@@ -6,7 +6,7 @@ using TravelAppCore.Entities;
 
 namespace TravelAppCore.Interfaces
 {
-    interface IAccountService
+    public interface IAccountService
     {
         bool TryLogIn(string nick, string password, out User user);
         Task<bool> TryLogInAsync(string nick, string password, out User user);

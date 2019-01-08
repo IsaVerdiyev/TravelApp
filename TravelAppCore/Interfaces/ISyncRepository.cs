@@ -5,7 +5,7 @@ using TravelAppCore.Entities;
 
 namespace TravelAppCore.Interfaces
 {
-    interface ISyncRepository<T> where T:BaseEntity
+    public interface ISyncRepository<T> where T:BaseEntity
     {
         T GetById(int id);
         //T GetSingleBySpec(ISpecification<T> spec);

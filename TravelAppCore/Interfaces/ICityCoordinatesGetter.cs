@@ -6,7 +6,7 @@ using TravelAppCore.Entities;
 
 namespace TravelAppCore.Interfaces
 {
-    interface ICityCoordinatesGetter
+    public interface ICityCoordinatesGetter
     {
         CityCoordinate GetCityCoordinate(string cityName);
         Task<CityCoordinate> GetCityCoordinateAsync(string cityName);

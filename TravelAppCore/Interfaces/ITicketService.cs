@@ -6,7 +6,7 @@ using TravelAppCore.Entities;
 
 namespace TravelAppCore.Interfaces
 {
-    interface ITicketService
+    public interface ITicketService
     {
         Ticket AddTicket(Trip trip, Ticket ticket);
         Task<Ticket> AddTicketAsync(Trip trip, Ticket ticket);

@@ -5,7 +5,7 @@ using TravelAppCore.Entities;
 
 namespace TravelAppCore.Interfaces
 {
-    interface IRepository<T>: ISyncRepository<T>, IAsyncRepository<T> where T:BaseEntity
+    public interface IRepository<T>: ISyncRepository<T>, IAsyncRepository<T> where T:BaseEntity
     {
     }
 }

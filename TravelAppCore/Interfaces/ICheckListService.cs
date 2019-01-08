@@ -6,7 +6,7 @@ using TravelAppCore.Entities;
 
 namespace TravelAppCore.Interfaces
 {
-    interface ICheckListService
+    public interface ICheckListService
     {
         ToDoItem AddItemInCheckList(Trip trip, ToDoItem toDoItem);
         Task<ToDoItem> AddItemInCheckListAsync(Trip trip, ToDoItem toDoItem);

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TravelAppCore.Interfaces
 {
-    interface ICityUrlGetter
+    public interface ICityUrlGetter
     {
         string GetCityImageUrl(string cityName);
         Task<string> GetCityImageUrlAsync(string cityName);
