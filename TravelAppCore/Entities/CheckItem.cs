@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TravelAppCore.Entities
 {
-    public class CheckItem: BaseEntity
+    public class ToDoItem: BaseEntity
     {
         [StringLength(50)]
         [Required]

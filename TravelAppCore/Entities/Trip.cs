@@ -11,14 +11,14 @@ namespace TravelAppCore.Entities
 
         [Required]
         [DataType(DataType.Date)]
-        public DateTime DepartureTime { get; set; }
+        public DateTime DepartureDate { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
-        public DateTime ArrivalTime { get; set; }
+        public DateTime ArriavalDate { get; set; }
 
         
-        public IEnumerable<CheckItem> CheckList { get; set; }
+        public IEnumerable<ToDoItem> CheckList { get; set; }
         public IEnumerable<Ticket> Tickets { get; set; }
 
     }
