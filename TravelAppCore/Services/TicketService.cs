@@ -7,7 +7,7 @@ using TravelAppCore.Interfaces;
 
 namespace TravelAppCore.Services
 {
-    class TicketService : ITicketService
+    public class TicketService : ITicketService
     {
 
         IRepository<Ticket> ticketRepository;

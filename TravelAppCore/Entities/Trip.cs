@@ -8,7 +8,7 @@ namespace TravelAppCore.Entities
 {
     public class Trip: BaseEntity
     {
-        public IEnumerable<City> Cities { get; set; }
+        public ICollection<City> Cities { get; set; }
 
         //[Required]
         [DataType(DataType.Date)]
@@ -19,8 +19,8 @@ namespace TravelAppCore.Entities
         public DateTime ArriavalDate { get; set; }
 
         
-        public IEnumerable<ToDoItem> CheckList { get; set; }
-        public IEnumerable<Ticket> Tickets { get; set; }
+        public ICollection<ToDoItem> CheckList { get; set; }
+        public ICollection<Ticket> Tickets { get; set; }
 
         //[ForeignKey("User")]
         public int UserId { get; set; }

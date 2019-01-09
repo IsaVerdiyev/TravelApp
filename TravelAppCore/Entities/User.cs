@@ -22,6 +22,7 @@ namespace TravelAppCore.Entities
         public string Email { get; set; }
 
 
-        public IEnumerable<Trip> Trips { get; set; }
+        public ICollection<Trip> Trips { get; set; }
+       
     }
 }

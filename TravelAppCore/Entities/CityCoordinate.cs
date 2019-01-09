@@ -9,7 +9,7 @@ namespace TravelAppCore.Entities
         public float Longitude { get; set; }
         public float Latitude { get; set; }
 
-        public int CityId { get; set; }
+        
         public City City { get; set; }
     }
 }

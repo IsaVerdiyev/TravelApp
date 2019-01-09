@@ -11,7 +11,7 @@ using TravelAppCore.Interfaces;
 
 namespace TravelAppInfrastructure.Data
 {
-    class EfRepository<T> : IRepository<T> where T : BaseEntity
+    public class EfRepository<T> : IRepository<T> where T : BaseEntity
     {
 
         TripDb tripDb;

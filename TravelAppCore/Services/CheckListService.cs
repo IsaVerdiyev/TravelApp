@@ -7,7 +7,7 @@ using TravelAppCore.Interfaces;
 
 namespace TravelAppCore.Services
 {
-    class CheckListService : ICheckListService
+    public class CheckListService : ICheckListService
     {
 
         IRepository<ToDoItem> checkListRepository;

@@ -14,7 +14,6 @@ namespace TravelAppCore.Entities
         [StringLength(50)]
         public string PictureUrl { get; set; }
 
-        public int CityCoordinateId { get; set; }
         public CityCoordinate CityCoordinate { get; set; }
 
         [StringLength(10)]
