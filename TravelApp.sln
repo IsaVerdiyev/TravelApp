@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelAppCore", "TravelAppC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelAppInfrastructure", "TravelAppInfrastructure\TravelAppInfrastructure.csproj", "{2778B79F-1846-43DE-AC95-C063E0C2866B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csproj", "{806F6D7A-A809-445F-A023-C86D8A5B5A5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2778B79F-1846-43DE-AC95-C063E0C2866B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2778B79F-1846-43DE-AC95-C063E0C2866B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2778B79F-1846-43DE-AC95-C063E0C2866B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{806F6D7A-A809-445F-A023-C86D8A5B5A5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{806F6D7A-A809-445F-A023-C86D8A5B5A5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{806F6D7A-A809-445F-A023-C86D8A5B5A5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{806F6D7A-A809-445F-A023-C86D8A5B5A5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

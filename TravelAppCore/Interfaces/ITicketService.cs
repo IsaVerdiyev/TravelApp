@@ -11,7 +11,7 @@ namespace TravelAppCore.Interfaces
         Ticket AddTicket(Trip trip, Ticket ticket);
         Task<Ticket> AddTicketAsync(Trip trip, Ticket ticket);
 
-        void RemoveTicket(Trip trip, Ticket ticket);
-        Task RemoveTicketAsync(Trip trip, Ticket ticket);
+        void RemoveTicket(Ticket ticket);
+        Task RemoveTicketAsync(Ticket ticket);
     }
 }

@@ -11,8 +11,8 @@ namespace TravelAppCore.Interfaces
         City AddCity(Trip trip, City city);
         Task<City> AddCityAsync(Trip trip, City city);
 
-        void RemoveCity(Trip trip, City city);
-        Task RemoveCityAsync(Trip trip, City city);
+        void RemoveCity(City city);
+        Task RemoveCityAsync(City city);
 
         void ChangeArivalDate(Trip trip, DateTime arrivalDate);
         Task ChangeArrivalDateAsync(Trip trip, DateTime arrivalDate);

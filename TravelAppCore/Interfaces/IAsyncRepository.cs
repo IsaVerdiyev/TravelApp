@@ -8,7 +8,7 @@ namespace TravelAppCore.Interfaces
 {
     public interface IAsyncRepository<T> where T: BaseEntity
     {
-        Task<T> GetByIdAsync(int id);
+        Task<T> GetByIdAsync(int id, string includePropertyName);
         Task<IReadOnlyList<T>> ListAllAsync();
         //Task<T> GetBySingleSpec(ISpecification<T> spec);
         //Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);

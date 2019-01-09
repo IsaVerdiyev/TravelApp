@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TravelAppCore.Entities;
@@ -45,14 +47,28 @@ namespace TravelAppInfrastructure.Data
             await tripDb.SaveChangesAsync();
         }
 
-        public T GetById(int id)
+        public T GetById(int id, string inlcudePropertyName = null)
         {
-            return tripDb.Set<T>().Find(id);
+            if (inlcudePropertyName != null)
+            {
+                return tripDb.Set<T>().Include(inlcudePropertyName).SingleOrDefault(item => item.Id == id);
+            }
+            else
+            {
+                return tripDb.Set<T>().Find(id);
+            }
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(int id, string includePropertyName = null)
         {
-            return  await tripDb.Set<T>().FindAsync(id);
+            if (includePropertyName != null)
+            {
+                return await tripDb.Set<T>().Include(includePropertyName).SingleOrDefaultAsync(item => item.Id == id);
+            }
+            else
+            {
+                return await tripDb.Set<T>().FindAsync(id);
+            }
         }
 
         public IEnumerable<T> ListAll()
@@ -76,5 +92,7 @@ namespace TravelAppInfrastructure.Data
             tripDb.Entry<T>(entity).State = EntityState.Modified;
             await tripDb.SaveChangesAsync();
         }
+
+        
     }
 }

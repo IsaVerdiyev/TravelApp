@@ -8,7 +8,7 @@ using TravelAppCore.Entities;
 
 namespace TravelAppInfrastructure.Data
 {
-    class TripDb: DbContext
+    public class TripDb: DbContext
     {
         public DbSet<ToDoItem> ToDoItems { get; set; }
         public DbSet<City> Cities { get; set; }
@@ -20,6 +20,12 @@ namespace TravelAppInfrastructure.Data
         public TripDb(): base("name=TripDbConnection")
         {
 
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<City>().HasOptional(city => city.CityCoordinate).WithRequired(coordinate => coordinate.City);
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

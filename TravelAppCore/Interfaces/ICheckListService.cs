@@ -11,8 +11,8 @@ namespace TravelAppCore.Interfaces
         ToDoItem AddItemInCheckList(Trip trip, ToDoItem toDoItem);
         Task<ToDoItem> AddItemInCheckListAsync(Trip trip, ToDoItem toDoItem);
 
-        void RemoveItemFromCheckList(Trip trip, ToDoItem toDoItem);
-        Task RemoveItemFromCheckListAsync(Trip trip, ToDoItem toDoItem);
+        void RemoveItemFromCheckList(ToDoItem toDoItem);
+        Task RemoveItemFromCheckListAsync(ToDoItem toDoItem);
 
         ToDoItem ChangeNameOfToDoItem(ToDoItem toDoItem, string name);
         Task<ToDoItem> ChangeNameOfToDoItemAsync(ToDoItem toDoItem, string name);

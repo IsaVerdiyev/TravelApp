@@ -11,7 +11,7 @@ namespace TravelAppCore.Interfaces
         Trip AddTrip(User user, Trip trip);
         Task<Trip> AddTripAsync(User user, Trip trip);
 
-        void RemoveTrip(User user, Trip trip);
-        Task RemoveTripAsync(User user, Trip trip);
+        void RemoveTrip(Trip trip);
+        Task RemoveTripAsync(Trip trip);
     }
 }
