@@ -7,16 +7,16 @@ namespace TravelAppCore.Entities
 {
     public class User: BaseEntity
     {
-        [Required]
+        //[Required]
         [StringLength(50)]
         public string NickName { get; set; }
 
-        [Required]
+        //[Required]
         [StringLength(50)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required]
+        //[Required]
         [StringLength(50)]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }

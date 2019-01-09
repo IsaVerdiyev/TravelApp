@@ -7,7 +7,7 @@ namespace TravelAppCore.Entities
 {
     public class City: BaseEntity
     {
-        [Required]
+        //[Required]
         [StringLength(50)]
         public string Name { get; set; }
 
@@ -22,5 +22,8 @@ namespace TravelAppCore.Entities
 
         [StringLength(20)]
         public string Language { get; set; }
+
+        public int TripId { get; set; }
+        public Trip Trip { get; set; }
     }
 }
