@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\EfRepository.cs" />
+    <Compile Include="Data\SpecificationEvaluator.cs" />
     <Compile Include="Data\TripDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -78,9 +78,13 @@ namespace Tester
             //};
             //tripDb.Trips.Add(trip);
 
-
-
-            IUserService userService = new UserService(new EfRepository<Trip>(tripDb));
+            ITripService tripService = new TripService(new EfRepository<City>(tripDb), new EfRepository<Trip>(tripDb));
+            var trips = tripService.GetTripsOfUser(tripDb.Users.FirstOrDefault());
+            foreach(var trip in trips)
+            {
+                Console.WriteLine(trip.ArriavalDate);
+            }
+            //IUserService userService = new UserService(new EfRepository<Trip>(tripDb));
             //userService.AddTrip();
             
         }

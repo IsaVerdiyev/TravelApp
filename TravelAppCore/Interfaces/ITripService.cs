@@ -8,16 +8,19 @@ namespace TravelAppCore.Interfaces
 {
     public interface ITripService
     {
-        City AddCity(Trip trip, City city);
-        Task<City> AddCityAsync(Trip trip, City city);
-
-        void RemoveCity(City city);
-        Task RemoveCityAsync(City city);
 
         void ChangeArivalDate(Trip trip, DateTime arrivalDate);
         Task ChangeArrivalDateAsync(Trip trip, DateTime arrivalDate);
 
         void ChangeDepartureDate(Trip trip, DateTime departureDate);
         Task ChangeDepartureDateAsync(Trip trip, DateTime departureDate);
+
+        Trip AddTrip(User user, Trip trip);
+        Task<Trip> AddTripAsync(User user, Trip trip);
+
+        void RemoveTrip(Trip trip);
+        Task RemoveTripAsync(Trip trip);
+
+        IReadOnlyList<Trip> GetTripsOfUser(User user);
     }
 }

@@ -8,13 +8,13 @@ namespace TravelAppCore.Interfaces
 {
     public interface ISyncRepository<T> where T:BaseEntity
     {
-        T GetById(int id, string includePropertyName);
-        //T GetSingleBySpec(ISpecification<T> spec);
-        IEnumerable<T> ListAll();
-        //IEnumerable<T> List(ISpecification<T> spec);
+        T GetById(int id);
+        T GetSingleBySpec(ISpecification<T> spec);
+        IReadOnlyList<T> ListAll();
+        IReadOnlyList<T> List(ISpecification<T> spec);
         T Add(T entity);
         void Update(T entity);
         void Delete(T entity);
-        //int Count(ISpecification<T> spec);
+        int Count(ISpecification<T> spec);
     }
 }

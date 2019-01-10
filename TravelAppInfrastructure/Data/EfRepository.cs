@@ -35,6 +35,16 @@ namespace TravelAppInfrastructure.Data
             return added;
         }
 
+        public int Count(ISpecification<T> spec)
+        {
+            return ApplySpecification(spec).Count();
+        }
+
+        public Task<int> CountAsync(ISpecification<T> spec)
+        {
+            return ApplySpecification(spec).CountAsync();
+        }
+
         public void Delete(T entity)
         {
             tripDb.Set<T>().Remove(entity);
@@ -47,31 +57,32 @@ namespace TravelAppInfrastructure.Data
             await tripDb.SaveChangesAsync();
         }
 
-        public T GetById(int id, string inlcudePropertyName = null)
+        public T GetById(int id)
         {
-            if (inlcudePropertyName != null)
-            {
-                return tripDb.Set<T>().Include(inlcudePropertyName).SingleOrDefault(item => item.Id == id);
-            }
-            else
-            {
-                return tripDb.Set<T>().Find(id);
-            }
+            return tripDb.Set<T>().Find(id);
         }
 
-        public async Task<T> GetByIdAsync(int id, string includePropertyName = null)
+        public async Task<T> GetByIdAsync(int id)
         {
-            if (includePropertyName != null)
-            {
-                return await tripDb.Set<T>().Include(includePropertyName).SingleOrDefaultAsync(item => item.Id == id);
-            }
-            else
-            {
-                return await tripDb.Set<T>().FindAsync(id);
-            }
+            return await tripDb.Set<T>().FindAsync(id);
         }
 
-        public IEnumerable<T> ListAll()
+        public T GetSingleBySpec(ISpecification<T> spec)
+        {
+            return ApplySpecification(spec).AsNoTracking().FirstOrDefault();
+        }
+
+        public async Task<T> GetSingleBySpecAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).AsNoTracking().FirstOrDefaultAsync();
+        }
+
+        public IReadOnlyList<T> List(ISpecification<T> spec)
+        {
+            return ApplySpecification(spec).AsNoTracking().ToList();
+        }
+
+        public IReadOnlyList<T> ListAll()
         {
             return tripDb.Set<T>().AsNoTracking().ToList();
         }
@@ -79,6 +90,11 @@ namespace TravelAppInfrastructure.Data
         public async Task<IReadOnlyList<T>> ListAllAsync()
         {
             return await tripDb.Set<T>().AsNoTracking().ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).AsNoTracking().ToListAsync();
         }
 
         public void Update(T entity)
@@ -93,6 +109,11 @@ namespace TravelAppInfrastructure.Data
             await tripDb.SaveChangesAsync();
         }
 
-        
+
+        private IQueryable<T> ApplySpecification(ISpecification<T> specification)
+        {
+            return SpecificationEvaluator<T>.GetQuery(tripDb.Set<T>().AsQueryable(), specification);
+        }
+
     }
 }

@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
+using TravelAppCore.Specifications;
 
 namespace TravelAppCore.Services
 {
@@ -20,16 +21,27 @@ namespace TravelAppCore.Services
         }
 
 
-        public City AddCity(Trip trip, City city)
+        public Trip AddTrip(User user, Trip trip)
         {
-            city.TripId = trip.Id;
-            return cityRepository.Add(city);
+            trip.UserId = user.Id;
+            return tripRepository.Add(trip);
         }
 
-        public async Task<City> AddCityAsync(Trip trip, City city)
+        public async Task<Trip> AddTripAsync(User user, Trip trip)
         {
-            city.TripId = trip.Id;
-            return await cityRepository.AddAsync(city);
+            trip.UserId = user.Id;
+            return await tripRepository.AddAsync(trip);
+
+        }
+
+        public void RemoveTrip(Trip trip)
+        {
+            tripRepository.Delete(trip);
+        }
+
+        public async Task RemoveTripAsync(Trip trip)
+        {
+            await tripRepository.DeleteAsync(trip);
         }
 
         public void ChangeArivalDate(Trip trip, DateTime arrivalDate)
@@ -56,14 +68,9 @@ namespace TravelAppCore.Services
             await tripRepository.UpdateAsync(trip);
         }
 
-        public void RemoveCity(City city)
+        public IReadOnlyList<Trip> GetTripsOfUser(User user)
         {
-            cityRepository.Delete(city);
-        }
-
-        public async Task RemoveCityAsync(City city)
-        {
-            await cityRepository.DeleteAsync(city);
+            return tripRepository.List(new UserTripsSpecification(user.Id));
         }
     }
 }
