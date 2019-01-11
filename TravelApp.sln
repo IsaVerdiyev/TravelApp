@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelAppInfrastructure", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csproj", "{806F6D7A-A809-445F-A023-C86D8A5B5A5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{B908F0CF-74C8-4B1E-AA74-9A120652579F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{B908F0CF-74C8-4B1E-AA74-9A120652579F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelAppWpf", "TravelAppWpf\TravelAppWpf.csproj", "{6B1950F7-4543-4F51-AB8F-9223F538980E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{B908F0CF-74C8-4B1E-AA74-9A120652579F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B908F0CF-74C8-4B1E-AA74-9A120652579F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B908F0CF-74C8-4B1E-AA74-9A120652579F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B1950F7-4543-4F51-AB8F-9223F538980E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B1950F7-4543-4F51-AB8F-9223F538980E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B1950F7-4543-4F51-AB8F-9223F538980E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B1950F7-4543-4F51-AB8F-9223F538980E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,6 @@
+{
+  "defaultAssembly": "TravelAppWpf",
+  "components": [
+    { "type": "TravelAppWpf.ViewModels.AppViewModel" }
+  ]
+}

@@ -1,0 +1,7 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TravelAppWpf.Resources"
+                    xmlns:vm="clr-namespace:TravelAppWpf.ViewModels"
+                    xmlns:v="clr-namespace:TravelAppWpf.Views">
+    
+</ResourceDictionary>
