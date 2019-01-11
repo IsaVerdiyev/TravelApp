@@ -12,6 +12,9 @@ namespace TravelAppCore.Entities
         public string Name { get; set; }
 
         [StringLength(50)]
+        public string FullName { get; set; }
+
+        [StringLength(50)]
         public string PictureUrl { get; set; }
 
         public CityCoordinate CityCoordinate { get; set; }

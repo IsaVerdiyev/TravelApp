@@ -6,9 +6,10 @@ using TravelAppCore.Entities;
 
 namespace TravelAppCore.Interfaces
 {
-    public interface ICityCoordinatesGetter
+    public interface ICityFromApiGetter<InputType>
     {
-        CityCoordinate GetCityCoordinate(string cityName);
-        Task<CityCoordinate> GetCityCoordinateAsync(string cityName);
+        City GetCityFromApiByName(InputType input);
+
+        Task<City> GetCityFromApiByNameAsync(InputType input);
     }
 }
