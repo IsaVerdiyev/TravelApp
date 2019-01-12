@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,31 +14,113 @@ namespace Services
     {
         IRepository<User> userRepos;
 
-        string salt = "sdflkj;adsf";
+        string salt = "alsdjf;ahjg;ha;sdnv;khasdhfa";
+
+        
 
         public AccountService(IRepository<User> userRepos)
         {
             this.userRepos = userRepos;
+           
         }
 
-        public bool TryLogIn(string nick, string password, out User user)
+        public void DeleteAccount(User user)
         {
-            throw new NotImplementedException();
+            userRepos.Delete(user);
         }
 
-        public Task<bool> TryLogInAsync(string nick, string password, out User user)
+        public async Task DeleteAccountAsync(User user)
         {
-            throw new NotImplementedException();
+            await userRepos.DeleteAsync(user);
         }
 
-        public bool TrySignUp(ref User user)
+        public (bool, User) TryLogIn(string nick, string password)
         {
-            throw new NotImplementedException();
+            User user = null;
+
+            User foundUser = userRepos.GetSingleBySpec(new UserByNickOrEmailSpecification(nick));
+
+            return GetSigningInResult(nick,password, foundUser);
+            
         }
 
-        public Task<bool> TrySignUpAsync(ref User user)
+        public async Task<(bool, User)> TryLogInAsync(string nickOrEmail, string password)
         {
-            throw new NotImplementedException();
+            User user = null;
+
+            User foundUser = await userRepos.GetSingleBySpecAsync(new UserByNickOrEmailSpecification(nickOrEmail));
+
+            return GetSigningInResult(nickOrEmail, password, foundUser);
+           
+        }
+
+        public bool TrySignUp(User user)
+        {
+            User foundUser = userRepos.GetSingleBySpec(new UserByNickOrEmailSpecification(user.NickName, user.Email));
+            if(foundUser != null)
+            {
+                return false;
+            }
+
+            else
+            {
+                user.Password = Encrypt(user.Password);
+                userRepos.Add(user);
+                return true;
+            }
+        }
+
+        public async Task<bool> TrySignUpAsync(User user)
+        {
+            User foundUser = await userRepos.GetSingleBySpecAsync(new UserByNickOrEmailSpecification(user.NickName, user.Email));
+            if (foundUser != null)
+            {
+                return false;
+            }
+
+            else
+            {
+                user.Password = Encrypt(user.Password);
+                await userRepos.AddAsync(user);
+                return true;
+            }
+        }
+
+
+        private string Encrypt(string password)
+        {
+            using (SHA256 sha = SHA256.Create())
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(password + salt);
+                bytes = sha.ComputeHash(bytes);
+                return Encoding.Default.GetString(bytes);
+            }
+        }
+
+        
+
+
+        private (bool, User) GetSigningInResult(string nickOrEmail, string password, User foundUser)
+        {
+            if (foundUser == null)
+            {
+                return (false, foundUser);
+            }
+            if (!foundUser.NickName.Equals(nickOrEmail) && !foundUser.Email.Equals(nickOrEmail))
+            {
+                foundUser = null;
+                return (false, foundUser);
+            }
+            if (foundUser.Password == Encrypt(password))
+            {
+                
+                return (true, foundUser);
+            }
+            else
+            {
+                foundUser = null;
+                return (false, foundUser);
+            }
         }
     }
 }

@@ -8,10 +8,13 @@ namespace TravelAppCore.Interfaces
 {
     public interface IAccountService
     {
-        bool TryLogIn(string nick, string password, out User user);
-        Task<bool> TryLogInAsync(string nick, string password, out User user);
+        (bool result, User foundUser) TryLogIn(string nick, string password);
+        Task<(bool result, User foundUser)> TryLogInAsync(string nick, string password);
 
-        bool TrySignUp(ref User user);
-        Task<bool> TrySignUpAsync(ref User user);
+        bool TrySignUp(User user);
+        Task<bool> TrySignUpAsync(User user);
+
+        void DeleteAccount(User user);
+        Task DeleteAccountAsync(User user);
     }
 }
