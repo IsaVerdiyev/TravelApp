@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TravelAppCore.Entities;
+using TravelAppCore.Exceptions;
 using TravelAppCore.Interfaces;
 using TravelAppCore.Specifications;
 
@@ -24,19 +25,21 @@ namespace Services
            
         }
 
-        public void DeleteAccount(User user)
+        public void DeleteAccount(DeleteByIdSpecification<User> specification)
         {
-            userRepos.Delete(user);
+            
+            userRepos.DeleteBySpec(specification);
         }
 
-        public async Task DeleteAccountAsync(User user)
+        public async Task DeleteAccountAsync(DeleteByIdSpecification<User> specification)
         {
-            await userRepos.DeleteAsync(user);
+            
+            await userRepos.DeleteBySpecAsync(specification);
         }
 
         public (bool, User) TryLogIn(string nick, string password)
         {
-            User user = null;
+            
 
             User foundUser = userRepos.GetSingleBySpec(new UserByNickOrEmailSpecification(nick));
 
@@ -46,7 +49,7 @@ namespace Services
 
         public async Task<(bool, User)> TryLogInAsync(string nickOrEmail, string password)
         {
-            User user = null;
+           
 
             User foundUser = await userRepos.GetSingleBySpecAsync(new UserByNickOrEmailSpecification(nickOrEmail));
 

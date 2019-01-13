@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using TravelAppCore.Entities;
+using TravelAppCore.Specifications;
 
 namespace TravelAppCore.Interfaces
 {
@@ -11,8 +12,8 @@ namespace TravelAppCore.Interfaces
         ToDoItem AddItemInCheckList(Trip trip, ToDoItem toDoItem);
         Task<ToDoItem> AddItemInCheckListAsync(Trip trip, ToDoItem toDoItem);
 
-        void RemoveItemFromCheckList(ToDoItem toDoItem);
-        Task RemoveItemFromCheckListAsync(ToDoItem toDoItem);
+        void RemoveItemFromCheckList(DeleteByIdSpecification<ToDoItem> deleteByIdSpecification);
+        Task RemoveItemFromCheckListAsync(DeleteByIdSpecification<ToDoItem> deleteByIdSpecification);
 
         ToDoItem ChangeNameOfToDoItem(ToDoItem toDoItem, string name);
         Task<ToDoItem> ChangeNameOfToDoItemAsync(ToDoItem toDoItem, string name);

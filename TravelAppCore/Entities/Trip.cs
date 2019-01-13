@@ -11,11 +11,11 @@ namespace TravelAppCore.Entities
         public ICollection<City> Cities { get; set; }
 
         //[Required]
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         public DateTime DepartureDate { get; set; }
 
         //[Required]
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         public DateTime ArriavalDate { get; set; }
 
         
@@ -24,7 +24,7 @@ namespace TravelAppCore.Entities
 
         //[ForeignKey("User")]
         public int UserId { get; set; }
-        public virtual User User { get; set; }
+        public User User { get; set; }
 
     }
 }

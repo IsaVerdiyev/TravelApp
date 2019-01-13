@@ -14,7 +14,7 @@ namespace TravelAppCore.Interfaces
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
+        Task DeleteBySpecAsync(ISpecification<T> spec);
         Task<int> CountAsync(ISpecification<T> spec);
     }
 }

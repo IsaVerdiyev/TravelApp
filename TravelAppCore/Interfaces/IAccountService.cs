@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using TravelAppCore.Entities;
+using TravelAppCore.Specifications;
 
 namespace TravelAppCore.Interfaces
 {
@@ -14,7 +15,7 @@ namespace TravelAppCore.Interfaces
         bool TrySignUp(User user);
         Task<bool> TrySignUpAsync(User user);
 
-        void DeleteAccount(User user);
-        Task DeleteAccountAsync(User user);
+        void DeleteAccount(DeleteByIdSpecification<User> specification);
+        Task DeleteAccountAsync(DeleteByIdSpecification<User> specification);
     }
 }

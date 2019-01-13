@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
+using TravelAppCore.Specifications;
 
 namespace TravelAppCore.Services
 {
@@ -29,14 +30,14 @@ namespace TravelAppCore.Services
             return await ticketRepository.AddAsync(ticket);
         }
 
-        public void RemoveTicket(Ticket ticket)
+        public void RemoveTicket(DeleteByIdSpecification<Ticket> specification)
         {
-            ticketRepository.Delete(ticket);
+            ticketRepository.DeleteBySpec(specification);
         }
 
-        public async Task RemoveTicketAsync(Ticket ticket)
+        public async Task RemoveTicketAsync(DeleteByIdSpecification<Ticket> specification)
         {
-            await ticketRepository.DeleteAsync(ticket);
+            await ticketRepository.DeleteBySpecAsync(specification);
         }
     }
 }

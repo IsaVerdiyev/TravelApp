@@ -25,10 +25,7 @@ namespace TravelAppInfrastructure.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<City>().HasOptional(city => city.CityCoordinate).WithRequired(coordinate => coordinate.City);
-            modelBuilder.Conventions.Add<ManyToManyCascadeDeleteConvention>();
-            modelBuilder.Conventions.Add<OneToManyCascadeDeleteConvention>();
-            
+            modelBuilder.Entity<City>().HasOptional(city => city.CityCoordinate).WithRequired(coordinate => coordinate.City).WillCascadeOnDelete(true);
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -33,7 +33,12 @@ namespace Tester
             //           DepartureDate = DateTime.Now,
             //            CheckList = new List<ToDoItem>
             //            {
-            //                new ToDoItem{Name = "First item to do", Done = false}
+            //                new ToDoItem{Name = "First item to do", Done = false},
+            //                new ToDoItem{Name = "Second item to do", Done = true}
+            //            },
+            //            Tickets = new List<Ticket>{
+            //                new Ticket{ImagePath = "a;lkdsjf;ajds;f"},
+            //                new Ticket{ImagePath = ";alskdjf;lajsd;fja;sdjf;kasjd" }
             //            },
             //            Cities = new List<City>
             //            {
@@ -46,7 +51,19 @@ namespace Tester
             //                        Latitude = 234,
             //                        Longitude = 123
             //                    }
+            //                },
+            //                new City
+            //                {
+            //                    Name = "Qwebeck",
+            //                    Currency  = "USD",
+            //                    Language = "English",
+            //                    CityCoordinate = new CityCoordinate
+            //                    {
+            //                        Latitude = 123,
+            //                        Longitude = 532
+            //                    }
             //                }
+
             //            }
 
             //       }
@@ -59,10 +76,30 @@ namespace Tester
 
             //userRepository.Add(user);
 
-            User user = userRepository.GetSingleBySpec(new UserCascadeDeleteSpecificationById(1));
+            accountService.DeleteAccount(new DeleteByIdSpecification<User>(8));
 
-            accountService.DeleteAccount(user);
-            accountService.TrySignUp(user);
+            //User user = userRepository.GetSingleBySpec(new CustomSpecification<User>(null));
+
+            //accountService.DeleteAccount(user);
+
+
+
+
+
+            //EfRepository<User> repository = new EfRepository<User>(tripDb);
+
+            //repository.DeleteSingleBySpec(new CustomSpecification<User>(user => ));
+
+            //var items = repository.List(new CustomSpecification<Ticket>(null));
+
+            //foreach(var item in items)
+            //{
+            //    repository.Delete(item);
+            //}
+
+
+
+            //accountService.TrySignUp(user);
 
             ////Trip trip = new Trip
             ////{

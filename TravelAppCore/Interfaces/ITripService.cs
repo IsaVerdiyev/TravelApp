@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using TravelAppCore.Entities;
+using TravelAppCore.Specifications;
 
 namespace TravelAppCore.Interfaces
 {
@@ -18,8 +19,8 @@ namespace TravelAppCore.Interfaces
         Trip AddTrip(User user, Trip trip);
         Task<Trip> AddTripAsync(User user, Trip trip);
 
-        void RemoveTrip(Trip trip);
-        Task RemoveTripAsync(Trip trip);
+        void RemoveTrip(DeleteByIdSpecification<Trip> specification);
+        Task RemoveTripAsync(DeleteByIdSpecification<Trip> specification);
 
         IReadOnlyList<Trip> GetTripsOfUser(User user);
     }
