@@ -6,6 +6,27 @@
     { "type": "TravelAppWpf.ViewModels.TripsViewModel" },
     { "type": "TravelAppWpf.ViewModels.CitiesViewModel" },
     { "type": "TravelAppWpf.ViewModels.TicketsViewModel" },
-    { "type": "TravelAppWpf.ViewModels.CheckListViewModel" }
+    { "type": "TravelAppWpf.ViewModels.CheckListViewModel" },
+    {
+      "type": "Services.AccountService, Services",
+      "services": [
+        {
+          "type": "TravelAppCore.Interfaces.IAccountService, TravelAppCore"
+        }
+      ]
+    },
+    {
+      "type": "TravelAppWpf.Navigation.Navigator",
+      "services": [
+        {
+          "type": "TravelAppWpf.Navigation.INavigator"
+        }
+      ],
+      "instanceScope": "single-instance"
+    },
+    {
+      "type": "TravelAppInfrastructure.Data.TripDb, TravelAppInfrastructure", 
+      "instanceScope":  "single-instance"
+    }
   ]
 }

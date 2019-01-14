@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravelAppCore.Interfaces;
+using TravelAppInfrastructure.Data;
 using TravelAppWpf.Navigation;
 using TravelAppWpf.ViewModels;
 
@@ -24,8 +26,8 @@ namespace TravelAppWpf.Tools
             var module = new ConfigurationModule(config.Build());
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule(module);
-            containerBuilder.RegisterInstance(navigator).As<INavigator>().SingleInstance();
-
+            containerBuilder.RegisterGeneric(typeof(EfRepository<>)).As(typeof(IRepository<>)).InstancePerDependency();
+            //containerBuilder.RegisterInstance(navigator).As<INavigator>().SingleInstance();
             var container = containerBuilder.Build();
 
             using (var scope = container.BeginLifetimeScope())
