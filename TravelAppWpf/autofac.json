@@ -1,6 +1,11 @@
 {
   "defaultAssembly": "TravelAppWpf",
   "components": [
-    { "type": "TravelAppWpf.ViewModels.AppViewModel" }
+    { "type": "TravelAppWpf.ViewModels.AppViewModel" },
+    { "type": "TravelAppWpf.ViewModels.SignInViewModel" },
+    { "type": "TravelAppWpf.ViewModels.TripsViewModel" },
+    { "type": "TravelAppWpf.ViewModels.CitiesViewModel" },
+    { "type": "TravelAppWpf.ViewModels.TicketsViewModel" },
+    { "type": "TravelAppWpf.ViewModels.CheckListViewModel" }
   ]
 }

@@ -3,5 +3,25 @@
                     xmlns:local="clr-namespace:TravelAppWpf.Resources"
                     xmlns:vm="clr-namespace:TravelAppWpf.ViewModels"
                     xmlns:v="clr-namespace:TravelAppWpf.Views">
+
+    <DataTemplate DataType="{x:Type vm:SignInViewModel}">
+        <v:SignInView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:TripsViewModel}">
+        <v:TripsView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:CitiesViewModel}">
+        <v:CitiesView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:TicketsViewModel}">
+        <v:TicketsView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:CheckListViewModel}">
+        <v:CheckListView/>
+    </DataTemplate>
     
 </ResourceDictionary>

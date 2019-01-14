@@ -32,9 +32,14 @@ namespace TravelAppWpf.Tools
             {
                 AppViewModel = scope.Resolve<AppViewModel>();
                 navigator.Register(AppViewModel);
+                navigator.Register(scope.Resolve<SignInViewModel>());
+                navigator.Register(scope.Resolve<TripsViewModel>());
+                navigator.Register(scope.Resolve<CitiesViewModel>());
+                navigator.Register(scope.Resolve<TicketsViewModel>());
+                navigator.Register(scope.Resolve<CheckListViewModel>());
             }
 
-            //write code for navigation to first page (ex. navigator.NavigateTo<SomeViewModel>()
+            navigator.NavigateTo<SignInViewModel>();
 
         }
     }
