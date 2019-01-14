@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
+using TravelAppCore.Specifications;
 
 namespace TravelAppCore.Services
 {
@@ -57,14 +58,14 @@ namespace TravelAppCore.Services
             return toDoItem;
         }
 
-        public void RemoveItemFromCheckList(ToDoItem toDoItem)
+        public void RemoveItemFromCheckList(DeleteByIdSpecification<ToDoItem> deleteByIdSpecification)
         {
-            checkListRepository.Delete(toDoItem);
+            checkListRepository.DeleteBySpec(deleteByIdSpecification);
         }
 
-        public async Task RemoveItemFromCheckListAsync(ToDoItem toDoItem)
+        public async Task RemoveItemFromCheckListAsync(DeleteByIdSpecification<ToDoItem> deleteByIdSpecification)
         {
-            await checkListRepository.DeleteAsync(toDoItem);
+            await checkListRepository.DeleteBySpecAsync(deleteByIdSpecification);
         }
     }
 }

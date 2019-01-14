@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using TravelAppCore.Entities;
+using TravelAppCore.Specifications;
 
 namespace TravelAppCore.Interfaces
 {
     public interface IAccountService
     {
-        bool TryLogIn(string nick, string password, out User user);
-        Task<bool> TryLogInAsync(string nick, string password, out User user);
+        (bool result, User foundUser) TryLogIn(string nick, string password);
+        Task<(bool result, User foundUser)> TryLogInAsync(string nick, string password);
 
-        bool TrySignUp(ref User user);
-        Task<bool> TrySignUpAsync(ref User user);
+        bool TrySignUp(User user);
+        Task<bool> TrySignUpAsync(User user);
+
+        void DeleteAccount(DeleteByIdSpecification<User> specification);
+        Task DeleteAccountAsync(DeleteByIdSpecification<User> specification);
     }
 }

@@ -34,14 +34,14 @@ namespace TravelAppCore.Services
 
         }
 
-        public void RemoveTrip(Trip trip)
+        public void RemoveTrip(DeleteByIdSpecification<Trip> specification)
         {
-            tripRepository.Delete(trip);
+            tripRepository.DeleteBySpec(specification);
         }
 
-        public async Task RemoveTripAsync(Trip trip)
+        public async Task RemoveTripAsync(DeleteByIdSpecification<Trip> specification)
         {
-            await tripRepository.DeleteAsync(trip);
+            await tripRepository.DeleteBySpecAsync(specification);
         }
 
         public void ChangeArivalDate(Trip trip, DateTime arrivalDate)

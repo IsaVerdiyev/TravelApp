@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace TravelAppInfrastructure.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<City>().HasOptional(city => city.CityCoordinate).WithRequired(coordinate => coordinate.City);
+            modelBuilder.Entity<City>().HasOptional(city => city.CityCoordinate).WithRequired(coordinate => coordinate.City).WillCascadeOnDelete(true);
             base.OnModelCreating(modelBuilder);
         }
     }

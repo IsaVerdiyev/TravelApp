@@ -14,7 +14,7 @@ namespace TravelAppCore.Interfaces
         IReadOnlyList<T> List(ISpecification<T> spec);
         T Add(T entity);
         void Update(T entity);
-        void Delete(T entity);
+        void DeleteBySpec(ISpecification<T> spec);
         int Count(ISpecification<T> spec);
     }
 }

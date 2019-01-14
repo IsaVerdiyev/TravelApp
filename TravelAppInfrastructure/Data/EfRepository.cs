@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
+using Z.EntityFramework.Plus;
 
 namespace TravelAppInfrastructure.Data
 {
@@ -45,16 +46,15 @@ namespace TravelAppInfrastructure.Data
             return ApplySpecification(spec).CountAsync();
         }
 
-        public void Delete(T entity)
+        public void DeleteBySpec(ISpecification<T> spec)
         {
-            tripDb.Set<T>().Remove(entity);
-            tripDb.SaveChanges();
+          
+            ApplySpecification(spec).DeleteFromQuery();
         }
 
-        public async Task DeleteAsync(T entity)
+        public async Task DeleteBySpecAsync(ISpecification<T> spec)
         {
-            tripDb.Set<T>().Remove(entity);
-            await tripDb.SaveChangesAsync();
+            await ApplySpecification(spec).DeleteFromQueryAsync();
         }
 
         public T GetById(int id)
@@ -108,7 +108,6 @@ namespace TravelAppInfrastructure.Data
             tripDb.Entry<T>(entity).State = EntityState.Modified;
             await tripDb.SaveChangesAsync();
         }
-
 
         private IQueryable<T> ApplySpecification(ISpecification<T> specification)
         {

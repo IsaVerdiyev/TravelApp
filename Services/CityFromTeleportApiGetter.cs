@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json.Linq;
+using Services.Exceptions.CityInfoFromTeleportApiGetterServiceExceptions;
+using Services.Exceptions.OpenWeatherMapExceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using TravelAppCore.Entities;
-using TravelAppCore.Exceptions;
 using TravelAppCore.Interfaces;
 
 namespace Services
@@ -282,7 +282,7 @@ namespace Services
                 }
                 catch (InvalidOperationException innerEx)
                 {
-                    throw new CityNotFoundByApiWithSpecifiedNameException($"City with name {searchedCity} was not found by api", innerEx);
+                    throw new CityNotFoundByTeleportApiWithSpecifiedNameException($"City with name {searchedCity} was not found by api", innerEx);
                 }
             }
         }
@@ -335,7 +335,7 @@ namespace Services
             }
             catch (InvalidOperationException ex)
             {
-                throw new CityNotFoundByApiWithSpecifiedNameException($"No city was found with name {cityName}", ex);
+                throw new InvalidApiInOpenWeatherMapServiceException($"No city was found with name {cityName}", ex);
             }
         }
 
