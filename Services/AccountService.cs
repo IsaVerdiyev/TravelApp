@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TravelAppCore.Entities;
-using TravelAppCore.Exceptions;
+
 using TravelAppCore.Interfaces;
 using TravelAppCore.Specifications;
 

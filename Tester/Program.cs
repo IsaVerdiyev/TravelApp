@@ -70,72 +70,15 @@ namespace Tester
             //    }
             //};
 
-            IRepository<User> userRepository = new EfRepository<User>(tripDb);
+            IWeatherInfoGetter weatherInfoGetter = new OpenWeatherMapWeatherInfoGetter("85b5bfec966f346dcd56d11b2c2b8db3");
+            string cityName = Console.ReadLine();
+            Weather weather = weatherInfoGetter.GetCurrentWeatherOfCity(cityName);
 
-            IAccountService accountService = new AccountService(userRepository);
-
-            //userRepository.Add(user);
-
-            accountService.DeleteAccount(new DeleteByIdSpecification<User>(8));
-
-            //User user = userRepository.GetSingleBySpec(new CustomSpecification<User>(null));
-
-            //accountService.DeleteAccount(user);
-
-
-
-
-
-            //EfRepository<User> repository = new EfRepository<User>(tripDb);
-
-            //repository.DeleteSingleBySpec(new CustomSpecification<User>(user => ));
-
-            //var items = repository.List(new CustomSpecification<Ticket>(null));
-
-            //foreach(var item in items)
-            //{
-            //    repository.Delete(item);
-            //}
-
-
-
-            //accountService.TrySignUp(user);
-
-            ////Trip trip = new Trip
-            ////{
-            ////    UserId = 1,
-            ////    ArriavalDate = DateTime.Now.AddDays(3),
-            ////    DepartureDate = DateTime.Now,
-            ////    CheckList = new List<ToDoItem>
-            ////            {
-            ////                new ToDoItem{Name = "First item to do", Done = false}
-            ////            },
-            ////    Cities = new List<City>
-            ////            {
-            ////                new City{
-            ////                    Name = "Baku",
-            ////                    Currency = "AZN",
-            ////                    Language = "Azeri",
-            ////                    CityCoordinate  = new CityCoordinate
-            ////                    {
-            ////                        Latitude = 234,
-            ////                        Longitude = 123
-            ////                    }
-            ////                }
-            ////            }
-
-            ////};
-            ////tripDb.Trips.Add(trip);
-
-            //ITripService tripService = new TripService(new EfRepository<City>(tripDb), new EfRepository<Trip>(tripDb));
-            //var trips = tripService.GetTripsOfUser(tripDb.Users.FirstOrDefault());
-            //foreach(var trip in trips)
-            //{
-            //    Console.WriteLine(trip.ArriavalDate);
-            //}
-            ////IUserService userService = new UserService(new EfRepository<Trip>(tripDb));
-            ////userService.AddTrip();
-
+            Console.WriteLine(weather.Temperature);
+            Console.WriteLine(weather.Date);
+            Console.WriteLine(weather.Description);
+            Console.WriteLine(weather.Humidity);
+            Console.WriteLine(weather.Pressure);
 
 
 
