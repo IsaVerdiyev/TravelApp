@@ -66,6 +66,12 @@ namespace TravelAppWpf.ViewModels
             }));
         }
 
+        private RelayCommand registerCommand;
+        public RelayCommand RegisterCommand
+        {
+            get => registerCommand ?? (registerCommand = new RelayCommand(() => navigator.NavigateTo<RegisterViewModel>()));
+        }
+
         #endregion
     }
 }

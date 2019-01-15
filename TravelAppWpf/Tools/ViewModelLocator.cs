@@ -15,7 +15,7 @@ namespace TravelAppWpf.Tools
 {
     class ViewModelLocator
     {
-        INavigator navigator = new Navigator();
+        INavigator navigator;
 
         public AppViewModel AppViewModel { get; }
 
@@ -27,18 +27,19 @@ namespace TravelAppWpf.Tools
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule(module);
             containerBuilder.RegisterGeneric(typeof(EfRepository<>)).As(typeof(IRepository<>)).InstancePerDependency();
-            //containerBuilder.RegisterInstance(navigator).As<INavigator>().SingleInstance();
             var container = containerBuilder.Build();
 
             using (var scope = container.BeginLifetimeScope())
             {
                 AppViewModel = scope.Resolve<AppViewModel>();
+                navigator = scope.Resolve<INavigator>();
                 navigator.Register(AppViewModel);
                 navigator.Register(scope.Resolve<SignInViewModel>());
                 navigator.Register(scope.Resolve<TripsViewModel>());
                 navigator.Register(scope.Resolve<CitiesViewModel>());
                 navigator.Register(scope.Resolve<TicketsViewModel>());
                 navigator.Register(scope.Resolve<CheckListViewModel>());
+                navigator.Register(scope.Resolve<RegisterViewModel>());
             }
 
             navigator.NavigateTo<SignInViewModel>();

@@ -45,7 +45,8 @@
                     Content="Confirm"
                     Command="{Binding SignInCommand}"/>
             <Button Grid.Row="7"
-                    Content="Register"/>
+                    Content="Register"
+                    Command="{Binding RegisterCommand}"/>
             <Label Grid.Row="8"
                    Content="{Binding ErrorMessage, Mode=OneWay}"/>
         </Grid>
