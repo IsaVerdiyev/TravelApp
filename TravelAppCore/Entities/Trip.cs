@@ -10,19 +10,17 @@ namespace TravelAppCore.Entities
     {
         public ICollection<City> Cities { get; set; }
 
-        //[Required]
-        //[DataType(DataType.Date)]
+        
         public DateTime DepartureDate { get; set; }
 
-        //[Required]
-        //[DataType(DataType.Date)]
+        
         public DateTime ArriavalDate { get; set; }
 
         
         public ICollection<ToDoItem> CheckList { get; set; }
         public ICollection<Ticket> Tickets { get; set; }
 
-        //[ForeignKey("User")]
+        
         public int UserId { get; set; }
         public User User { get; set; }
 
