@@ -26,6 +26,29 @@ namespace TravelAppInfrastructure.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<City>().HasOptional(city => city.CityCoordinate).WithRequired(coordinate => coordinate.City).WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<User>().Property(u => u.NickName).IsRequired().HasMaxLength(30).IsUnicode(true);
+            modelBuilder.Entity<User>().Property(u => u.Email).IsRequired().HasMaxLength(40).IsUnicode(false);
+            modelBuilder.Entity<User>().Property(u => u.Password).IsRequired().HasMaxLength(40).IsUnicode(false);
+
+            modelBuilder.Entity<Trip>().Property(t => t.ArriavalDate).IsRequired();
+            modelBuilder.Entity<Trip>().Property(t => t.DepartureDate).IsRequired();
+
+            modelBuilder.Entity<City>().Property(c => c.Currency).HasMaxLength(10).IsRequired();
+            modelBuilder.Entity<City>().Property(c => c.FullName).IsRequired().HasMaxLength(30);
+            modelBuilder.Entity<City>().Property(c => c.Language).HasMaxLength(30);
+            modelBuilder.Entity<City>().Property(c => c.Name).HasMaxLength(30).IsRequired();
+            modelBuilder.Entity<City>().Property(c => c.PictureUrl).HasMaxLength(60);
+            
+
+            modelBuilder.Entity<CityCoordinate>().Property(cor => cor.Latitude).IsRequired();
+            modelBuilder.Entity<CityCoordinate>().Property(cor => cor.Longitude).IsRequired();
+
+            modelBuilder.Entity<Ticket>().Property(tick => tick.ImagePath).HasMaxLength(60);
+
+            modelBuilder.Entity<ToDoItem>().Property(td => td.Done).IsRequired();
+            modelBuilder.Entity<ToDoItem>().Property(td => td.Name).IsRequired().HasMaxLength(30);
+
             base.OnModelCreating(modelBuilder);
         }
     }

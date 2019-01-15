@@ -65,6 +65,10 @@
     <Compile Include="Migrations\201901121852445_Initial.Designer.cs">
       <DependentUpon>201901121852445_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901151555276_entityPropertyRestrictions.cs" />
+    <Compile Include="Migrations\201901151555276_entityPropertyRestrictions.Designer.cs">
+      <DependentUpon>201901151555276_entityPropertyRestrictions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -83,6 +87,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901121852445_Initial.resx">
       <DependentUpon>201901121852445_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901151555276_entityPropertyRestrictions.resx">
+      <DependentUpon>201901151555276_entityPropertyRestrictions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

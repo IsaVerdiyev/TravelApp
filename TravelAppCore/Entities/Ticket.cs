@@ -8,12 +8,10 @@ namespace TravelAppCore.Entities
 {
     public class Ticket: BaseEntity
     {
-        //[Required]
-        //[StringLength(60)]
-        //[DataType(DataType.ImageUrl)]
+        
         public string ImagePath { get; set; }
 
-        //[ForeignKey("Trip")]
+        
         public int TripId { get; set; }
         public Trip Trip { get; set; }
     }
