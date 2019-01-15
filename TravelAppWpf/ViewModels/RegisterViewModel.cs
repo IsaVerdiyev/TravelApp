@@ -109,8 +109,11 @@ namespace TravelAppWpf.ViewModels
             () => !string.IsNullOrWhiteSpace(Nick) &&
                   !string.IsNullOrWhiteSpace(Email) &&
                   !string.IsNullOrWhiteSpace(Password) &&
-                  !string.IsNullOrWhiteSpace(RepeatPassword)));
-        }
+                  !string.IsNullOrWhiteSpace(RepeatPassword) &&
+                  Password.Equals(RepeatPassword)));
+                
+                }
+              
 
         #endregion
     }
