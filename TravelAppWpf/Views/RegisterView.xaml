@@ -23,9 +23,13 @@
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
@@ -38,11 +42,14 @@
                 <Label Content="Enter nick"/>
 
                 <TextBox Grid.Column="1"
-                         Text="{Binding Nick, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                         Name="NickTextBox"
+                         Text="{Binding Nick, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True, ValidatesOnDataErrors=True}"/>
 
             </Grid>
 
-            <Grid Grid.Row="1">
+            <Label Grid.Row="1"
+                   Content="{Binding (Validation.Errors)[0].ErrorContent, ElementName=NickTextBox}"/>
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.3*"/>
                     <ColumnDefinition/>
@@ -50,10 +57,12 @@
                 <Label Content="Enter Email"/>
 
                 <TextBox Grid.Column="1"
-                         Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                         Name="EmailTextBox"
+                         Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True, ValidatesOnDataErrors=True}"/>
             </Grid>
-
-            <Grid Grid.Row="2">
+            <Label Grid.Row="3"
+                   Content="{Binding (Validation.Errors)[0].ErrorContent, ElementName=EmailTextBox}"/>
+            <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.3*"/>
                     <ColumnDefinition/>
@@ -61,10 +70,12 @@
                 <Label Content="Enter Password"/>
 
                 <TextBox Grid.Column="1"
-                         Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                         Name="PasswordTextBox"
+                         Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
             </Grid>
-
-            <Grid Grid.Row="3">
+            <Label Grid.Row="5"
+                   Content="{Binding (Validation.Errors)[0].ErrorContent, ElementName=PasswordTextBox}"/>
+            <Grid Grid.Row="6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.3*"/>
                     <ColumnDefinition/>
@@ -72,10 +83,12 @@
                 <Label Content="Repeat Password"/>
 
                 <TextBox Grid.Column="1"
-                         Text="{Binding RepeatPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                         Name="RepeatPasswordTextBox"
+                         Text="{Binding RepeatPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
             </Grid>
-
-            <Button Grid.Row="4"
+            <Label Grid.Row="7"
+                   Content="{Binding (Validation.Errors)[0].ErrorContent, ElementName=RepeatPasswordTextBox}"/>
+            <Button Grid.Row="8"
                     Content="Confirm registration"
                     Command="{Binding RegisterCommand}"/>
 

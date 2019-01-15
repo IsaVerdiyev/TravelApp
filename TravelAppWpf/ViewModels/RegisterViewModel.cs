@@ -2,21 +2,25 @@
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
+using TravelAppWpf.Extensions;
 using TravelAppWpf.Navigation;
 
 namespace TravelAppWpf.ViewModels
 {
-    class RegisterViewModel : ViewModelBase
+    class RegisterViewModel : ViewModelBase, IDataErrorInfo
     {
         #region Fields And Properties
 
         string nick;
+        [Required (ErrorMessage ="Nick field is required")]
         public string Nick
         {
             get => nick;
@@ -28,6 +32,7 @@ namespace TravelAppWpf.ViewModels
         }
 
         string email;
+        [Required (ErrorMessage = "Email field is required")]
         public string Email {
             get => email;
             set
@@ -38,6 +43,7 @@ namespace TravelAppWpf.ViewModels
         }
 
         string password;
+        [Required (ErrorMessage ="Password field is required")]
         public string Password {
             get => password;
             set
@@ -48,6 +54,9 @@ namespace TravelAppWpf.ViewModels
         }
 
         string repeatPassword;
+
+        [Required (ErrorMessage = "Repeat password to confirm it")]
+        [Compare(nameof(Password), ErrorMessage = "Passwords do not match")]
         public string RepeatPassword
         {
             get => repeatPassword;
@@ -113,7 +122,13 @@ namespace TravelAppWpf.ViewModels
                   Password.Equals(RepeatPassword)));
                 
                 }
-              
+        #endregion
+
+        #region Validation
+
+        public string Error => throw new NotImplementedException();
+
+        public string this[string columnName] => this.Validate(columnName);
 
         #endregion
     }
