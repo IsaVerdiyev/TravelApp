@@ -69,6 +69,10 @@
     <Compile Include="Migrations\201901151555276_entityPropertyRestrictions.Designer.cs">
       <DependentUpon>201901151555276_entityPropertyRestrictions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901160724561_PasswordOfUserWasSetToUnicode.cs" />
+    <Compile Include="Migrations\201901160724561_PasswordOfUserWasSetToUnicode.Designer.cs">
+      <DependentUpon>201901160724561_PasswordOfUserWasSetToUnicode.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -90,6 +94,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901151555276_entityPropertyRestrictions.resx">
       <DependentUpon>201901151555276_entityPropertyRestrictions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901160724561_PasswordOfUserWasSetToUnicode.resx">
+      <DependentUpon>201901160724561_PasswordOfUserWasSetToUnicode.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
