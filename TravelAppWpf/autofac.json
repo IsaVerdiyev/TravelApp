@@ -8,6 +8,7 @@
     { "type": "TravelAppWpf.ViewModels.TicketsViewModel" },
     { "type": "TravelAppWpf.ViewModels.CheckListViewModel" },
     { "type": "TravelAppWpf.ViewModels.RegisterViewModel" },
+    { "type": "TravelAppWpf.ViewModels.AddTripViewModel" },
     {
       "type": "Services.AccountService, Services",
       "services": [
