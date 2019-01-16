@@ -10,7 +10,8 @@ namespace TravelAppCore.Entities
     {
         public ICollection<City> Cities { get; set; }
 
-        
+        public string Name { get; set; }
+
         public DateTime DepartureDate { get; set; }
 
         

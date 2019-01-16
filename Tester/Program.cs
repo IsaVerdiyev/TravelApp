@@ -29,6 +29,7 @@ namespace Tester
                 Trips = new List<Trip>
                 {
                    new Trip{
+                       Name="Trip1",
                        ArriavalDate = DateTime.Now.AddDays(3),
                        DepartureDate = DateTime.Now,
                         CheckList = new List<ToDoItem>

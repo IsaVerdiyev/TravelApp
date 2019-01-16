@@ -33,6 +33,7 @@ namespace TravelAppInfrastructure.Data
 
             modelBuilder.Entity<Trip>().Property(t => t.ArriavalDate).IsRequired();
             modelBuilder.Entity<Trip>().Property(t => t.DepartureDate).IsRequired();
+            modelBuilder.Entity<Trip>().Property(t => t.Name).IsRequired().HasMaxLength(30).IsUnicode(true);
 
             modelBuilder.Entity<City>().Property(c => c.Currency).HasMaxLength(10).IsRequired();
             modelBuilder.Entity<City>().Property(c => c.FullName).IsRequired().HasMaxLength(30);
