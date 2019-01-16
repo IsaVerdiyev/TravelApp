@@ -73,6 +73,10 @@
     <Compile Include="Migrations\201901160724561_PasswordOfUserWasSetToUnicode.Designer.cs">
       <DependentUpon>201901160724561_PasswordOfUserWasSetToUnicode.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901161954423_AddedNamePropertyInTrip.cs" />
+    <Compile Include="Migrations\201901161954423_AddedNamePropertyInTrip.Designer.cs">
+      <DependentUpon>201901161954423_AddedNamePropertyInTrip.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -97,6 +101,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901160724561_PasswordOfUserWasSetToUnicode.resx">
       <DependentUpon>201901160724561_PasswordOfUserWasSetToUnicode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901161954423_AddedNamePropertyInTrip.resx">
+      <DependentUpon>201901161954423_AddedNamePropertyInTrip.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
