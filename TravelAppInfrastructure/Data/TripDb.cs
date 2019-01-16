@@ -29,7 +29,7 @@ namespace TravelAppInfrastructure.Data
 
             modelBuilder.Entity<User>().Property(u => u.NickName).IsRequired().HasMaxLength(30).IsUnicode(true);
             modelBuilder.Entity<User>().Property(u => u.Email).IsRequired().HasMaxLength(40).IsUnicode(false);
-            modelBuilder.Entity<User>().Property(u => u.Password).IsRequired().HasMaxLength(40).IsUnicode(false);
+            modelBuilder.Entity<User>().Property(u => u.Password).IsRequired().HasMaxLength(40).IsUnicode(true);
 
             modelBuilder.Entity<Trip>().Property(t => t.ArriavalDate).IsRequired();
             modelBuilder.Entity<Trip>().Property(t => t.DepartureDate).IsRequired();
