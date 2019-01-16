@@ -149,6 +149,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Extensions\ValidateExtensions.cs" />
+    <Compile Include="Messages\TripsViewModelMessage.cs" />
     <Compile Include="Navigation\INavigator.cs" />
     <Compile Include="Navigation\Navigator.cs" />
     <Compile Include="Navigation\PageNotFoundException.cs" />
@@ -212,9 +213,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Messages\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Resources\AppViewDictionary.xaml">
       <SubType>Designer</SubType>

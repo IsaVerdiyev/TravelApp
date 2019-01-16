@@ -26,8 +26,16 @@
       "instanceScope": "single-instance"
     },
     {
-      "type": "TravelAppInfrastructure.Data.TripDb, TravelAppInfrastructure", 
-      "instanceScope":  "single-instance"
+      "type": "TravelAppInfrastructure.Data.TripDb, TravelAppInfrastructure",
+      "instanceScope": "single-instance"
+    },
+    {
+      "type": "TravelAppCore.Services.TripService, TravelAppCore",
+      "services": [
+        {
+          "type": "TravelAppCore.Interfaces.ITripService, TravelAppCore"
+        }
+      ]
     }
   ]
 }

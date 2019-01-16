@@ -109,7 +109,7 @@ namespace TravelAppWpf.ViewModels
                 if (result)
                 {
                     MessageBox.Show("User was successfully registered");
-
+                    navigator.NavigateTo<TripsViewModel>();
                 }
                 else
                 {
