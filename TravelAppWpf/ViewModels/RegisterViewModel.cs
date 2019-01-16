@@ -122,7 +122,14 @@ namespace TravelAppWpf.ViewModels
                   !string.IsNullOrWhiteSpace(RepeatPassword) &&
                   Password.Equals(RepeatPassword)));
                 
-                }
+        }
+
+        private RelayCommand returnBackCommand;
+        public RelayCommand ReturnBackCommand
+        {
+            get  => returnBackCommand ?? (returnBackCommand  = new RelayCommand(() => navigator.NavigateTo<SignInViewModel>()))  ;
+        }
+
         #endregion
 
         #region Validation

@@ -18,7 +18,17 @@
             
         </Grid.RowDefinitions>
 
-        <Label Content="Registration"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" 
+                   Content="←"
+                    Command="{Binding ReturnBackCommand}"/>
+            <Label Grid.Column="1"
+                   Content="Registration"/>
+        </Grid>
 
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
