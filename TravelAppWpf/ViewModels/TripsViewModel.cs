@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,8 +22,9 @@ namespace TravelAppWpf.ViewModels
 
         private User user;
 
-        private ObservableCollection<Trip> trips;
-        public ObservableCollection<Trip> Trips { get => trips; set => Set(ref trips, value); }
+       
+        public ObservableCollection<Trip> Trips { get => new ObservableCollection<Trip>(tripService.GetTripsOfUser(user)); }
+
 
         #endregion
 
@@ -44,8 +46,8 @@ namespace TravelAppWpf.ViewModels
             Messenger.Default.Register<TripsViewModelMessage>(this, m =>
             {
                 user = m.User;
-                Trips = new ObservableCollection<Trip>(tripService.GetTripsOfUser(user));
-            });
+                
+            }, true);
         }
 
         #endregion
@@ -56,13 +58,44 @@ namespace TravelAppWpf.ViewModels
         public RelayCommand<Trip> DeleteTripCommand
         {
             get => deleteTripCommand ?? (deleteTripCommand = new RelayCommand<Trip>(
-                        async t => await tripService.RemoveTripAsync(new DeleteByIdSpecification<Trip>(t.Id))
+                        async t =>
+                        {
+                            await tripService.RemoveTripAsync(new DeleteByIdSpecification<Trip>(t.Id));
+                            RaisePropertyChanged(nameof(Trips));
+                        }
                         ));
         }
 
 
+        private RelayCommand addTrip;
+        public RelayCommand AddTrip
+        {
+            get => addTrip ?? (addTrip = new RelayCommand(
+                        async () => 
+                        {
+                            string tripName = Interaction.InputBox("Enter trip name: ", "Trip name", "Default");
+                            await tripService.AddTripAsync(user, new Trip
+                            {
+                                Name = tripName,
+                                CheckList = new List<ToDoItem>(),
+                                Cities = new List<City>(),
+                                Tickets = new List<Ticket>(),
+                                ArriavalDate = DateTime.Now.AddDays(3),
+                                DepartureDate = DateTime.Now
+                            });
+                            RaisePropertyChanged(nameof(Trips));
+                        }
+                        ));
+        }
 
 
+        private RelayCommand signOutCommand;
+        public RelayCommand SignOutCommand
+        {
+            get => signOutCommand ?? (signOutCommand = new RelayCommand(
+                        () => navigator.NavigateTo<SignInViewModel>()
+                        ));
+        }
 
 
         #endregion

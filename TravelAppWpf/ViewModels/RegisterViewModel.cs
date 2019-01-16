@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,6 +12,7 @@ using System.Windows;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
 using TravelAppWpf.Extensions;
+using TravelAppWpf.Messages;
 using TravelAppWpf.Navigation;
 
 namespace TravelAppWpf.ViewModels
@@ -79,6 +81,11 @@ namespace TravelAppWpf.ViewModels
 
         #endregion
 
+        #region Messages
+
+        TripsViewModelMessage tripsViewModelMessage = new TripsViewModelMessage();
+
+        #endregion
 
         #region Constutors
 
@@ -109,6 +116,8 @@ namespace TravelAppWpf.ViewModels
                 if (result)
                 {
                     MessageBox.Show("User was successfully registered");
+                    tripsViewModelMessage.User = user;
+                    Messenger.Default.Send<TripsViewModelMessage>(tripsViewModelMessage);
                     navigator.NavigateTo<TripsViewModel>();
                 }
                 else

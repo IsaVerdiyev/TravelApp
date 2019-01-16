@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
+using TravelAppWpf.Messages;
 using TravelAppWpf.Navigation;
 
 namespace TravelAppWpf.ViewModels
@@ -35,6 +36,11 @@ namespace TravelAppWpf.ViewModels
 
         #endregion
 
+        #region Messages
+
+        TripsViewModelMessage tripsViewModelMessage = new TripsViewModelMessage();
+
+        #endregion
 
         #region Constuctors
 
@@ -57,6 +63,8 @@ namespace TravelAppWpf.ViewModels
                 var resultOfSigningIn = await accountService.TryLogInAsync(nickOrEmail, password);
                 if (resultOfSigningIn.result)
                 {
+                    tripsViewModelMessage.User = resultOfSigningIn.foundUser;
+                    Messenger.Default.Send<TripsViewModelMessage>(tripsViewModelMessage);
                     navigator.NavigateTo<TripsViewModel>();
                 }
                 else
