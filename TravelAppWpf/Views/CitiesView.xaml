@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TravelAppWpf.Views"
+             xmlns:vm="clr-namespace:TravelAppWpf.ViewModels"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance vm:CitiesViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary Source="../Resources/CitiesViewDictionary.xaml"/>
@@ -12,12 +14,42 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
+            <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
             <RowDefinition/>
+            <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Cities"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
+            <Button Grid.Column="0"
+                    Content="←"
+                    Command="{Binding ReturnBackCommand}"/>
 
-        <ListBox Grid.Row="1">
+            <Label Grid.Column="1"
+                   Content="Cities"/>
+        </Grid>
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Content="Cities"/>
+            <Button Grid.Column="1"
+                    Content="Tickets"/>
+            <Button Grid.Column="2"
+                    Content="Checklist"/>
+        </Grid>
+
+        <ListBox Grid.Row="2"
+                 ItemsSource="{Binding Cities}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -28,15 +60,31 @@
                         </Grid.ColumnDefinitions>
                         <Label/>
                         <Button Grid.Column="1"
-                                Content="👁"/>
+                                Content="👁"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ShowInfoOfCity}"
+                                CommandParameter="{Binding}"/>
 
 
                         <Button Grid.Column="2"
-                                Content="x"/>
+                                Content="x"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DeleteCityCommand}"
+                                CommandParameter="{Binding}"/>
 
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="2"
+                    Content="Add City"
+                    Command="{Binding AddCityCommand}"/>
+        </Grid>
     </Grid>
 </UserControl>

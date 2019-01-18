@@ -31,5 +31,13 @@
     <DataTemplate DataType="{x:Type vm:AddTripViewModel}">
         <v:AddTripView/>
     </DataTemplate>
-    
+
+    <DataTemplate DataType="{x:Type vm:AddCityViewModel}">
+        <v:AddCityView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:CityOnMapViewModel}">
+        <v:CityOnMapView/>
+    </DataTemplate>
+
 </ResourceDictionary>

@@ -150,6 +150,7 @@
     </Compile>
     <Compile Include="Extensions\ValidateExtensions.cs" />
     <Compile Include="Messages\AddTripViewModelMessage.cs" />
+    <Compile Include="Messages\CityOnMapViewModelMessage.cs" />
     <Compile Include="Messages\TripDetailsObserverViewModelMessage.cs" />
     <Compile Include="Messages\TripsViewModelMessage.cs" />
     <Compile Include="Navigation\INavigator.cs" />
@@ -161,10 +162,14 @@
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\CheckListViewModel.cs" />
     <Compile Include="ViewModels\CitiesViewModel.cs" />
+    <Compile Include="ViewModels\CityOnMapViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
     <Compile Include="ViewModels\SignInViewModel.cs" />
     <Compile Include="ViewModels\TicketsViewModel.cs" />
     <Compile Include="ViewModels\TripsViewModel.cs" />
+    <Compile Include="Views\AddCityView.xaml.cs">
+      <DependentUpon>AddCityView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AddTripView.xaml.cs">
       <DependentUpon>AddTripView.xaml</DependentUpon>
     </Compile>
@@ -176,6 +181,9 @@
     </Compile>
     <Compile Include="Views\CitiesView.xaml.cs">
       <DependentUpon>CitiesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CityOnMapView.xaml.cs">
+      <DependentUpon>CityOnMapView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RegisterView.xaml.cs">
       <DependentUpon>RegisterView.xaml</DependentUpon>
@@ -222,6 +230,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="Resources\AddCityViewDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\AddTripViewDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -235,6 +247,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\CitiesViewDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\CityOnMapViewDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -262,6 +278,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AddCityView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AddTripView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -275,6 +295,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CitiesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CityOnMapView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

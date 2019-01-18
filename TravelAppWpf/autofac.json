@@ -9,6 +9,8 @@
     { "type": "TravelAppWpf.ViewModels.CheckListViewModel" },
     { "type": "TravelAppWpf.ViewModels.RegisterViewModel" },
     { "type": "TravelAppWpf.ViewModels.AddTripViewModel" },
+    { "type": "TravelAppWpf.ViewModels.AddCityViewModel" },
+    { "type": "TravelAppWpf.ViewModels.CityOnMapViewModel" },
     {
       "type": "Services.AccountService, Services",
       "services": [

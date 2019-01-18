@@ -1,12 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
 using TravelAppCore.Specifications;
@@ -27,6 +22,12 @@ namespace TravelAppWpf.ViewModels
 
         #endregion
 
+
+        #region Messages
+
+        CityOnMapViewModelMessage cityOnMapViewModelMessage = new CityOnMapViewModelMessage();
+
+        #endregion
 
         #region Dependencies
 
@@ -72,6 +73,19 @@ namespace TravelAppWpf.ViewModels
             get => deleteCityCommand ?? (deleteCityCommand = new RelayCommand<City>(async c => await cityService.RemoveCityAsync(new DeleteByIdSpecification<City>(c.Id))));
         }
 
+        RelayCommand<City> showInfoOfCity;
+        public RelayCommand<City> ShowInfoOfCity
+        {
+            get => showInfoOfCity ?? (showInfoOfCity = new RelayCommand<City>(c => {
+                cityOnMapViewModelMessage.User = user;
+                cityOnMapViewModelMessage.Trip = trip;
+                cityOnMapViewModelMessage.City = c;
+
+                Messenger.Default.Send<CityOnMapViewModelMessage>(cityOnMapViewModelMessage);
+
+                navigator.NavigateTo<CityOnMapViewModel>();
+            }));
+        }
 
         #endregion
     }
