@@ -14,5 +14,10 @@ namespace TravelAppCore.Interfaces
 
         void RemoveTicket(DeleteByIdSpecification<Ticket> specification);
         Task RemoveTicketAsync(DeleteByIdSpecification<Ticket> specification);
+
+        IReadOnlyList<Ticket> GetTicketsOfTrip(Trip trip);
+        Task<IReadOnlyList<Ticket>> GetTicketsOfTripAsync(Trip trip);
+
+        
     }
 }

@@ -30,6 +30,16 @@ namespace TravelAppCore.Services
             return await ticketRepository.AddAsync(ticket);
         }
 
+        public IReadOnlyList<Ticket> GetTicketsOfTrip(Trip trip)
+        {
+            return ticketRepository.List(new TripTicketsSpecification(trip));
+        }
+
+        public async Task<IReadOnlyList<Ticket>> GetTicketsOfTripAsync(Trip trip)
+        {
+            return await ticketRepository.ListAsync(new TripTicketsSpecification(trip));
+        }
+
         public void RemoveTicket(DeleteByIdSpecification<Ticket> specification)
         {
             ticketRepository.DeleteBySpec(specification);

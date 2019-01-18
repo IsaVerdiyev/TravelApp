@@ -30,6 +30,16 @@ namespace TravelAppCore.Services
             return await cityRepository.AddAsync(city);
         }
 
+        public IReadOnlyList<City> GetCitiesOfTrip(Trip trip)
+        {
+            return cityRepository.List(new TripCitiesSpecification(trip));
+        }
+
+        public async Task<IReadOnlyList<City>> GetCitiesOfTripAsync(Trip trip)
+        {
+            return await cityRepository.ListAsync(new TripCitiesSpecification(trip));
+        }
+
         public void RemoveCity(DeleteByIdSpecification<City> specification)
         {
             cityRepository.DeleteBySpec(specification);
