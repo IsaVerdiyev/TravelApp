@@ -20,5 +20,8 @@ namespace TravelAppCore.Interfaces
 
         ToDoItem ChangeCheckedStateOfToDoItem(ToDoItem toDoItem, bool state);
         Task<ToDoItem> ChangeCheckedStateOfToDoItemAsync(ToDoItem toDoItem, bool state);
+
+        IReadOnlyList<ToDoItem> GetCheckListOfTrip(Trip trip);
+        Task<IReadOnlyList<ToDoItem>> GetCheckListOfTripAsync(Trip trip);
     }
 }

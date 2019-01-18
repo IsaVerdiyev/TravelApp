@@ -72,5 +72,10 @@ namespace TravelAppCore.Services
         {
             return tripRepository.List(new UserTripsSpecification(user.Id));
         }
+
+        public async Task<IReadOnlyList<Trip>> GetTripsOfUserAsync(User user)
+        {
+            return await tripRepository.ListAsync(new UserTripsSpecification(user.Id));
+        }
     }
 }

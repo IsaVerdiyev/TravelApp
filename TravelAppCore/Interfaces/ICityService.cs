@@ -14,5 +14,8 @@ namespace TravelAppCore.Interfaces
 
         void RemoveCity(DeleteByIdSpecification<City> deleteByIdSpecification);
         Task RemoveCityAsync(DeleteByIdSpecification<City> deleteByIdSpecification);
+
+        IReadOnlyList<City> GetCitiesOfTrip(Trip trip);
+        Task<IReadOnlyList<City>> GetCitiesOfTripAsync(Trip trip);
     }
 }

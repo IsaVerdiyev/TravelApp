@@ -58,6 +58,16 @@ namespace TravelAppCore.Services
             return toDoItem;
         }
 
+        public IReadOnlyList<ToDoItem> GetCheckListOfTrip(Trip trip)
+        {
+            return checkListRepository.List(new TripCheckListSpecification(trip));
+        }
+
+        public async Task<IReadOnlyList<ToDoItem>> GetCheckListOfTripAsync(Trip trip)
+        {
+            return await checkListRepository.ListAsync(new TripCheckListSpecification(trip));
+        }
+
         public void RemoveItemFromCheckList(DeleteByIdSpecification<ToDoItem> deleteByIdSpecification)
         {
             checkListRepository.DeleteBySpec(deleteByIdSpecification);

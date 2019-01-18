@@ -23,5 +23,6 @@ namespace TravelAppCore.Interfaces
         Task RemoveTripAsync(DeleteByIdSpecification<Trip> specification);
 
         IReadOnlyList<Trip> GetTripsOfUser(User user);
+        Task<IReadOnlyList<Trip>> GetTripsOfUserAsync(User user);
     }
 }
