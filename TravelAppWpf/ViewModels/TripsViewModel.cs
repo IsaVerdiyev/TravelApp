@@ -32,6 +32,7 @@ namespace TravelAppWpf.ViewModels
         #region Messages
 
         AddTripViewModelMessage addTripViewModelMessage = new AddTripViewModelMessage();
+        TripDetailsObserverViewModelMessage tripDetailsObserverViewModelMessage = new TripDetailsObserverViewModelMessage();
 
         #endregion
 
@@ -73,10 +74,10 @@ namespace TravelAppWpf.ViewModels
         }
 
 
-        private RelayCommand addTrip;
-        public RelayCommand AddTrip
+        private RelayCommand addTripCommand;
+        public RelayCommand AddTripCommand
         {
-            get => addTrip ?? (addTrip = new RelayCommand(() =>
+            get => addTripCommand ?? (addTripCommand = new RelayCommand(() =>
             {
                 addTripViewModelMessage.User = user;
                 Messenger.Default.Send(addTripViewModelMessage);
@@ -93,6 +94,21 @@ namespace TravelAppWpf.ViewModels
                         ));
         }
 
+
+        private RelayCommand<Trip> observeCommand;
+        public RelayCommand<Trip> ObserveCommand
+        {
+            get => observeCommand ?? (
+                observeCommand = new RelayCommand<Trip>(t =>
+                {
+                    tripDetailsObserverViewModelMessage.User = user;
+                    tripDetailsObserverViewModelMessage.Trip = t;
+                    Messenger.Default.Send<TripDetailsObserverViewModelMessage>(tripDetailsObserverViewModelMessage);
+                    navigator.NavigateTo<CitiesViewModel>();
+                }
+                ));
+              
+        }
 
         #endregion
     }

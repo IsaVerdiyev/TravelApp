@@ -42,7 +42,9 @@
                         </Grid.ColumnDefinitions>
                         <Label Content="{Binding Name}"/>
                         <Button Grid.Column="1"
-                                Content="👁"/>
+                                Content="👁"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=DataContext.ObserveCommand}"
+                                CommandParameter="{Binding}"/>
                         <Button Grid.Column="2"
                                 Content="x"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl,Mode=FindAncestor}, Path=DataContext.DeleteTripCommand}"
@@ -61,7 +63,7 @@
             <Button Grid.Column="1"
                     Content="+"
                     ToolTip="Add Trip"
-                    Command="{Binding AddTrip}"/>
+                    Command="{Binding AddTripCommand}"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -37,6 +37,14 @@
           "type": "TravelAppCore.Interfaces.ITripService, TravelAppCore"
         }
       ]
+    },
+    {
+      "type": "TravelAppCore.Services.CityService, TravelAppCore",
+      "services": [
+        {
+          "type": "TravelAppCore.Interfaces.ICityService, TravelAppCore"
+        }
+      ]
     }
   ]
 }
