@@ -150,6 +150,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Extensions\ValidateExtensions.cs" />
+    <Compile Include="Messages\AddTripViewModelMessage.cs" />
     <Compile Include="Messages\TripsViewModelMessage.cs" />
     <Compile Include="Navigation\INavigator.cs" />
     <Compile Include="Navigation\Navigator.cs" />

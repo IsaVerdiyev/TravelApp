@@ -29,6 +29,12 @@ namespace TravelAppWpf.ViewModels
         #endregion
 
 
+        #region Messages
+
+        AddTripViewModelMessage addTripViewModelMessage = new AddTripViewModelMessage();
+
+        #endregion
+
         #region Dependencies
 
         INavigator navigator;
@@ -70,22 +76,12 @@ namespace TravelAppWpf.ViewModels
         private RelayCommand addTrip;
         public RelayCommand AddTrip
         {
-            get => addTrip ?? (addTrip = new RelayCommand(
-                        async () => 
-                        {
-                            string tripName = Interaction.InputBox("Enter trip name: ", "Trip name", "Default");
-                            await tripService.AddTripAsync(user, new Trip
-                            {
-                                Name = tripName,
-                                CheckList = new List<ToDoItem>(),
-                                Cities = new List<City>(),
-                                Tickets = new List<Ticket>(),
-                                ArriavalDate = DateTime.Now.AddDays(3),
-                                DepartureDate = DateTime.Now
-                            });
-                            RaisePropertyChanged(nameof(Trips));
-                        }
-                        ));
+            get => addTrip ?? (addTrip = new RelayCommand(() =>
+            {
+                addTripViewModelMessage.User = user;
+                Messenger.Default.Send(addTripViewModelMessage);
+                navigator.NavigateTo<AddTripViewModel>();
+            }));
         }
 
 
