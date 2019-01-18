@@ -17,6 +17,26 @@
 
         <Label Content="Cities"/>
 
-        <ListBox Grid.Row="1"/>
+        <ListBox Grid.Row="1">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="30"/>
+                        </Grid.ColumnDefinitions>
+                        <Label/>
+                        <Button Grid.Column="1"
+                                Content="👁"/>
+
+
+                        <Button Grid.Column="2"
+                                Content="x"/>
+
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>

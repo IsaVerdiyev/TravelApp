@@ -1,4 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
+using TravelAppCore.Specifications;
+using TravelAppWpf.Messages;
 using TravelAppWpf.Navigation;
 
 namespace TravelAppWpf.ViewModels
@@ -15,7 +19,11 @@ namespace TravelAppWpf.ViewModels
     {
         #region Fields And Properties
 
-        public ObservableCollection<City> Cities { get; }
+        User user;
+
+        Trip trip;
+
+        public ObservableCollection<City> Cities { get => new ObservableCollection<City>(cityService.GetCitiesOfTrip(trip)); }
 
         #endregion
 
@@ -33,7 +41,37 @@ namespace TravelAppWpf.ViewModels
         {
             this.navigator = navigator;
             this.cityService = cityService;
+
+            Messenger.Default.Register<TripDetailsObserverViewModelMessage>(this, m => {
+                user = m.User;
+                trip = m.Trip;
+            });
         }
+
+        #endregion
+
+
+        #region Commands
+
+        RelayCommand returnBackCommand;
+        public RelayCommand ReturnBackCommand
+        {
+            get => returnBackCommand ?? (returnBackCommand = new RelayCommand(() => navigator.NavigateTo<TripsViewModel>()));
+        }
+
+
+        RelayCommand addCityCommand;
+        public RelayCommand AddCityCommand
+        {
+            get => addCityCommand ?? (addCityCommand = new RelayCommand(() => navigator.NavigateTo<AddCityViewModel>()));
+        }
+
+        RelayCommand<City> deleteCityCommand;
+        public RelayCommand<City> DeleteCityCommand
+        {
+            get => deleteCityCommand ?? (deleteCityCommand = new RelayCommand<City>(async c => await cityService.RemoveCityAsync(new DeleteByIdSpecification<City>(c.Id))));
+        }
+
 
         #endregion
     }

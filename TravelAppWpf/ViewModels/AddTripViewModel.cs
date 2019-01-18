@@ -53,11 +53,6 @@ namespace TravelAppWpf.ViewModels
 
         #endregion
 
-        #region Message
-
-        TripsViewModelMessage tripsViewModelMessage = new TripsViewModelMessage();
-
-        #endregion
 
         #region Dependencies
 
