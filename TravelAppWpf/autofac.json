@@ -20,6 +20,17 @@
       ]
     },
     {
+      "type": "Services.CityFromTeleportApiGetter, Services",
+      "services": [
+        {
+          "type": "TravelAppCore.Interfaces.ICityFromApiGetter`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], TravelAppCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        {
+          "type": "TravelAppCore.Interfaces.ICityMatchesSearcherFromApi`3[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Collections.Generic.IList`1[[System.ValueTuple`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], TravelAppCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        }
+      ]
+    },
+    {
       "type": "TravelAppWpf.Navigation.Navigator",
       "services": [
         {

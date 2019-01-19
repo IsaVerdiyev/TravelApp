@@ -12,7 +12,7 @@ using TravelAppWpf.Navigation;
 
 namespace TravelAppWpf.ViewModels
 {
-    class CitiesViewModel: ViewModelBase
+    class CitiesViewModel : ViewModelBase
     {
         #region Fields And Properties
 
@@ -35,7 +35,7 @@ namespace TravelAppWpf.ViewModels
         #region Messages
 
         CityOnMapViewModelMessage cityOnMapViewModelMessage = new CityOnMapViewModelMessage();
-
+        AddCityViewModelMessage addCityViewModelMessage = new AddCityViewModelMessage();
         #endregion
 
         #region Dependencies
@@ -52,10 +52,13 @@ namespace TravelAppWpf.ViewModels
             this.navigator = navigator;
             this.cityService = cityService;
 
-            Messenger.Default.Register<TripDetailsObserverViewModelMessage>(this, m => {
+            Messenger.Default.Register<TripDetailsObserverViewModelMessage>(this, m =>
+            {
                 user = m.User;
                 trip = m.Trip;
             });
+
+            Messenger.Default.Register<UpdateCitiesMessage>(this, m => RaisePropertyChanged(nameof(Cities)));
         }
 
         #endregion
@@ -73,13 +76,20 @@ namespace TravelAppWpf.ViewModels
         RelayCommand addCityCommand;
         public RelayCommand AddCityCommand
         {
-            get => addCityCommand ?? (addCityCommand = new RelayCommand(() => navigator.NavigateTo<AddCityViewModel>()));
+            get => addCityCommand ?? (addCityCommand = new RelayCommand(() =>
+            {
+                addCityViewModelMessage.User = user;
+                addCityViewModelMessage.Trip = trip;
+                Messenger.Default.Send<AddCityViewModelMessage>(addCityViewModelMessage);
+                navigator.NavigateTo<AddCityViewModel>();
+            }));
         }
 
         RelayCommand<City> deleteCityCommand;
         public RelayCommand<City> DeleteCityCommand
         {
-            get => deleteCityCommand ?? (deleteCityCommand = new RelayCommand<City>(c => {
+            get => deleteCityCommand ?? (deleteCityCommand = new RelayCommand<City>(c =>
+            {
                 var removeCityTask = Task.Run(() => cityService.RemoveCityAsync(new DeleteByIdSpecification<City>(c.Id)));
                 removeCityTask.ContinueWith(t => RaisePropertyChanged(nameof(Cities)));
             }));
@@ -88,7 +98,8 @@ namespace TravelAppWpf.ViewModels
         RelayCommand<City> showInfoOfCity;
         public RelayCommand<City> ShowInfoOfCity
         {
-            get => showInfoOfCity ?? (showInfoOfCity = new RelayCommand<City>(c => {
+            get => showInfoOfCity ?? (showInfoOfCity = new RelayCommand<City>(c =>
+            {
                 cityOnMapViewModelMessage.User = user;
                 cityOnMapViewModelMessage.Trip = trip;
                 cityOnMapViewModelMessage.City = c;
