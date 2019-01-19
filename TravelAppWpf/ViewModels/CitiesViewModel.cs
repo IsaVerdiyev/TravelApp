@@ -20,13 +20,12 @@ namespace TravelAppWpf.ViewModels
 
         Trip trip;
 
+
+        ObservableCollection<City> cities;
         public ObservableCollection<City> Cities
         {
-            get
-            {
-                var getCitiesTask = Task.Run<IReadOnlyList<City>>(async () => await cityService.GetCitiesOfTripAsync(trip));
-                return new ObservableCollection<City>(getCitiesTask.ContinueWith(t => t.Result, TaskScheduler.Current).Result);
-            }
+            get => cities;
+            set => Set(ref cities, value);
         }
 
         #endregion
@@ -56,9 +55,10 @@ namespace TravelAppWpf.ViewModels
             {
                 user = m.User;
                 trip = m.Trip;
+                UpdateCities();
             });
 
-            Messenger.Default.Register<UpdateCitiesMessage>(this, m => RaisePropertyChanged(nameof(Cities)));
+            Messenger.Default.Register<UpdateCitiesMessage>(this, UpdateCitiesOnMessage);
         }
 
         #endregion
@@ -108,6 +108,22 @@ namespace TravelAppWpf.ViewModels
 
                 navigator.NavigateTo<CityOnMapViewModel>();
             }));
+        }
+
+        #endregion
+
+
+        #region Private Functions
+
+
+        void UpdateCities()
+        {
+            var getCitiesTask = Task.Run<IReadOnlyList<City>>(async () => await cityService.GetCitiesOfTripAsync(trip));
+            getCitiesTask.ContinueWith(t => Cities = new ObservableCollection<City>(t.Result), TaskScheduler.Current);
+        }
+        void UpdateCitiesOnMessage(UpdateCitiesMessage updateCitiesMessage)
+        {
+            UpdateCities();
         }
 
         #endregion

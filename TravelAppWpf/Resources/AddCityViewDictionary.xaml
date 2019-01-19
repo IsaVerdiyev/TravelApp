@@ -1,9 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:TravelAppWpf.Resources">
+                    xmlns:local="clr-namespace:TravelAppWpf.Resources"
+                    xmlns:converters="clr-namespace:TravelAppWpf.Converters">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="CommonDictionary.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
+
+    <converters:CityMatchTupleToStringConverter x:Key="CityMatchTupleToStringConverter"/>
+
 </ResourceDictionary>

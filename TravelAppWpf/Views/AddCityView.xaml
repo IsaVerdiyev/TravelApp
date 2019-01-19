@@ -4,12 +4,71 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TravelAppWpf.Views"
+             xmlns:vm="clr-namespace:TravelAppWpf.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             d:DataContext="{d:DesignInstance vm:AddCityViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary Source="../Resources/AddCityViewDictionary.xaml"/>
     </UserControl.Resources>
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" 
+                   Content="←"
+                    Command="{Binding ReturnBackCommand}"/>
+            <Label Grid.Column="1"
+                   Content="Adding City"/>
+        </Grid>
+
+        <Grid Grid.Row="1"> 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0"
+                         Text="{Binding SearchInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:InvokeCommandAction Command="{Binding SearchMatchesByNameCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+                <Button Grid.Column="1"
+                        Content="🔍"
+                        Command="{Binding SearchByNameAndAddCityCommand}"/>
+
+                <Label Grid.Column="3"
+                       Content="{Binding FoundCity}"/>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <ListBox ItemsSource="{Binding FoundCities}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding Converter={StaticResource CityMatchTupleToStringConverter}}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

@@ -148,6 +148,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\CityMatchTupleToStringConverter.cs" />
     <Compile Include="Extensions\ValidateExtensions.cs" />
     <Compile Include="Messages\AddCityViewModelMessage.cs" />
     <Compile Include="Messages\AddTripViewModelMessage.cs" />

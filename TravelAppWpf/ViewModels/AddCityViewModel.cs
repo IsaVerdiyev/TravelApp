@@ -30,7 +30,7 @@ namespace TravelAppWpf.ViewModels
         }
 
 
-        ObservableCollection<(string cityFullName, string cityUrl)> foundCities;
+        ObservableCollection<(string cityFullName, string cityUrl)> foundCities = new ObservableCollection<(string cityFullName, string cityUrl)>();
         public ObservableCollection<(string cityFullName, string cityUrl)> FoundCities {
             get => foundCities;
             set => Set(ref foundCities, value);
@@ -108,8 +108,8 @@ namespace TravelAppWpf.ViewModels
         public RelayCommand SearchByNameAndAddCityCommand
         {
             get => searchByNameAndAddCityCommand ?? (searchByNameAndAddCityCommand = new RelayCommand(() => {
-                var searchCityByNameTask = Task.Run<City>(async() => await cityFromApiGetter.GetCityFromApiByNameAsync(SearchInput));
-                var addFoundCityInTripTask = searchCityByNameTask.ContinueWith(async t =>await cityService.AddCityAsync(trip, t.Result), TaskScheduler.Default);
+                var searchCityByNameTask = Task.Run<City>(() => cityFromApiGetter.GetCityFromApiByNameAsync(SearchInput));
+                var addFoundCityInTripTask = searchCityByNameTask.ContinueWith( t => cityService.AddCityAsync(trip, t.Result), TaskScheduler.Default);
                 addFoundCityInTripTask.ContinueWith(t => Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage), TaskScheduler.Default);
                 navigator.NavigateTo<CitiesViewModel>();
             }));
@@ -125,6 +125,9 @@ namespace TravelAppWpf.ViewModels
                 navigator.NavigateTo<CitiesViewModel>();
             }));
         }
+
+        RelayCommand returnBackCommand;
+        public RelayCommand ReturnBackCommand { get => returnBackCommand ?? (returnBackCommand = new RelayCommand(() => navigator.NavigateTo<CitiesViewModel>())); }
 
         #endregion
     }

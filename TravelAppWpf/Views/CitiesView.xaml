@@ -58,7 +58,7 @@
                             <ColumnDefinition Width="30"/>
                             <ColumnDefinition Width="30"/>
                         </Grid.ColumnDefinitions>
-                        <Label/>
+                        <Label Content="{Binding FullName}"/>
                         <Button Grid.Column="1"
                                 Content="👁"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ShowInfoOfCity}"
