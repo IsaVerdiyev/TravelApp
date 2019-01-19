@@ -23,7 +23,15 @@ namespace TravelAppWpf.ViewModels
         private User user;
 
        
-        public ObservableCollection<Trip> Trips { get => new ObservableCollection<Trip>(tripService.GetTripsOfUser(user)); }
+        public ObservableCollection<Trip> Trips
+        {
+            get
+            {
+                var tripsGettingTask = Task.Run(async() => await tripService.GetTripsOfUserAsync(user));
+                return new ObservableCollection<Trip>(tripsGettingTask.ContinueWith(t => t.Result, TaskScheduler.Current).Result);
+                
+            }
+        }
 
 
         #endregion
@@ -65,10 +73,10 @@ namespace TravelAppWpf.ViewModels
         public RelayCommand<Trip> DeleteTripCommand
         {
             get => deleteTripCommand ?? (deleteTripCommand = new RelayCommand<Trip>(
-                        async t =>
+                        t =>
                         {
-                            await tripService.RemoveTripAsync(new DeleteByIdSpecification<Trip>(t.Id));
-                            RaisePropertyChanged(nameof(Trips));
+                            var removeTripTask = Task.Run(async () => await tripService.RemoveTripAsync(new DeleteByIdSpecification<Trip>(t.Id)));
+                            removeTripTask.ContinueWith(task => RaisePropertyChanged(nameof(Trips)), TaskScheduler.Current);
                         }
                         ));
         }

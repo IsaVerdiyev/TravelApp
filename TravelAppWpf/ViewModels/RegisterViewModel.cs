@@ -103,7 +103,7 @@ namespace TravelAppWpf.ViewModels
         private RelayCommand registerCommand;
         public RelayCommand RegisterCommand
         {
-            get => registerCommand ?? (registerCommand = new RelayCommand(async () =>
+            get => registerCommand ?? (registerCommand = new RelayCommand(() =>
             {
                 User user = new User
                 {
@@ -112,18 +112,22 @@ namespace TravelAppWpf.ViewModels
                     Password = Password
                 };
 
-                bool result = await accountService.TrySignUpAsync(user);
-                if (result)
-                {
-                    MessageBox.Show("User was successfully registered");
-                    tripsViewModelMessage.User = user;
-                    Messenger.Default.Send<TripsViewModelMessage>(tripsViewModelMessage);
-                    navigator.NavigateTo<TripsViewModel>();
-                }
-                else
-                {
-                    MessageBox.Show("There is already such user");
-                }
+                var signUpTask = Task.Run<bool>(async () => await accountService.TrySignUpAsync(user));
+
+                signUpTask.ContinueWith(t => {
+                    if (t.Result)
+                    {
+                        MessageBox.Show("User was successfully registered");
+                        tripsViewModelMessage.User = user;
+                        Messenger.Default.Send<TripsViewModelMessage>(tripsViewModelMessage);
+                        navigator.NavigateTo<TripsViewModel>();
+                    }
+                    else
+                    {
+                        MessageBox.Show("There is already such user");
+                    }
+
+                }, TaskScheduler.Current);
             },
             () => !string.IsNullOrWhiteSpace(Nick) &&
                   !string.IsNullOrWhiteSpace(Email) &&

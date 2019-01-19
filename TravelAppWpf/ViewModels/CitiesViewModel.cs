@@ -1,7 +1,9 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
 using TravelAppCore.Specifications;
@@ -18,7 +20,14 @@ namespace TravelAppWpf.ViewModels
 
         Trip trip;
 
-        public ObservableCollection<City> Cities { get => new ObservableCollection<City>(cityService.GetCitiesOfTrip(trip)); }
+        public ObservableCollection<City> Cities
+        {
+            get
+            {
+                var getCitiesTask = Task.Run<IReadOnlyList<City>>(async () => await cityService.GetCitiesOfTripAsync(trip));
+                return new ObservableCollection<City>(getCitiesTask.ContinueWith(t => t.Result, TaskScheduler.Current).Result);
+            }
+        }
 
         #endregion
 
@@ -70,7 +79,10 @@ namespace TravelAppWpf.ViewModels
         RelayCommand<City> deleteCityCommand;
         public RelayCommand<City> DeleteCityCommand
         {
-            get => deleteCityCommand ?? (deleteCityCommand = new RelayCommand<City>(async c => await cityService.RemoveCityAsync(new DeleteByIdSpecification<City>(c.Id))));
+            get => deleteCityCommand ?? (deleteCityCommand = new RelayCommand<City>(c => {
+                var removeCityTask = Task.Run(() => cityService.RemoveCityAsync(new DeleteByIdSpecification<City>(c.Id)));
+                removeCityTask.ContinueWith(t => RaisePropertyChanged(nameof(Cities)));
+            }));
         }
 
         RelayCommand<City> showInfoOfCity;

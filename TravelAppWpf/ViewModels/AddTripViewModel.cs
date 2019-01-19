@@ -85,7 +85,7 @@ namespace TravelAppWpf.ViewModels
         public RelayCommand AddTripCommand
         {
             get => addTripCommand ?? (
-                addTripCommand = new RelayCommand(async () =>
+                addTripCommand = new RelayCommand(() =>
                 {
                     Trip trip = new Trip
                     {
@@ -97,8 +97,12 @@ namespace TravelAppWpf.ViewModels
                         Tickets = new List<Ticket>()
                     };
 
-                    await tripService.AddTripAsync(user, trip);
-                    navigator.NavigateTo<TripsViewModel>();
+                    var addTripTask = Task.Run(async() =>await tripService.AddTripAsync(user, trip));
+                    addTripTask.ContinueWith(t => {
+                       navigator.NavigateTo<TripsViewModel>();
+                    }, TaskScheduler.Current);
+                    //await tripService.AddTripAsync(user, trip);
+                    //navigator.NavigateTo<TripsViewModel>();
 
                 }
                 , () =>
