@@ -96,7 +96,7 @@ namespace TravelAppWpf.ViewModels
                 await Task.Run(async () =>
                 {
                     await cityService.RemoveCityAsync(new DeleteByIdSpecification<City>(c.Id));
-                    Cities = new ObservableCollection<City>(await cityService.GetCitiesOfTripAsync(trip));
+                    UpdateCities();
                 });
             }));
         }

@@ -1,12 +1,14 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
 using TravelAppCore.Specifications;
@@ -15,7 +17,7 @@ using TravelAppWpf.Navigation;
 
 namespace TravelAppWpf.ViewModels
 {
-    class CheckListViewModel:  ViewModelBase
+    class CheckListViewModel : ViewModelBase
     {
         #region Fields And Properties
 
@@ -50,9 +52,11 @@ namespace TravelAppWpf.ViewModels
             this.navigator = navigator;
             this.checkListService = checkListService;
 
-            Messenger.Default.Register<TripDetailsObserverViewModelMessage>(this, m => {
+            Messenger.Default.Register<TripDetailsObserverViewModelMessage>(this, m =>
+            {
                 user = m.User;
                 trip = m.Trip;
+                UpdateCheckList();
             });
         }
 
@@ -65,9 +69,11 @@ namespace TravelAppWpf.ViewModels
         public RelayCommand<ToDoItem> ChangeToDoItemStateCommand
         {
             get => changeToDoItemStateCommand ?? (changeToDoItemStateCommand = new RelayCommand<ToDoItem>(
-                        async p => {
-                            await Task.Run(async () => {
-                                p = await checkListService.ChangeCheckedStateOfToDoItemAsync(p, !p.Done);
+                        async p =>
+                        {
+                            await Task.Run(async () =>
+                            {
+                                p = await checkListService.ChangeCheckedStateOfToDoItemAsync(p, p.Done);
                                 //checkList.First(i => i.Id == p.Id).Done = p.Done;
                             });
                         }
@@ -78,11 +84,26 @@ namespace TravelAppWpf.ViewModels
         public RelayCommand AddToDoItemInCheckListCommand
         {
             get => addToDoItemInCheckListCommand ?? (addToDoItemInCheckListCommand = new RelayCommand(
-                        () => {
-                            addToDoItemViewModelMessage.User = user;
-                            addToDoItemViewModelMessage.Trip = trip;
-                            Messenger.Default.Send<AddToDoItemViewModelMessage>(addToDoItemViewModelMessage);
-                            navigator.NavigateTo<AddToDoItemViewModel>();
+                        async () =>
+                        {
+                            await Task.Run(async () =>
+                            {
+                                while (true)
+                                {
+                                    string toDoItemName = Interaction.InputBox("Enter name of item to do: ", "Adding new item in checkList", "");
+                                    if (!string.IsNullOrWhiteSpace(toDoItemName))
+                                    {
+                                        await checkListService.AddItemInCheckListAsync(trip, new ToDoItem { Name = toDoItemName });
+                                        UpdateCheckList();
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("You should enter name for item");
+                                    }
+                                }
+                            });
+
                         }
                         ));
         }
@@ -91,10 +112,12 @@ namespace TravelAppWpf.ViewModels
         public RelayCommand<ToDoItem> DeleteToDoItemCommand
         {
             get => deleteToDoItemCommand ?? (deleteToDoItemCommand = new RelayCommand<ToDoItem>(
-                        async p => {
-                            await Task.Run(async () => {
+                        async p =>
+                        {
+                            await Task.Run(async () =>
+                            {
                                 await checkListService.RemoveItemFromCheckListAsync(new DeleteByIdSpecification<ToDoItem>(p.Id));
-                                CheckList = new ObservableCollection<ToDoItem>(await checkListService.GetCheckListOfTripAsync(trip));
+                                UpdateCheckList();
                             });
                         }
                         ));
@@ -121,6 +144,18 @@ namespace TravelAppWpf.ViewModels
 
 
 
+
+        #endregion
+
+
+        #region Private Functions
+
+        async void UpdateCheckList()
+        {
+            await Task.Run(async () => {
+                CheckList = new ObservableCollection<ToDoItem>(await checkListService.GetCheckListOfTripAsync(trip));
+            });
+        }
 
         #endregion
 
