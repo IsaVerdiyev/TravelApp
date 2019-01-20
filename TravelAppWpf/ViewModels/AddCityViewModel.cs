@@ -16,7 +16,7 @@ using TravelAppWpf.Navigation;
 
 namespace TravelAppWpf.ViewModels
 {
-    class AddCityViewModel: ViewModelBase
+    class AddCityViewModel : ViewModelBase
     {
         #region Fields And Properties
 
@@ -33,7 +33,8 @@ namespace TravelAppWpf.ViewModels
 
 
         ObservableCollection<(string cityFullName, string cityUrl)> foundCities = new ObservableCollection<(string cityFullName, string cityUrl)>();
-        public ObservableCollection<(string cityFullName, string cityUrl)> FoundCities {
+        public ObservableCollection<(string cityFullName, string cityUrl)> FoundCities
+        {
             get => foundCities;
             set => Set(ref foundCities, value);
         }
@@ -67,7 +68,8 @@ namespace TravelAppWpf.ViewModels
             this.cityMatchesSearcherFromApi = cityMatchesSearcherFromApi;
             this.cityService = cityService;
 
-            Messenger.Default.Register<AddCityViewModelMessage>(this, m => {
+            Messenger.Default.Register<AddCityViewModelMessage>(this, m =>
+            {
                 user = m.User;
                 trip = m.Trip;
             });
@@ -81,60 +83,69 @@ namespace TravelAppWpf.ViewModels
         RelayCommand searchMatchesByNameCommand;
         public RelayCommand SearchMatchesByNameCommand
         {
-            get => searchMatchesByNameCommand ?? (searchMatchesByNameCommand = new RelayCommand(() => {
-                var searchMathesTask = Task.Run<IList<(string cityFullName, string cityUrl)>>(async () => await cityMatchesSearcherFromApi.GetMatchesFromApiByInputAsync(SearchInput));
-                searchMathesTask.ContinueWith(t => FoundCities = new ObservableCollection<(string cityFullName, string cityUrl)>(t.Result), TaskScheduler.Current);
+            get => searchMatchesByNameCommand ?? (searchMatchesByNameCommand = new RelayCommand(async () =>
+            {
+                await Task.Run(async () =>
+                {
+                    var searchMatches = await cityMatchesSearcherFromApi.GetMatchesFromApiByInputAsync(SearchInput);
+                    FoundCities = new ObservableCollection<(string cityFullName, string cityUrl)>(searchMatches);
+                });
             }));
         }
 
         RelayCommand searchSingleCityByNameCommand;
         public RelayCommand SearchSingleCityByNameCommand
         {
-            get => searchSingleCityByNameCommand ?? (searchSingleCityByNameCommand = new RelayCommand(() => {
-                var cityFromApiGetterTask = Task.Run<City>(async() =>await cityFromApiGetter.GetCityFromApiByNameAsync(SearchInput));
-                cityFromApiGetterTask.ContinueWith(t => FoundCity = t.Result, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
-                cityFromApiGetterTask.ContinueWith(t => MessageBox.Show(t.Exception.InnerExceptions.First().Message), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
+            get => searchSingleCityByNameCommand ?? (searchSingleCityByNameCommand = new RelayCommand(async () =>
+            {
+                await Task.Run(async () =>
+                {
+                    FoundCity = await cityFromApiGetter.GetCityFromApiByNameAsync(SearchInput);
+                });
             }));
         }
 
         RelayCommand addFoundCityCommand;
         public RelayCommand AddFoundCityCommand
         {
-            get => addFoundCityCommand ?? (addFoundCityCommand = new RelayCommand(() => {
-                var AddingCityInTripTask = Task.Run(() => cityService.AddCityAsync(trip, FoundCity));
-                AddingCityInTripTask.ContinueWith(t => Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage), CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Default);
-                AddingCityInTripTask.ContinueWith(t => MessageBox.Show(t.Exception.InnerExceptions.First().Message), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
-                navigator.NavigateTo<CitiesViewModel>();
+            get => addFoundCityCommand ?? (addFoundCityCommand = new RelayCommand(async () =>
+            {
+                await Task.Run(async () =>
+                {
+                    navigator.NavigateTo<CitiesViewModel>();
+                    await cityService.AddCityAsync(trip, FoundCity);
+                    Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage);
+                });
             }));
         }
 
         RelayCommand searchByNameAndAddCityCommand;
         public RelayCommand SearchByNameAndAddCityCommand
         {
-            get => searchByNameAndAddCityCommand ?? (searchByNameAndAddCityCommand = new RelayCommand(() => {
-                var searchCityByNameTask = Task.Run<City>(() => cityFromApiGetter.GetCityFromApiByName(SearchInput));
-                searchCityByNameTask.ContinueWith(t => MessageBox.Show(t.Exception.InnerExceptions.First().Message), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
-                var addFoundCityInTripTask = searchCityByNameTask.ContinueWith( t => cityService.AddCity(trip, t.Result),CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Default);
-                addFoundCityInTripTask.ContinueWith(t => Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage),CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Default);
-                addFoundCityInTripTask.ContinueWith(t => MessageBox.Show(t.Exception.InnerExceptions.First().Message), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
-
-                //Task.WhenAny(searchCityByNameTask, addFoundCityInTripTask).ContinueWith(t => MessageBox.Show(t.Exception.InnerExceptions.First().Message), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
-                navigator.NavigateTo<CitiesViewModel>();
+            get => searchByNameAndAddCityCommand ?? (searchByNameAndAddCityCommand = new RelayCommand(async () =>
+            {
+                await Task.Run(async () =>
+                {
+                    navigator.NavigateTo<CitiesViewModel>();
+                    City city = await cityFromApiGetter.GetCityFromApiByNameAsync(SearchInput);
+                    await cityService.AddCityAsync(trip, city);
+                    Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage);
+                });
             }));
         }
 
         RelayCommand<(string cityFullName, string cityUrl)> addCityFromSelectedMatchCommand;
         public RelayCommand<(string cityFullName, string cityUrl)> AddCityFromSelectedMatchCommand
         {
-            get => addCityFromSelectedMatchCommand ?? (addCityFromSelectedMatchCommand = new RelayCommand<(string cityFullName, string cityUrl)>(tuple => {
-                var GettingCityBySelectedMatchTask = Task.Run<City>(async() =>await cityMatchesSearcherFromApi.GetCityFromApiBySelectedMatchAsync(tuple.cityUrl));
-                var AddingCityInTripTask = GettingCityBySelectedMatchTask.ContinueWith(async t => await cityService.AddCityAsync(trip, t.Result),CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Default);
-                
-                AddingCityInTripTask.ContinueWith(t => Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage),CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Default);
-                Task[] tasks = { GettingCityBySelectedMatchTask, AddingCityInTripTask };
-                
-                AddingCityInTripTask.ContinueWith(t => MessageBox.Show(t.Exception.InnerExceptions.First().Message), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
-                navigator.NavigateTo<CitiesViewModel>();
+            get => addCityFromSelectedMatchCommand ?? (addCityFromSelectedMatchCommand = new RelayCommand<(string cityFullName, string cityUrl)>(async tuple =>
+            {
+                await Task.Run(async () =>
+                {
+                    navigator.NavigateTo<CitiesViewModel>();
+                    City city = await cityMatchesSearcherFromApi.GetCityFromApiBySelectedMatchAsync(tuple.cityUrl);
+                    await cityService.AddCityAsync(trip, city);
+                    Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage);
+                });
             }));
         }
 

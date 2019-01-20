@@ -54,6 +54,12 @@ namespace TravelAppWpf.ViewModels
         #endregion
 
 
+        #region Messages
+
+        UpdateTripsMessage updateTripsMessage = new UpdateTripsMessage();
+
+        #endregion
+
         #region Dependencies
 
         private readonly INavigator navigator;
@@ -85,24 +91,24 @@ namespace TravelAppWpf.ViewModels
         public RelayCommand AddTripCommand
         {
             get => addTripCommand ?? (
-                addTripCommand = new RelayCommand(() =>
+                addTripCommand = new RelayCommand(async() =>
                 {
-                    Trip trip = new Trip
+                    await Task.Run(async () =>
                     {
-                        Name = Name,
-                        ArriavalDate = ArrivalDate,
-                        DepartureDate = DepartureDate,
-                        CheckList = new List<ToDoItem>(),
-                        Cities = new List<City>(),
-                        Tickets = new List<Ticket>()
-                    };
+                        navigator.NavigateTo<TripsViewModel>();
+                        Trip trip = new Trip
+                        {
+                            Name = Name,
+                            ArriavalDate = ArrivalDate,
+                            DepartureDate = DepartureDate,
+                            CheckList = new List<ToDoItem>(),
+                            Cities = new List<City>(),
+                            Tickets = new List<Ticket>()
+                        };
+                        await tripService.AddTripAsync(user, trip);
+                        Messenger.Default.Send<UpdateTripsMessage>(updateTripsMessage);
 
-                    var addTripTask = Task.Run(async() =>await tripService.AddTripAsync(user, trip));
-                    addTripTask.ContinueWith(t => {
-                       navigator.NavigateTo<TripsViewModel>();
-                    }, TaskScheduler.Current);
-                    //await tripService.AddTripAsync(user, trip);
-                    //navigator.NavigateTo<TripsViewModel>();
+                    });
 
                 }
                 , () =>

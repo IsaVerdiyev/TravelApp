@@ -59,14 +59,15 @@ namespace TravelAppWpf.ViewModels
         private RelayCommand signInCommand;
         public RelayCommand SignInCommand
         {
-            get => signInCommand ?? (signInCommand = new RelayCommand(()=>
+            get => signInCommand ?? (signInCommand = new RelayCommand(async ()=>
             {
-                var logInTask = Task.Run<(bool result, User foundUser)>(async () => await accountService.TryLogInAsync(nickOrEmail, password));
+                await Task.Run(async () =>
+                {
+                    var logInResult = await accountService.TryLogInAsync(NickOrEmail, Password);
 
-                logInTask.ContinueWith(t => {
-                    if (logInTask.Result.result)
+                    if (logInResult.result)
                     {
-                        tripsViewModelMessage.User = logInTask.Result.foundUser;
+                        tripsViewModelMessage.User = logInResult.foundUser;
                         Messenger.Default.Send<TripsViewModelMessage>(tripsViewModelMessage);
                         navigator.NavigateTo<TripsViewModel>();
                     }
@@ -74,7 +75,7 @@ namespace TravelAppWpf.ViewModels
                     {
                         ErrorMessage = "Error occured during signing in\n";
                     }
-                }, TaskScheduler.Current);
+                });
             }));
         }
 

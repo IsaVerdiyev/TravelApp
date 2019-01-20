@@ -16,22 +16,15 @@ using TravelAppWpf.Navigation;
 
 namespace TravelAppWpf.ViewModels
 {
-    class TripsViewModel: ViewModelBase
+    class TripsViewModel : ViewModelBase
     {
         #region Fields And Properties
 
         private User user;
 
-       
-        public ObservableCollection<Trip> Trips
-        {
-            get
-            {
-                var tripsGettingTask = Task.Run(async() => await tripService.GetTripsOfUserAsync(user));
-                return new ObservableCollection<Trip>(tripsGettingTask.ContinueWith(t => t.Result, TaskScheduler.Current).Result);
-                
-            }
-        }
+        private ObservableCollection<Trip> trips;
+        public ObservableCollection<Trip> Trips { get => trips; set => Set(ref trips, value); }
+
 
 
         #endregion
@@ -61,8 +54,10 @@ namespace TravelAppWpf.ViewModels
             Messenger.Default.Register<TripsViewModelMessage>(this, m =>
             {
                 user = m.User;
-                
+                UpdateTrips();
             }, true);
+
+            Messenger.Default.Register<UpdateTripsMessage>(this, m => UpdateTrips());
         }
 
         #endregion
@@ -72,13 +67,14 @@ namespace TravelAppWpf.ViewModels
         private RelayCommand<Trip> deleteTripCommand;
         public RelayCommand<Trip> DeleteTripCommand
         {
-            get => deleteTripCommand ?? (deleteTripCommand = new RelayCommand<Trip>(
-                        t =>
-                        {
-                            var removeTripTask = Task.Run(async () => await tripService.RemoveTripAsync(new DeleteByIdSpecification<Trip>(t.Id)));
-                            removeTripTask.ContinueWith(task => RaisePropertyChanged(nameof(Trips)), TaskScheduler.Current);
-                        }
-                        ));
+            get => deleteTripCommand ?? (deleteTripCommand = new RelayCommand<Trip>(async t =>
+            {
+                await Task.Run(async () =>
+                {
+                    await tripService.RemoveTripAsync(new DeleteByIdSpecification<Trip>(t.Id));
+                    UpdateTrips();
+                });
+            }));
         }
 
 
@@ -97,9 +93,8 @@ namespace TravelAppWpf.ViewModels
         private RelayCommand signOutCommand;
         public RelayCommand SignOutCommand
         {
-            get => signOutCommand ?? (signOutCommand = new RelayCommand(
-                        () => navigator.NavigateTo<SignInViewModel>()
-                        ));
+            get => signOutCommand ?? (signOutCommand = 
+                new RelayCommand(() => navigator.NavigateTo<SignInViewModel>()));
         }
 
 
@@ -115,7 +110,19 @@ namespace TravelAppWpf.ViewModels
                     navigator.NavigateTo<CitiesViewModel>();
                 }
                 ));
-              
+
+        }
+
+        #endregion
+
+        #region Private functions
+
+        async void UpdateTrips()
+        {
+            await Task.Run(async () =>
+           {
+               Trips = new ObservableCollection<Trip>(await tripService.GetTripsOfUserAsync(user));
+           });
         }
 
         #endregion

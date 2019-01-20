@@ -22,7 +22,7 @@ namespace TravelAppWpf.ViewModels
         #region Fields And Properties
 
         string nick;
-        [Required (ErrorMessage ="Nick field is required")]
+        [Required(ErrorMessage = "Nick field is required")]
         public string Nick
         {
             get => nick;
@@ -34,9 +34,10 @@ namespace TravelAppWpf.ViewModels
         }
 
         string email;
-        [Required (ErrorMessage = "Email field is required")]
+        [Required(ErrorMessage = "Email field is required")]
         [EmailAddress]
-        public string Email {
+        public string Email
+        {
             get => email;
             set
             {
@@ -46,8 +47,9 @@ namespace TravelAppWpf.ViewModels
         }
 
         string password;
-        [Required (ErrorMessage ="Password field is required")]
-        public string Password {
+        [Required(ErrorMessage = "Password field is required")]
+        public string Password
+        {
             get => password;
             set
             {
@@ -58,7 +60,7 @@ namespace TravelAppWpf.ViewModels
 
         string repeatPassword;
 
-        [Required (ErrorMessage = "Repeat password to confirm it")]
+        [Required(ErrorMessage = "Repeat password to confirm it")]
         [Compare(nameof(Password), ErrorMessage = "Passwords do not match")]
         public string RepeatPassword
         {
@@ -103,19 +105,19 @@ namespace TravelAppWpf.ViewModels
         private RelayCommand registerCommand;
         public RelayCommand RegisterCommand
         {
-            get => registerCommand ?? (registerCommand = new RelayCommand(() =>
+            get => registerCommand ?? (registerCommand = new RelayCommand(async () =>
             {
-                User user = new User
+                await Task.Run(async () =>
                 {
-                    Email = Email,
-                    NickName = Nick,
-                    Password = Password
-                };
+                    User user = new User
+                    {
+                        Email = Email,
+                        NickName = Nick,
+                        Password = Password
+                    };
 
-                var signUpTask = Task.Run<bool>(async () => await accountService.TrySignUpAsync(user));
-
-                signUpTask.ContinueWith(t => {
-                    if (t.Result)
+                    var signUpResult = await accountService.TrySignUpAsync(user);
+                    if (signUpResult)
                     {
                         MessageBox.Show("User was successfully registered");
                         tripsViewModelMessage.User = user;
@@ -124,23 +126,22 @@ namespace TravelAppWpf.ViewModels
                     }
                     else
                     {
-                        MessageBox.Show("There is already such user");
+                        MessageBox.Show("There is already such a user");
                     }
-
-                }, TaskScheduler.Current);
+                });
             },
             () => !string.IsNullOrWhiteSpace(Nick) &&
                   !string.IsNullOrWhiteSpace(Email) &&
                   !string.IsNullOrWhiteSpace(Password) &&
                   !string.IsNullOrWhiteSpace(RepeatPassword) &&
                   Password.Equals(RepeatPassword)));
-                
+
         }
 
         private RelayCommand returnBackCommand;
         public RelayCommand ReturnBackCommand
         {
-            get  => returnBackCommand ?? (returnBackCommand  = new RelayCommand(() => navigator.NavigateTo<SignInViewModel>()))  ;
+            get => returnBackCommand ?? (returnBackCommand = new RelayCommand(() => navigator.NavigateTo<SignInViewModel>()));
         }
 
         #endregion

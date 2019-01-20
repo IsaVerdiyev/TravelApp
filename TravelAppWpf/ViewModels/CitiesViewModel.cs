@@ -61,7 +61,7 @@ namespace TravelAppWpf.ViewModels
                 UpdateCities();
             });
 
-            Messenger.Default.Register<UpdateCitiesMessage>(this, UpdateCitiesOnMessage);
+            Messenger.Default.Register<UpdateCitiesMessage>(this, m => UpdateCities());
         }
 
         #endregion
@@ -91,10 +91,13 @@ namespace TravelAppWpf.ViewModels
         RelayCommand<City> deleteCityCommand;
         public RelayCommand<City> DeleteCityCommand
         {
-            get => deleteCityCommand ?? (deleteCityCommand = new RelayCommand<City>(c =>
+            get => deleteCityCommand ?? (deleteCityCommand = new RelayCommand<City>(async c =>
             {
-                var removeCityTask = Task.Run(() => cityService.RemoveCity(new DeleteByIdSpecification<City>(c.Id)));
-                removeCityTask.ContinueWith(t => Cities = new ObservableCollection<City>(cityService.GetCitiesOfTrip(trip)), CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
+                await Task.Run(async () =>
+                {
+                    await cityService.RemoveCityAsync(new DeleteByIdSpecification<City>(c.Id));
+                    Cities = new ObservableCollection<City>(await cityService.GetCitiesOfTripAsync(trip));
+                });
             }));
         }
 
@@ -119,19 +122,12 @@ namespace TravelAppWpf.ViewModels
         #region Private Functions
 
 
-        void UpdateCities()
+        async void UpdateCities()
         {
-            Task<IReadOnlyList<City>> getCitiesTask = Task.Run<IReadOnlyList<City>>(() => cityService.GetCitiesOfTrip(trip));
-            getCitiesTask.ContinueWith(t =>
+            await Task.Run(async() =>
             {
-                Cities = new ObservableCollection<City>(t.Result);
-                //RaisePropertyChanged(nameof(Cities));
-            }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
-            getCitiesTask.ContinueWith(t => MessageBox.Show(t.Exception.InnerExceptions.First().Message), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
-        }
-        void UpdateCitiesOnMessage(UpdateCitiesMessage updateCitiesMessage)
-        {
-            UpdateCities();
+                Cities = new ObservableCollection<City>(await cityService.GetCitiesOfTripAsync(trip));
+            });
         }
 
         #endregion

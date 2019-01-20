@@ -156,6 +156,7 @@
     <Compile Include="Messages\TripDetailsObserverViewModelMessage.cs" />
     <Compile Include="Messages\TripsViewModelMessage.cs" />
     <Compile Include="Messages\UpdateCitiesMessage.cs" />
+    <Compile Include="Messages\UpdateTripsMessage.cs" />
     <Compile Include="Navigation\INavigator.cs" />
     <Compile Include="Navigation\Navigator.cs" />
     <Compile Include="Navigation\PageNotFoundException.cs" />
