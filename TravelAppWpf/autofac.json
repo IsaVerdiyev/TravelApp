@@ -11,6 +11,7 @@
     { "type": "TravelAppWpf.ViewModels.AddTripViewModel" },
     { "type": "TravelAppWpf.ViewModels.AddCityViewModel" },
     { "type": "TravelAppWpf.ViewModels.CityOnMapViewModel" },
+    { "type": "TravelAppWpf.ViewModels.AddToDoItemViewModel" },
     {
       "type": "Services.AccountService, Services",
       "services": [
@@ -56,6 +57,14 @@
       "services": [
         {
           "type": "TravelAppCore.Interfaces.ICityService, TravelAppCore"
+        }
+      ]
+    },
+    {
+      "type": "TravelAppCore.Services.CheckListService, TravelAppCore",
+      "services": [
+        {
+          "type": "TravelAppCore.Interfaces.ICheckListService, TravelAppCore"
         }
       ]
     }

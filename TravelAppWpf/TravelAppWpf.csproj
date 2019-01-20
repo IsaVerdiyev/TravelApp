@@ -151,6 +151,7 @@
     <Compile Include="Converters\CityMatchTupleToStringConverter.cs" />
     <Compile Include="Extensions\ValidateExtensions.cs" />
     <Compile Include="Messages\AddCityViewModelMessage.cs" />
+    <Compile Include="Messages\AddToDoItemViewModelMessage.cs" />
     <Compile Include="Messages\AddTripViewModelMessage.cs" />
     <Compile Include="Messages\CityOnMapViewModelMessage.cs" />
     <Compile Include="Messages\TripDetailsObserverViewModelMessage.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Navigation\PageNotFoundException.cs" />
     <Compile Include="Tools\ViewModelLocator.cs" />
     <Compile Include="ViewModels\AddCityViewModel.cs" />
+    <Compile Include="ViewModels\AddToDoItemViewModel.cs" />
     <Compile Include="ViewModels\AddTripViewModel.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\CheckListViewModel.cs" />
@@ -173,6 +175,9 @@
     <Compile Include="ViewModels\TripsViewModel.cs" />
     <Compile Include="Views\AddCityView.xaml.cs">
       <DependentUpon>AddCityView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddToDoItemView.xaml.cs">
+      <DependentUpon>AddToDoItemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AddTripView.xaml.cs">
       <DependentUpon>AddTripView.xaml</DependentUpon>
@@ -238,6 +243,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\AddToDoItemViewDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\AddTripViewDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -283,6 +292,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddCityView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddToDoItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

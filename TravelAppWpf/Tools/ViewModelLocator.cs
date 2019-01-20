@@ -43,6 +43,7 @@ namespace TravelAppWpf.Tools
                 navigator.Register(scope.Resolve<AddTripViewModel>());
                 navigator.Register(scope.Resolve<AddCityViewModel>());
                 navigator.Register(scope.Resolve<CityOnMapViewModel>());
+                navigator.Register(scope.Resolve<AddToDoItemViewModel>());
             }
 
             navigator.NavigateTo<SignInViewModel>();

@@ -116,6 +116,16 @@ namespace TravelAppWpf.ViewModels
             }));
         }
 
+        private RelayCommand navigateToCheckListCommand;
+        public RelayCommand NavigateToCheckListCommand
+        {
+            get => navigateToCheckListCommand ?? (navigateToCheckListCommand = new RelayCommand(
+                        () => navigator.NavigateTo<CheckListViewModel>()
+                        ));
+        }
+
+
+
         #endregion
 
 
