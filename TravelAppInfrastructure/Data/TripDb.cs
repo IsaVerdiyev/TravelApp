@@ -39,13 +39,13 @@ namespace TravelAppInfrastructure.Data
             modelBuilder.Entity<City>().Property(c => c.FullName).IsRequired().HasMaxLength(30);
             modelBuilder.Entity<City>().Property(c => c.Language).HasMaxLength(30);
             modelBuilder.Entity<City>().Property(c => c.Name).HasMaxLength(30).IsRequired();
-            modelBuilder.Entity<City>().Property(c => c.PictureUrl).HasMaxLength(60);
+            modelBuilder.Entity<City>().Property(c => c.PictureUrl).HasMaxLength(500);
             
 
             modelBuilder.Entity<CityCoordinate>().Property(cor => cor.Latitude).IsRequired();
             modelBuilder.Entity<CityCoordinate>().Property(cor => cor.Longitude).IsRequired();
 
-            modelBuilder.Entity<Ticket>().Property(tick => tick.ImagePath).HasMaxLength(60);
+            modelBuilder.Entity<Ticket>().Property(tick => tick.ImagePath).HasMaxLength(500);
 
             modelBuilder.Entity<ToDoItem>().Property(td => td.Done).IsRequired();
             modelBuilder.Entity<ToDoItem>().Property(td => td.Name).IsRequired().HasMaxLength(30);
