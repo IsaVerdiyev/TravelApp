@@ -36,9 +36,9 @@ namespace TravelAppInfrastructure.Data
             modelBuilder.Entity<Trip>().Property(t => t.Name).IsRequired().HasMaxLength(30).IsUnicode(true);
 
             modelBuilder.Entity<City>().Property(c => c.Currency).HasMaxLength(10).IsRequired();
-            modelBuilder.Entity<City>().Property(c => c.FullName).IsRequired().HasMaxLength(30);
-            modelBuilder.Entity<City>().Property(c => c.Language).HasMaxLength(30);
-            modelBuilder.Entity<City>().Property(c => c.Name).HasMaxLength(30).IsRequired();
+            modelBuilder.Entity<City>().Property(c => c.FullName).IsRequired().HasMaxLength(150);
+            modelBuilder.Entity<City>().Property(c => c.Language).HasMaxLength(50);
+            modelBuilder.Entity<City>().Property(c => c.Name).HasMaxLength(50).IsRequired();
             modelBuilder.Entity<City>().Property(c => c.PictureUrl).HasMaxLength(500);
             
 
@@ -48,7 +48,7 @@ namespace TravelAppInfrastructure.Data
             modelBuilder.Entity<Ticket>().Property(tick => tick.ImagePath).HasMaxLength(500);
 
             modelBuilder.Entity<ToDoItem>().Property(td => td.Done).IsRequired();
-            modelBuilder.Entity<ToDoItem>().Property(td => td.Name).IsRequired().HasMaxLength(30);
+            modelBuilder.Entity<ToDoItem>().Property(td => td.Name).IsRequired().HasMaxLength(70);
 
             base.OnModelCreating(modelBuilder);
         }

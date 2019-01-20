@@ -81,6 +81,10 @@
     <Compile Include="Migrations\201901200826470_PicturePathPropertiesLengthIncreasing.Designer.cs">
       <DependentUpon>201901200826470_PicturePathPropertiesLengthIncreasing.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901200841363_IncreasedLengthOfStrings.cs" />
+    <Compile Include="Migrations\201901200841363_IncreasedLengthOfStrings.Designer.cs">
+      <DependentUpon>201901200841363_IncreasedLengthOfStrings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -111,6 +115,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901200826470_PicturePathPropertiesLengthIncreasing.resx">
       <DependentUpon>201901200826470_PicturePathPropertiesLengthIncreasing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901200841363_IncreasedLengthOfStrings.resx">
+      <DependentUpon>201901200841363_IncreasedLengthOfStrings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
