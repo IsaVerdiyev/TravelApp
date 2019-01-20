@@ -61,7 +61,7 @@ namespace TravelAppWpf.ViewModels
                 UpdateCities();
             });
 
-            Messenger.Default.Register<UpdateCitiesMessage>(this, UpdateCitiesOnMessage, true);
+            Messenger.Default.Register<UpdateCitiesMessage>(this, UpdateCitiesOnMessage);
         }
 
         #endregion
