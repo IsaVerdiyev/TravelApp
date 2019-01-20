@@ -77,6 +77,10 @@
     <Compile Include="Migrations\201901161954423_AddedNamePropertyInTrip.Designer.cs">
       <DependentUpon>201901161954423_AddedNamePropertyInTrip.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901200826470_PicturePathPropertiesLengthIncreasing.cs" />
+    <Compile Include="Migrations\201901200826470_PicturePathPropertiesLengthIncreasing.Designer.cs">
+      <DependentUpon>201901200826470_PicturePathPropertiesLengthIncreasing.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -104,6 +108,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901161954423_AddedNamePropertyInTrip.resx">
       <DependentUpon>201901161954423_AddedNamePropertyInTrip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901200826470_PicturePathPropertiesLengthIncreasing.resx">
+      <DependentUpon>201901200826470_PicturePathPropertiesLengthIncreasing.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
