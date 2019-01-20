@@ -55,7 +55,7 @@ namespace TravelAppWpf.ViewModels
             {
                 user = m.User;
                 UpdateTrips();
-            }, true);
+            });
 
             Messenger.Default.Register<UpdateTripsMessage>(this, m => UpdateTrips());
         }
