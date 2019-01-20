@@ -110,6 +110,15 @@ namespace TravelAppWpf.ViewModels
                         ));
         }
 
+        private RelayCommand navigateToCitiesCommand;
+        public RelayCommand NavigateToCitiesCommand
+        {
+            get => navigateToCitiesCommand ?? (navigateToCitiesCommand = new RelayCommand(
+                        () => navigator.NavigateTo<CitiesViewModel>()
+                        ));
+        }
+
+
 
 
 
