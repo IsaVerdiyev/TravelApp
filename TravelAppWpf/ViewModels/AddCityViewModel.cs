@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
 using TravelAppWpf.Messages;
@@ -90,7 +92,8 @@ namespace TravelAppWpf.ViewModels
         {
             get => searchSingleCityByNameCommand ?? (searchSingleCityByNameCommand = new RelayCommand(() => {
                 var cityFromApiGetterTask = Task.Run<City>(async() =>await cityFromApiGetter.GetCityFromApiByNameAsync(SearchInput));
-                cityFromApiGetterTask.ContinueWith(t => FoundCity = t.Result, TaskScheduler.Current);
+                cityFromApiGetterTask.ContinueWith(t => FoundCity = t.Result, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
+                cityFromApiGetterTask.ContinueWith(t => MessageBox.Show(t.Exception.InnerExceptions.First().Message), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
             }));
         }
 
@@ -98,8 +101,9 @@ namespace TravelAppWpf.ViewModels
         public RelayCommand AddFoundCityCommand
         {
             get => addFoundCityCommand ?? (addFoundCityCommand = new RelayCommand(() => {
-                var AddingCityInTripTask = Task.Run(async () => await cityService.AddCityAsync(trip, FoundCity));
-                AddingCityInTripTask.ContinueWith(t => Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage), TaskScheduler.Default);
+                var AddingCityInTripTask = Task.Run(() => cityService.AddCityAsync(trip, FoundCity));
+                AddingCityInTripTask.ContinueWith(t => Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage), CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Default);
+                AddingCityInTripTask.ContinueWith(t => MessageBox.Show(t.Exception.InnerExceptions.First().Message), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
                 navigator.NavigateTo<CitiesViewModel>();
             }));
         }
@@ -108,9 +112,13 @@ namespace TravelAppWpf.ViewModels
         public RelayCommand SearchByNameAndAddCityCommand
         {
             get => searchByNameAndAddCityCommand ?? (searchByNameAndAddCityCommand = new RelayCommand(() => {
-                var searchCityByNameTask = Task.Run<City>(() => cityFromApiGetter.GetCityFromApiByNameAsync(SearchInput));
-                var addFoundCityInTripTask = searchCityByNameTask.ContinueWith( t => cityService.AddCityAsync(trip, t.Result), TaskScheduler.Default);
-                addFoundCityInTripTask.ContinueWith(t => Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage), TaskScheduler.Default);
+                var searchCityByNameTask = Task.Run<City>(() => cityFromApiGetter.GetCityFromApiByName(SearchInput));
+                searchCityByNameTask.ContinueWith(t => MessageBox.Show(t.Exception.InnerExceptions.First().Message), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
+                var addFoundCityInTripTask = searchCityByNameTask.ContinueWith( t => cityService.AddCity(trip, t.Result),CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Default);
+                addFoundCityInTripTask.ContinueWith(t => Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage),CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Default);
+                addFoundCityInTripTask.ContinueWith(t => MessageBox.Show(t.Exception.InnerExceptions.First().Message), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
+
+                //Task.WhenAny(searchCityByNameTask, addFoundCityInTripTask).ContinueWith(t => MessageBox.Show(t.Exception.InnerExceptions.First().Message), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
                 navigator.NavigateTo<CitiesViewModel>();
             }));
         }
@@ -120,8 +128,12 @@ namespace TravelAppWpf.ViewModels
         {
             get => addCityFromSelectedMatchCommand ?? (addCityFromSelectedMatchCommand = new RelayCommand<(string cityFullName, string cityUrl)>(tuple => {
                 var GettingCityBySelectedMatchTask = Task.Run<City>(async() =>await cityMatchesSearcherFromApi.GetCityFromApiBySelectedMatchAsync(tuple.cityUrl));
-                var AddingCityInTripTask = GettingCityBySelectedMatchTask.ContinueWith(async t => await cityService.AddCityAsync(trip, t.Result), TaskScheduler.Default);
-                AddingCityInTripTask.ContinueWith(t => Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage), TaskScheduler.Default);
+                var AddingCityInTripTask = GettingCityBySelectedMatchTask.ContinueWith(async t => await cityService.AddCityAsync(trip, t.Result),CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Default);
+                
+                AddingCityInTripTask.ContinueWith(t => Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage),CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Default);
+                Task[] tasks = { GettingCityBySelectedMatchTask, AddingCityInTripTask };
+                
+                AddingCityInTripTask.ContinueWith(t => MessageBox.Show(t.Exception.InnerExceptions.First().Message), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
                 navigator.NavigateTo<CitiesViewModel>();
             }));
         }

@@ -3,7 +3,10 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
 using TravelAppCore.Specifications;
@@ -58,7 +61,7 @@ namespace TravelAppWpf.ViewModels
                 UpdateCities();
             });
 
-            Messenger.Default.Register<UpdateCitiesMessage>(this, UpdateCitiesOnMessage);
+            Messenger.Default.Register<UpdateCitiesMessage>(this, UpdateCitiesOnMessage, true);
         }
 
         #endregion
@@ -90,8 +93,8 @@ namespace TravelAppWpf.ViewModels
         {
             get => deleteCityCommand ?? (deleteCityCommand = new RelayCommand<City>(c =>
             {
-                var removeCityTask = Task.Run(() => cityService.RemoveCityAsync(new DeleteByIdSpecification<City>(c.Id)));
-                removeCityTask.ContinueWith(t => RaisePropertyChanged(nameof(Cities)));
+                var removeCityTask = Task.Run(() => cityService.RemoveCity(new DeleteByIdSpecification<City>(c.Id)));
+                removeCityTask.ContinueWith(t => Cities = new ObservableCollection<City>(cityService.GetCitiesOfTrip(trip)), CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
             }));
         }
 
@@ -118,8 +121,13 @@ namespace TravelAppWpf.ViewModels
 
         void UpdateCities()
         {
-            var getCitiesTask = Task.Run<IReadOnlyList<City>>(async () => await cityService.GetCitiesOfTripAsync(trip));
-            getCitiesTask.ContinueWith(t => Cities = new ObservableCollection<City>(t.Result), TaskScheduler.Current);
+            Task<IReadOnlyList<City>> getCitiesTask = Task.Run<IReadOnlyList<City>>(() => cityService.GetCitiesOfTrip(trip));
+            getCitiesTask.ContinueWith(t =>
+            {
+                Cities = new ObservableCollection<City>(t.Result);
+                //RaisePropertyChanged(nameof(Cities));
+            }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
+            getCitiesTask.ContinueWith(t => MessageBox.Show(t.Exception.InnerExceptions.First().Message), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
         }
         void UpdateCitiesOnMessage(UpdateCitiesMessage updateCitiesMessage)
         {
