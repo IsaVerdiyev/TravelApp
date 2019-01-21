@@ -29,21 +29,20 @@ namespace TravelAppWpf.Tools
             containerBuilder.RegisterGeneric(typeof(EfRepository<>)).As(typeof(IRepository<>)).InstancePerDependency();
             var container = containerBuilder.Build();
 
-            using (var scope = container.BeginLifetimeScope())
-            {
-                AppViewModel = scope.Resolve<AppViewModel>();
-                navigator = scope.Resolve<INavigator>();
+          
+                AppViewModel = container.Resolve<AppViewModel>();
+                navigator = container.Resolve<INavigator>();
                 navigator.Register(AppViewModel);
-                navigator.Register(scope.Resolve<SignInViewModel>());
-                navigator.Register(scope.Resolve<TripsViewModel>());
-                navigator.Register(scope.Resolve<CitiesViewModel>());
-                navigator.Register(scope.Resolve<TicketsViewModel>());
-                navigator.Register(scope.Resolve<CheckListViewModel>());
-                navigator.Register(scope.Resolve<RegisterViewModel>());
-                navigator.Register(scope.Resolve<AddTripViewModel>());
-                navigator.Register(scope.Resolve<AddCityViewModel>());
-                navigator.Register(scope.Resolve<CityOnMapViewModel>());
-            }
+                navigator.Register(container.Resolve<SignInViewModel>());
+                navigator.Register(container.Resolve<TripsViewModel>());
+                navigator.Register(container.Resolve<CitiesViewModel>());
+                navigator.Register(container.Resolve<TicketsViewModel>());
+                navigator.Register(container.Resolve<CheckListViewModel>());
+                navigator.Register(container.Resolve<RegisterViewModel>());
+                navigator.Register(container.Resolve<AddTripViewModel>());
+                navigator.Register(container.Resolve<AddCityViewModel>());
+                navigator.Register(container.Resolve<CityOnMapViewModel>());
+           
 
             navigator.NavigateTo<SignInViewModel>();
 
