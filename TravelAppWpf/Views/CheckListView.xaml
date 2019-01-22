@@ -63,10 +63,12 @@
                         <Label Content="{Binding Name}"/>
                         <CheckBox Grid.Column="1"
                                   IsChecked="{Binding Done}">
-                            <i:EventTrigger EventName="Click">
-                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ChangeToDoItemStateCommand}"
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ChangeToDoItemStateCommand}"
                                                        CommandParameter="{Binding}"/>
-                            </i:EventTrigger>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                         </CheckBox>
                         <Button Grid.Column="2"
                                 Content="x"
