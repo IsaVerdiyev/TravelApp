@@ -79,14 +79,9 @@ namespace Tester
             ICityService cityService = new CityService(new EfRepository<City>(tripDb));
             ICheckListService checkListService = new CheckListService(new EfRepository<ToDoItem>(tripDb));
 
-            Trip trip = new Trip { Id = 6 };
-            var list = ticketService.GetTicketsOfTripAsync(trip).Result;
+            ICityCoordinateGetter cityCoordinateGetter = new CityCoordinateGetter(new EfRepository<CityCoordinate>(tripDb));
 
-            foreach(var item in list)
-            {
-                Console.WriteLine(item.ImagePath);
-            }
-
+            Console.WriteLine(cityCoordinateGetter.GetCityCoordinateOfCity(new City { Id = 1 }).Latitude);
 
             Console.ReadKey();
         }
