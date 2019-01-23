@@ -81,7 +81,9 @@ namespace Tester
 
             ICityCoordinateGetter cityCoordinateGetter = new CityCoordinateGetter(new EfRepository<CityCoordinate>(tripDb));
 
-            Console.WriteLine(cityCoordinateGetter.GetCityCoordinateOfCity(new City { Id = 1 }).Latitude);
+
+            ICityFromApiGetter<string> cityFromApiGetter = new CityFromTeleportApiGetter();
+            Console.WriteLine(cityFromApiGetter.GetCityFromApiByNameAsync("Ganja").Result.Currency);
 
             Console.ReadKey();
         }
