@@ -83,16 +83,23 @@ namespace Services
                     PictureUrl = await pictureUrlGettingTask
                 };
             }
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
-                Task<string> currencyCodeGettingTaskWhenNoUrbanDetailsAvailable = GetCurrencyCodeWhenNoUrbanDetailsAvailableAsync(jObject);
-                return new City
+                if (ex is InvalidOperationException || ex is NullReferenceException)
                 {
-                    Name = GetNameFromCityResponse(jObject),
-                    FullName = GetFullNameFromCityResponse(jObject),
-                    CityCoordinate = GetCityCoordinateFromCityResponse(jObject),
-                    Currency = await currencyCodeGettingTaskWhenNoUrbanDetailsAvailable
-                };
+                    Task<string> currencyCodeGettingTaskWhenNoUrbanDetailsAvailable = GetCurrencyCodeWhenNoUrbanDetailsAvailableAsync(jObject);
+                    return new City
+                    {
+                        Name = GetNameFromCityResponse(jObject),
+                        FullName = GetFullNameFromCityResponse(jObject),
+                        CityCoordinate = GetCityCoordinateFromCityResponse(jObject),
+                        Currency = await currencyCodeGettingTaskWhenNoUrbanDetailsAvailable
+                    };
+                }
+                else
+                {
+                    throw;
+                }
             }
         }
 
