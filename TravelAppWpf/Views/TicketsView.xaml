@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TravelAppWpf.Views"
+             xmlns:vm="clr-namespace:TravelAppWpf.ViewModels"
+             d:DataContext="{d:DesignInstance vm:TicketsViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -12,10 +14,53 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
+            <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
             <RowDefinition/>
+            <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
         </Grid.RowDefinitions>
-        <Label Content="Tickets"/>
 
-        <ListBox Grid.Row="1"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Content="←"
+                    Command="{Binding ReturnCommand}"/>
+
+            <Label Grid.Column="1"
+                   Content="Tickets"/>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Content="Cities"
+                    Command="{Binding NavigateToCitiesCommand}"/>
+            <Button Grid.Column="1"
+                    Content="Tickets"/>
+            <Button Grid.Column="2"
+                    Content="Checklist"
+                    Command="{Binding NavigateToCheckListCommand}"/>
+        </Grid>
+        <ListBox Grid.Row="2"
+                 ItemsSource="{Binding Tickets}"/>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1"
+                    Content="Add ticket"
+                    Command="{Binding AddTicketCommand}"/>
+        </Grid>
     </Grid>
 </UserControl>

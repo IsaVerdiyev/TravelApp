@@ -43,7 +43,8 @@
             <Button Grid.Column="0"
                     Content="Cities"/>
             <Button Grid.Column="1"
-                    Content="Tickets"/>
+                    Content="Tickets"
+                    Command="{Binding NavigateToTicketsCommand}"/>
             <Button Grid.Column="2"
                     Content="Checklist"
                     Command="{Binding NavigateToCheckListCommand}"/>

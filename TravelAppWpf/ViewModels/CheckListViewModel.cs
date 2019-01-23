@@ -141,6 +141,13 @@ namespace TravelAppWpf.ViewModels
                         ));
         }
 
+        RelayCommand navigateToTicketsCommand;
+        public RelayCommand NavigateToTicketsCommand
+        {
+            get => navigateToTicketsCommand ?? (navigateToTicketsCommand = new RelayCommand(
+                () => navigator.NavigateTo<TicketsViewModel>()
+                ));
+        }
 
 
 

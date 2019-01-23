@@ -180,6 +180,9 @@
     <Compile Include="Views\AddCityView.xaml.cs">
       <DependentUpon>AddCityView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\AddTicketView.xaml.cs">
+      <DependentUpon>AddTicketView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AddTripView.xaml.cs">
       <DependentUpon>AddTripView.xaml</DependentUpon>
     </Compile>
@@ -289,6 +292,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddCityView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddTicketView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
