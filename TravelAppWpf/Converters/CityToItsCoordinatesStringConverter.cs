@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Maps.MapControl.WPF;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -14,7 +15,11 @@ namespace TravelAppWpf.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             City city = value as City;
-            return $"{city?.CityCoordinate.Latitude.ToString()}, {city?.CityCoordinate.Longitude.ToString()}";
+            if(city == null)
+            {
+                return null;
+            }
+            return new Location(System.Convert.ToDouble(city.CityCoordinate.Latitude, CultureInfo.InvariantCulture), System.Convert.ToDouble(city.CityCoordinate.Longitude, CultureInfo.InvariantCulture));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

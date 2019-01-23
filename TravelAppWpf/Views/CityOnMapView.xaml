@@ -32,9 +32,9 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <m:Map CredentialsProvider="AvUXr9Rwzu3wZ5_DyFCwymIC0S5mNuojHXY87IO9LVirSYJLef904VNCoMq_7Yhw"
-                   Center="{Binding City, Converter={StaticResource CityToItsCoordinateStringConverter}}"
-                   ZoomLevel="4"/>
+            <m:Map CredentialsProvider="AvUXr9Rwzu3wZ5_DyFCwymIC0S5mNuojHXY87IO9LVirSYJLef904VNCoMq_7Yhw">
+                <m:Pushpin Location="{Binding City, Converter={StaticResource CityToItsCoordinateStringConverter}}"/>
+            </m:Map>
         </Grid>
     </Grid>
 </UserControl>

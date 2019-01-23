@@ -65,6 +65,14 @@
           "type": "TravelAppCore.Interfaces.ICheckListService, TravelAppCore"
         }
       ]
+    },
+    {
+      "type": "TravelAppCore.Services.CityCoordinateGetter, TravelAppCore",
+      "services": [
+        {
+          "type": "TravelAppCore.Interfaces.ICityCoordinateGetter, TravelAppCore"
+        }
+      ]
     }
   ]
 }
