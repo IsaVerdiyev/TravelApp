@@ -41,6 +41,22 @@ namespace Services
             return await GetCityFromCityUrlAsync(SelectedMatchCityUrl);
         }
 
+        public IList<(string cityFullName, string cityUrl)> GetMatchesFromApiByInput(string cityName)
+        {
+
+            string citiesResponse = LoadResponseFromSomeLink($"{apiUrl}/cities/?search={cityName}");
+
+            return GetListOfCitiesFromSearchByCityNameResponse(cityName, citiesResponse);
+        }
+
+        public async Task<IList<(string cityFullName, string cityUrl)>> GetMatchesFromApiByInputAsync(string cityName)
+        {
+            string citiesResponse = await LoadResponseFromSomeLinkAsync($"{apiUrl}/cities/?search={cityName}");
+
+            return GetListOfCitiesFromSearchByCityNameResponse(cityName, citiesResponse);
+        }
+
+
 
         private string LoadResponseFromSomeLink(string link)
         {
@@ -300,20 +316,6 @@ namespace Services
             }
         }
 
-        public IList<(string cityFullName, string cityUrl)> GetMatchesFromApiByInput(string cityName)
-        {
-
-            string citiesResponse = LoadResponseFromSomeLink(cityName);
-
-            return GetListOfCitiesFromSearchByCityNameResponse(cityName, citiesResponse);
-        }
-
-        public async Task<IList<(string cityFullName, string cityUrl)>> GetMatchesFromApiByInputAsync(string cityName)
-        {
-            string citiesResponse = await LoadResponseFromSomeLinkAsync(cityName);
-
-            return GetListOfCitiesFromSearchByCityNameResponse(cityName, citiesResponse);
-        }
 
         private IList<(string fullname, string cityUrl)> GetListOfCitiesFromSearchByCityNameResponse(string cityName, string response)
         {
