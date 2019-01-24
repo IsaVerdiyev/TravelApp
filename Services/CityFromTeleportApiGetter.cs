@@ -15,6 +15,7 @@ namespace Services
     {
         string apiUrl = @"https://api.teleport.org/api/";
 
+
         public City GetCityFromApiByName(string cityName)
         {
             string urlOfCity = GetApiUrlOfCityBySearchedCityName(cityName);
@@ -29,9 +30,41 @@ namespace Services
             return await GetCityFromCityUrlAsync(urlOfCity);
         }
 
+
+        public City GetCityFromApiBySelectedMatch(string SelectedMatchCityUrl)
+        {
+            return GetCityFromCityUrl(SelectedMatchCityUrl);
+        }
+
+        public async Task<City> GetCityFromApiBySelectedMatchAsync(string SelectedMatchCityUrl)
+        {
+            return await GetCityFromCityUrlAsync(SelectedMatchCityUrl);
+        }
+
+
+        private string LoadResponseFromSomeLink(string link)
+        {
+            using (WebClient webClient = new WebClient())
+            {
+                return webClient.DownloadString(link);
+            }
+        }
+
+        private async Task<string> LoadResponseFromSomeLinkAsync(string link)
+        {
+            using (WebClient webClient = new WebClient())
+            {
+                return await webClient.DownloadStringTaskAsync(link);
+            }
+        }
+
+
+
+
+
         private City GetCityFromCityUrl(string urlOfCity)
         {
-            string response = GetResponseFromCityUrl(urlOfCity);
+            string response = LoadResponseFromSomeLink(urlOfCity);
 
             JObject jObject = JObject.Parse(response);
 
@@ -51,9 +84,20 @@ namespace Services
             try
             {
                 string urbanAreaLink = GetUrbanAreaLinkFromCityUrlResponse(jObject);
-                string urbanAreaResponse = GetResponseFromUrbanAreaUrl(urbanAreaLink);
-                city.PictureUrl = GetImageUrlFromUrbanAreaResponse(urbanAreaResponse);
-                return GetCityWithUrbanDetails(urbanAreaLink + "details", city);
+                string urbanAreaResponse = LoadResponseFromSomeLink(urbanAreaLink);
+                (string currency, string language) urbanDetails = GetCityDetailsFromUrbanDetailsApi(urbanAreaLink + "details");
+                string pictureUrlLink = GetImagesLinkFromUrbanAreaResponse(urbanAreaResponse);
+                string pictureUrlLinkResponse = LoadResponseFromSomeLink(pictureUrlLink);
+                string pictureUrl = GetImageUrlFromImageLinkResponse(pictureUrlLinkResponse);
+                return new City
+                {
+                    Name = GetNameFromCityResponse(jObject),
+                    FullName = GetFullNameFromCityResponse(jObject),
+                    CityCoordinate = GetCityCoordinateFromCityResponse(jObject),
+                    Language = urbanDetails.language,
+                    Currency = urbanDetails.currency,
+                    PictureUrl = pictureUrl
+                };
             }
             catch (InvalidOperationException ex)
             {
@@ -63,15 +107,16 @@ namespace Services
 
         private async Task<City> GetCityFromCityUrlAsync(string urlOfCity)
         {
-            string response = await GetResponseFromCityUrlAsync(urlOfCity);
+            string response = await LoadResponseFromSomeLinkAsync(urlOfCity);
 
             JObject jObject = JObject.Parse(response);
             try
             {
                 string urbanAreaLink = GetUrbanAreaLinkFromCityUrlResponse(jObject);
-                Task<string> urbanAreaUrlResponseGettingTask = GetResponseFromUrbanAreaUrlAsync(urbanAreaLink);
+                Task<string> urbanAreaUrlResponseGettingTask = LoadResponseFromSomeLinkAsync(urbanAreaLink);
                 Task<(string currency, string language)> urbanDetailsGettingTask = GetCityDetailsFromUrbanDetailsApiAsync(urbanAreaLink + "details");
-                Task<string> pictureUrlGettingTask = urbanAreaUrlResponseGettingTask.ContinueWith(t => GetImageUrlFromUrbanAreaResponse(t.Result), TaskContinuationOptions.OnlyOnRanToCompletion);
+                Task<string> pictureUrlLinkGettingTask = urbanAreaUrlResponseGettingTask.ContinueWith(t => GetImagesLinkFromUrbanAreaResponse(t.Result), TaskContinuationOptions.OnlyOnRanToCompletion);
+                Task<string> pictureUrlLinkResponseGettingTask = pictureUrlLinkGettingTask.ContinueWith(t => LoadResponseFromSomeLink(t.Result));
 
                 return new City
                 {
@@ -80,7 +125,7 @@ namespace Services
                     CityCoordinate = GetCityCoordinateFromCityResponse(jObject),
                     Language = (await urbanDetailsGettingTask).language,
                     Currency = (await urbanDetailsGettingTask).currency,
-                    PictureUrl = await pictureUrlGettingTask
+                    PictureUrl = GetImageUrlFromImageLinkResponse(await pictureUrlLinkResponseGettingTask)
                 };
             }
             catch (Exception ex)
@@ -103,6 +148,8 @@ namespace Services
             }
         }
 
+
+
         private City GetCityWithUrbanDetails(string urbanAreaDetailsLink, City city)
         {
             string urbanDetailsResponse = GetResponseFromUrbanDetailsLink(urbanAreaDetailsLink);
@@ -112,37 +159,31 @@ namespace Services
             return city;
         }
 
-
-        private async Task<(string currency, string language)> GetCityDetailsFromUrbanDetailsApiAsync(string urbanAreaDetailsLink)
+  
+        private (string currency, string language) GetCityDetailsFromUrbanDetailsApi(string urbanAreaDetailsLink)
         {
-            string urbanDetailsResponse = await GetResponseFromUrbanAreaUrlAsync(urbanAreaDetailsLink);
+            string urbanDetailsResponse = LoadResponseFromSomeLink(urbanAreaDetailsLink);
             JObject jObject = JObject.Parse(urbanDetailsResponse);
             string currency = GetCurrencyFromUrbanAreaDetailsResponse(jObject);
             string language = GetLanguageFromUrbanAreaDetailsResponse(jObject);
             return (currency, language);
         }
 
-        private string GetImageUrlFromUrbanAreaResponse(string response)
+        private async Task<(string currency, string language)> GetCityDetailsFromUrbanDetailsApiAsync(string urbanAreaDetailsLink)
+        {
+            string urbanDetailsResponse = await LoadResponseFromSomeLinkAsync(urbanAreaDetailsLink);
+            JObject jObject = JObject.Parse(urbanDetailsResponse);
+            string currency = GetCurrencyFromUrbanAreaDetailsResponse(jObject);
+            string language = GetLanguageFromUrbanAreaDetailsResponse(jObject);
+            return (currency, language);
+        }
+
+
+        private string GetImagesLinkFromUrbanAreaResponse(string response)
         {
             JObject jObject = JObject.Parse(response);
 
             return jObject["_links"]["ua:images"]["href"].Value<string>();
-        }
-
-        private string GetResponseFromUrbanAreaUrl(string url)
-        {
-            using (WebClient webClient = new WebClient())
-            {
-                return webClient.DownloadString(url);
-            }
-        }
-
-        private async Task<string> GetResponseFromUrbanAreaUrlAsync(string url)
-        {
-            using (WebClient webClient = new WebClient())
-            {
-                return await webClient.DownloadStringTaskAsync(url);
-            }
         }
 
         private string GetLanguageFromUrbanAreaDetailsResponse(JObject jObject)
@@ -169,18 +210,11 @@ namespace Services
             }
         }
 
-        private async Task<string> GetResponseFromUrbanDetailsLinkAsync(string urbanDetailsLink)
-        {
-            using (WebClient webClient = new WebClient())
-            {
-                return await webClient.DownloadStringTaskAsync(urbanDetailsLink);
-            }
-        }
 
         private City GetCityWithoutUrbanDetails(JObject jObject, City city)
         {
             string countryUrl = GetCountryUrlFromCityResponse(jObject);
-            string countryResponse = GetResponseFromCountryUrl(countryUrl);
+            string countryResponse = LoadResponseFromSomeLink(countryUrl);
             string currencyCode = GetCurrencyCodeFromCountryResponse(countryResponse);
 
             city.Currency = currencyCode;
@@ -191,7 +225,7 @@ namespace Services
         private async Task<string> GetCurrencyCodeWhenNoUrbanDetailsAvailableAsync(JObject jObject)
         {
             string countryUrl = GetCountryUrlFromCityResponse(jObject);
-            string countryResponse = await GetResponseFromCountryUrlAsync(countryUrl);
+            string countryResponse = await LoadResponseFromSomeLinkAsync(countryUrl);
             return GetCurrencyCodeFromCountryResponse(countryResponse);
         }
 
@@ -202,21 +236,8 @@ namespace Services
             return jObject["currency_code"].Value<string>();
         }
 
-        private string GetResponseFromCountryUrl(string countryUrl)
-        {
-            using (WebClient webClient = new WebClient())
-            {
-                return webClient.DownloadString(countryUrl);
-            }
-        }
 
-        private async Task<string> GetResponseFromCountryUrlAsync(string countryUrl)
-        {
-            using (WebClient webClient = new WebClient())
-            {
-                return await webClient.DownloadStringTaskAsync(countryUrl);
-            }
-        }
+
 
         private string GetCountryUrlFromCityResponse(JObject jObject)
         {
@@ -245,31 +266,16 @@ namespace Services
             return new CityCoordinate { Latitude = latitude, Longitude = longitude };
         }
 
-        private string GetResponseFromCityUrl(string cityUrl)
-        {
-            using (WebClient webClient = new WebClient())
-            {
-                return webClient.DownloadString(cityUrl);
-            }
-        }
-
-        private async Task<string> GetResponseFromCityUrlAsync(string cityUrl)
-        {
-            using (WebClient webClient = new WebClient())
-            {
-                return await webClient.DownloadStringTaskAsync(cityUrl);
-            }
-        }
 
         private string GetApiUrlOfCityBySearchedCityName(string searchedCityName)
         {
-            string responseFromApi = GetResponseOfSearchByCityNameFromApi(searchedCityName);
+            string responseFromApi = LoadResponseFromSomeLink($"{apiUrl}/cities/?search={searchedCityName}");
             return GetUrlOfFoundCityFromReturnedResponse(searchedCityName, responseFromApi);
         }
 
         private async Task<string> GetApiUrlOfCityBySearchCityNameAsync(string searchedCityName)
         {
-            string responseFromApi = await GetResponseOfSearchByCityNameFromApiAsync(searchedCityName);
+            string responseFromApi = await LoadResponseFromSomeLinkAsync($"{apiUrl}/cities/?search={searchedCityName}");
             return GetUrlOfFoundCityFromReturnedResponse(searchedCityName, responseFromApi);
         }
 
@@ -294,37 +300,17 @@ namespace Services
             }
         }
 
-        private async Task<string> GetResponseOfSearchByCityNameFromApiAsync(string searchedCityName)
-        {
-            string apiForCitySearch = $"{apiUrl}/cities/?search={searchedCityName}";
-
-            using (WebClient webClient = new WebClient())
-            {
-                return await webClient.DownloadStringTaskAsync(apiForCitySearch);
-            }
-        }
-
-        private string GetResponseOfSearchByCityNameFromApi(string name)
-        {
-            string apiForCitySearch = $"{apiUrl}/cities/?search={name}";
-            using (WebClient webClient = new WebClient())
-            {
-                return webClient.DownloadString(apiForCitySearch);
-            }
-
-        }
-
         public IList<(string cityFullName, string cityUrl)> GetMatchesFromApiByInput(string cityName)
         {
 
-            string citiesResponse = GetResponseOfSearchByCityNameFromApi(cityName);
+            string citiesResponse = LoadResponseFromSomeLink(cityName);
 
             return GetListOfCitiesFromSearchByCityNameResponse(cityName, citiesResponse);
         }
 
         public async Task<IList<(string cityFullName, string cityUrl)>> GetMatchesFromApiByInputAsync(string cityName)
         {
-            string citiesResponse = await GetResponseOfSearchByCityNameFromApiAsync(cityName);
+            string citiesResponse = await LoadResponseFromSomeLinkAsync(cityName);
 
             return GetListOfCitiesFromSearchByCityNameResponse(cityName, citiesResponse);
         }
@@ -346,15 +332,13 @@ namespace Services
             }
         }
 
-
-        public City GetCityFromApiBySelectedMatch(string SelectedMatchCityUrl)
+        private string GetImageUrlFromImageLinkResponse(string response)
         {
-            return GetCityFromCityUrl(SelectedMatchCityUrl);
+            JObject jObject = JObject.Parse(response);
+
+            return jObject["photos"][0]["image"]["web"].Value<string>();
         }
 
-        public async Task<City> GetCityFromApiBySelectedMatchAsync(string SelectedMatchCityUrl)
-        {
-            return await GetCityFromCityUrlAsync(SelectedMatchCityUrl);
-        }
+
     }
 }

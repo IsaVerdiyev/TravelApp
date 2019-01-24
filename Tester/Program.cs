@@ -83,7 +83,8 @@ namespace Tester
 
 
             ICityFromApiGetter<string> cityFromApiGetter = new CityFromTeleportApiGetter();
-            Console.WriteLine(cityFromApiGetter.GetCityFromApiByNameAsync("Ganja").Result.Currency);
+            Console.WriteLine(cityFromApiGetter.GetCityFromApiByName("Baku").PictureUrl);
+            Console.WriteLine(cityFromApiGetter.GetCityFromApiByNameAsync("Baku").Result.PictureUrl);
 
             Console.ReadKey();
         }
