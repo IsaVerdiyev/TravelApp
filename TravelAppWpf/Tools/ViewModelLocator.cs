@@ -19,6 +19,8 @@ namespace TravelAppWpf.Tools
 
         public AppViewModel AppViewModel { get; }
 
+        public static AddTicketViewModel AddTicketViewModel { get; private set; }
+
         public ViewModelLocator()
         {
             var config = new ConfigurationBuilder();
@@ -29,20 +31,20 @@ namespace TravelAppWpf.Tools
             containerBuilder.RegisterGeneric(typeof(EfRepository<>)).As(typeof(IRepository<>)).InstancePerDependency();
             var container = containerBuilder.Build();
 
-          
-                AppViewModel = container.Resolve<AppViewModel>();
-                navigator = container.Resolve<INavigator>();
-                navigator.Register(AppViewModel);
-                navigator.Register(container.Resolve<SignInViewModel>());
-                navigator.Register(container.Resolve<TripsViewModel>());
-                navigator.Register(container.Resolve<CitiesViewModel>());
-                navigator.Register(container.Resolve<TicketsViewModel>());
-                navigator.Register(container.Resolve<CheckListViewModel>());
-                navigator.Register(container.Resolve<RegisterViewModel>());
-                navigator.Register(container.Resolve<AddTripViewModel>());
-                navigator.Register(container.Resolve<AddCityViewModel>());
-                navigator.Register(container.Resolve<CityOnMapViewModel>());
-           
+            AddTicketViewModel = container.Resolve<AddTicketViewModel>();
+            AppViewModel = container.Resolve<AppViewModel>();
+            navigator = container.Resolve<INavigator>();
+            navigator.Register(AppViewModel);
+            navigator.Register(container.Resolve<SignInViewModel>());
+            navigator.Register(container.Resolve<TripsViewModel>());
+            navigator.Register(container.Resolve<CitiesViewModel>());
+            navigator.Register(container.Resolve<TicketsViewModel>());
+            navigator.Register(container.Resolve<CheckListViewModel>());
+            navigator.Register(container.Resolve<RegisterViewModel>());
+            navigator.Register(container.Resolve<AddTripViewModel>());
+            navigator.Register(container.Resolve<AddCityViewModel>());
+            navigator.Register(container.Resolve<CityOnMapViewModel>());
+
 
             navigator.NavigateTo<SignInViewModel>();
 

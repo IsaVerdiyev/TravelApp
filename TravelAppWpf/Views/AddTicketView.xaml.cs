@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TravelAppWpf.Tools;
+using TravelAppWpf.ViewModels;
 
 namespace TravelAppWpf.Views
 {
@@ -22,6 +24,7 @@ namespace TravelAppWpf.Views
         public AddTicketView()
         {
             InitializeComponent();
+            DataContext = ViewModelLocator.AddTicketViewModel;
         }
     }
 }

@@ -168,6 +168,7 @@
     <Compile Include="Navigation\PageNotFoundException.cs" />
     <Compile Include="Tools\ViewModelLocator.cs" />
     <Compile Include="ViewModels\AddCityViewModel.cs" />
+    <Compile Include="ViewModels\AddTicketViewModel.cs" />
     <Compile Include="ViewModels\AddTripViewModel.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\CheckListViewModel.cs" />

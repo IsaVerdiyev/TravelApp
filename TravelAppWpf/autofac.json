@@ -11,6 +11,7 @@
     { "type": "TravelAppWpf.ViewModels.AddTripViewModel" },
     { "type": "TravelAppWpf.ViewModels.AddCityViewModel" },
     { "type": "TravelAppWpf.ViewModels.CityOnMapViewModel" },
+    { "type": "TravelAppWpf.ViewModels.AddTicketViewModel" },
     {
       "type": "Services.AccountService, Services",
       "services": [
