@@ -92,7 +92,8 @@
                 </Grid.RowDefinitions>
 
                 <Image Grid.Column="0"
-                       Width="340"/>
+                       Width="340"
+                       Source="{Binding SelectedCity.PictureUrl}"/>
                 <Label Grid.Row="1"
                        Content="{Binding SelectedCity.FullName}"/>
                 <Label Grid.Row="2"
