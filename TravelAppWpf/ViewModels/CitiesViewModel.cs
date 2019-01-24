@@ -31,6 +31,9 @@ namespace TravelAppWpf.ViewModels
             set => Set(ref cities, value);
         }
 
+        private City selectedCity;
+        public City SelectedCity{  get => selectedCity; set => Set(ref selectedCity, value); }
+
         #endregion
 
 

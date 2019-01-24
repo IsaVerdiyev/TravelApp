@@ -49,33 +49,59 @@
                     Content="Checklist"
                     Command="{Binding NavigateToCheckListCommand}"/>
         </Grid>
-
-        <ListBox Grid.Row="2"
-                 ItemsSource="{Binding Cities, Mode=OneWay}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="30"/>
-                            <ColumnDefinition Width="30"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Content="{Binding FullName}"/>
-                        <Button Grid.Column="1"
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
+            <ListBox
+                 ItemsSource="{Binding Cities, Mode=OneWay}"
+                SelectedItem="{Binding SelectedCity}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="30"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="{Binding FullName}"/>
+                            <Button Grid.Column="1"
                                 Content="👁"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ShowInfoOfCity}"
                                 CommandParameter="{Binding}"/>
 
 
-                        <Button Grid.Column="2"
+                            <Button Grid.Column="2"
                                 Content="x"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DeleteCityCommand}"
                                 CommandParameter="{Binding}"/>
 
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Image Grid.Column="0"
+                       Width="340"/>
+                <Label Grid.Row="1"
+                       Content="{Binding SelectedCity.FullName}"/>
+                <Label Grid.Row="2"
+                       Content="{Binding SelectedCity.Currency}"/>
+                <Label Grid.Row="3"
+                       Content="{Binding SelectedCity.Language}"/>
+            </Grid>
+        </Grid>
+        
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
