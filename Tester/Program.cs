@@ -82,9 +82,7 @@ namespace Tester
             ICityCoordinateGetter cityCoordinateGetter = new CityCoordinateGetter(new EfRepository<CityCoordinate>(tripDb));
 
 
-            ICityFromApiGetter<string> cityFromApiGetter = new CityFromTeleportApiGetter();
-            Console.WriteLine(cityFromApiGetter.GetCityFromApiByName("Baku").PictureUrl);
-            Console.WriteLine(cityFromApiGetter.GetCityFromApiByNameAsync("Baku").Result.PictureUrl);
+            Console.WriteLine(tripDb.Set<Ticket>().First().Name);
 
             Console.ReadKey();
         }
