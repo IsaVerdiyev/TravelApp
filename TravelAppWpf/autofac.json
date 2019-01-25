@@ -60,6 +60,14 @@
       ]
     },
     {
+      "type": "TravelAppCore.Services.TicketService, TravelAppCore",
+      "services": [
+        {
+          "type": "TravelAppCore.Interfaces.ITicketService, TravelAppCore"
+        }
+      ]
+    },
+    {
       "type": "TravelAppCore.Services.CheckListService, TravelAppCore",
       "services": [
         {

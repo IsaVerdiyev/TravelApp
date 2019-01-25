@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:TravelAppWpf.Views"
         xmlns:vm="clr-namespace:TravelAppWpf.ViewModels"
         mc:Ignorable="d"
+        x:Name="AddTicketWindow"
         d:DataContext="{d:DesignInstance vm:AddTicketViewModel}"
         Title="AddTicketView" Height="450" Width="800">
     <Grid>
@@ -19,17 +20,18 @@
 
         <Label Content="Enter name of ticket: "/>
         <TextBox Grid.Row="1"
-                 Text="{Binding TicketName}"/>
-        <Label Grid.Column="2"
+                 Text="{Binding TicketName, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Row="2"
                Content="Enter path to ticket"/>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding PdfPath}"/>
-            <Button Grid.Column="1"/>
+            <TextBox Text="{Binding PdfPath, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Grid.Column="1"
+                    Content="Browse"/>
         </Grid>
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
@@ -37,7 +39,10 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="1"
-                    Content="Ok"/>
+                    Content="Ok"
+                    Width="100"
+                    Command="{Binding AddTicketCommand}"
+                    CommandParameter="{Binding ElementName=AddTicketWindow}"/>
         </Grid>
 
     </Grid>

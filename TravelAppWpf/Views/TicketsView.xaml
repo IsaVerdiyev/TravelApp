@@ -50,7 +50,24 @@
                     Command="{Binding NavigateToCheckListCommand}"/>
         </Grid>
         <ListBox Grid.Row="2"
-                 ItemsSource="{Binding Tickets}"/>
+                 ItemsSource="{Binding Tickets}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0"
+                               Content="{Binding ImagePath}"/>
+                        <Button Grid.Column="1"
+                                Content="X"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=DataContext.DeleteTicketCommand}"
+                                CommandParameter="{Binding}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>

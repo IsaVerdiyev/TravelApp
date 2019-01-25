@@ -156,12 +156,14 @@
     <Compile Include="Converters\CityToItsCoordinatesStringConverter.cs" />
     <Compile Include="Extensions\ValidateExtensions.cs" />
     <Compile Include="Messages\AddCityViewModelMessage.cs" />
+    <Compile Include="Messages\AddTicketViewModelMessage.cs" />
     <Compile Include="Messages\AddToDoItemViewModelMessage.cs" />
     <Compile Include="Messages\AddTripViewModelMessage.cs" />
     <Compile Include="Messages\CityOnMapViewModelMessage.cs" />
     <Compile Include="Messages\TripDetailsObserverViewModelMessage.cs" />
     <Compile Include="Messages\TripsViewModelMessage.cs" />
     <Compile Include="Messages\UpdateCitiesMessage.cs" />
+    <Compile Include="Messages\UpdateTicketsMessage.cs" />
     <Compile Include="Messages\UpdateTripsMessage.cs" />
     <Compile Include="Navigation\INavigator.cs" />
     <Compile Include="Navigation\Navigator.cs" />
