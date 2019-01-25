@@ -85,6 +85,10 @@
     <Compile Include="Migrations\201901200841363_IncreasedLengthOfStrings.Designer.cs">
       <DependentUpon>201901200841363_IncreasedLengthOfStrings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901250849023_TicketEntityChanging.cs" />
+    <Compile Include="Migrations\201901250849023_TicketEntityChanging.Designer.cs">
+      <DependentUpon>201901250849023_TicketEntityChanging.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -118,6 +122,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901200841363_IncreasedLengthOfStrings.resx">
       <DependentUpon>201901200841363_IncreasedLengthOfStrings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901250849023_TicketEntityChanging.resx">
+      <DependentUpon>201901250849023_TicketEntityChanging.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

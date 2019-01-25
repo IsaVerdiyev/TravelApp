@@ -8,7 +8,8 @@ namespace TravelAppCore.Entities
 {
     public class Ticket: BaseEntity
     {
-        
+        public string Name { get; set; }
+
         public string ImagePath { get; set; }
 
         
