@@ -75,7 +75,7 @@ namespace TravelAppWpf.ViewModels
                     async w => {
                         w.Close();
                         await Task.Run(async() => {
-                            await ticketService.AddTicketAsync(trip, new Ticket { ImagePath = PdfPath});
+                            await ticketService.AddTicketAsync(trip, new Ticket {Name = TicketName,ImagePath = PdfPath});
                             Messenger.Default.Send<UpdateTicketsMessage>(updateTicketsMessage);
                         });
                     },

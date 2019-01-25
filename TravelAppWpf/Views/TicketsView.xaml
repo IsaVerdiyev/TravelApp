@@ -53,13 +53,13 @@
                  ItemsSource="{Binding Tickets}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid Height="25">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0"
-                               Content="{Binding ImagePath}"/>
+                               Content="{Binding Name}"/>
                         <Button Grid.Column="1"
                                 Content="X"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=DataContext.DeleteTicketCommand}"
