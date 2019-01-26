@@ -16,9 +16,10 @@
       "type": "TravelAppWpf.Services.ProcessesInfo.ProcessesInfoService",
       "services": [
         {
-          "type":"TravelAppWpf.Services.ProcessesInfo.IProcessesInfoService"
+          "type": "TravelAppWpf.Services.ProcessesInfo.IProcessesInfoService"
         }
-      ]
+      ],
+      "instanceScope": "singleinstance"
     },
     {
       "type": "Services.AccountService, Services",

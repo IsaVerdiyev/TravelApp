@@ -14,12 +14,15 @@ using TravelAppCore.Interfaces;
 using TravelAppWpf.Extensions;
 using TravelAppWpf.Messages;
 using TravelAppWpf.Navigation;
+using TravelAppWpf.Services.ProcessesInfo;
 
 namespace TravelAppWpf.ViewModels
 {
     class RegisterViewModel : ViewModelBase, IDataErrorInfo
     {
         #region Fields And Properties
+
+        
 
         string nick;
         [Required(ErrorMessage = "Nick field is required")]
@@ -73,12 +76,24 @@ namespace TravelAppWpf.ViewModels
         }
 
 
+        private string currentProcessesInfo;
+        public string CurrentProcessesInfo
+        {
+            get { return currentProcessesInfo; }
+            set
+            {
+                Set(ref currentProcessesInfo, value);
+                RegisterCommand.RaiseCanExecuteChanged();
+            }
+        }
+
         #endregion
 
 
         #region Dependencies
 
         INavigator navigator;
+        private readonly IProcessesInfoService processesInfoService;
         IAccountService accountService;
 
         #endregion
@@ -86,15 +101,18 @@ namespace TravelAppWpf.ViewModels
         #region Messages
 
         TripsViewModelMessage tripsViewModelMessage = new TripsViewModelMessage();
-
+        UpdateProcessInfoMessage updateProcessInfoMessage = new UpdateProcessInfoMessage();
         #endregion
 
         #region Constutors
 
-        public RegisterViewModel(INavigator navigator, IAccountService accountService)
+        public RegisterViewModel(INavigator navigator, IProcessesInfoService processesInfoService, IAccountService accountService)
         {
             this.navigator = navigator;
+            this.processesInfoService = processesInfoService;
             this.accountService = accountService;
+
+            Messenger.Default.Register<UpdateProcessInfoMessage>(this, m => UpdateCurrentProcessInfo());
         }
 
         #endregion
@@ -107,6 +125,8 @@ namespace TravelAppWpf.ViewModels
         {
             get => registerCommand ?? (registerCommand = new RelayCommand(async () =>
             {
+                processesInfoService.ActivateProcess(ProcessEnum.SigningUp, "Signing Up");
+                Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
                 await Task.Run(async () =>
                 {
                     User user = new User
@@ -129,11 +149,14 @@ namespace TravelAppWpf.ViewModels
                         MessageBox.Show("There is already such a user");
                     }
                 });
+                processesInfoService.DeactivateProcess(ProcessEnum.SigningUp);
+                Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
             },
             () => !string.IsNullOrWhiteSpace(Nick) &&
                   !string.IsNullOrWhiteSpace(Email) &&
                   !string.IsNullOrWhiteSpace(Password) &&
                   !string.IsNullOrWhiteSpace(RepeatPassword) &&
+                  string.IsNullOrWhiteSpace(CurrentProcessesInfo) &&
                   Password.Equals(RepeatPassword)));
 
         }
@@ -151,6 +174,22 @@ namespace TravelAppWpf.ViewModels
         public string Error => throw new NotImplementedException();
 
         public string this[string columnName] => this.Validate(columnName);
+
+        #endregion
+
+        #region Private Functions
+
+        void UpdateCurrentProcessInfo()
+        {
+            try
+            {
+                CurrentProcessesInfo = processesInfoService.GetAllStringValues().Aggregate((i, j) => i +", " + j);
+            }
+            catch (InvalidOperationException ex)
+            {
+                CurrentProcessesInfo = "";
+            }
+        }
 
         #endregion
     }

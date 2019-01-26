@@ -44,14 +44,14 @@ namespace TravelAppWpf.ViewModels
         string errorMessage;
         public string ErrorMessage { get => errorMessage; set => Set(ref errorMessage, value); }
 
-        private string processMessage;
+        private string currentProcessesInfo;
 
-        public string ProcessMessage
+        public string CurrentProcessesInfo
         {
-            get { return processMessage; }
+            get { return currentProcessesInfo; }
             set
             {
-                processMessage = value;
+                Set(ref currentProcessesInfo, value);
                 RegisterCommand.RaiseCanExecuteChanged();
             }
         }
@@ -71,6 +71,7 @@ namespace TravelAppWpf.ViewModels
         #region Messages
 
         TripsViewModelMessage tripsViewModelMessage = new TripsViewModelMessage();
+        UpdateProcessInfoMessage updateProcessInfoMessage = new UpdateProcessInfoMessage();
 
         #endregion
 
@@ -81,6 +82,8 @@ namespace TravelAppWpf.ViewModels
             this.accountService = accountService;
             this.navigator = navigator;
             this.processesInfoService = processesInfoService;
+
+            Messenger.Default.Register<UpdateProcessInfoMessage>(this, m => UpdateCurrentProcessesInfo());
         }
 
         #endregion
@@ -96,7 +99,7 @@ namespace TravelAppWpf.ViewModels
 
 
                 processesInfoService.ActivateProcess(ProcessEnum.SigningIn, "Signing In");
-                UpdateProcessMessage();
+                Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
                 await Task.Run(async () =>
                 {
 
@@ -114,7 +117,7 @@ namespace TravelAppWpf.ViewModels
                     }
                 });
                 processesInfoService.DeactivateProcess(ProcessEnum.SigningIn);
-                UpdateProcessMessage();
+                Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
 
             }));
         }
@@ -125,7 +128,7 @@ namespace TravelAppWpf.ViewModels
             get => registerCommand ??
                 (registerCommand = new RelayCommand(
                     () => navigator.NavigateTo<RegisterViewModel>(),
-                    () => string.IsNullOrWhiteSpace(processMessage)
+                    () => string.IsNullOrWhiteSpace(currentProcessesInfo)
                     ));
         }
 
@@ -133,15 +136,15 @@ namespace TravelAppWpf.ViewModels
 
         #region Private Functions
 
-        void UpdateProcessMessage()
+        void UpdateCurrentProcessesInfo()
         {
             try
             {
-                ProcessMessage = processesInfoService.GetAllStringValues().Aggregate((i, j) => i + j);
+                CurrentProcessesInfo = processesInfoService.GetAllStringValues().Aggregate((i, j) => i + ", " + j);
             }
             catch (InvalidOperationException ex)
             {
-                ProcessMessage = "";
+                CurrentProcessesInfo = "";
             }
         }
 
