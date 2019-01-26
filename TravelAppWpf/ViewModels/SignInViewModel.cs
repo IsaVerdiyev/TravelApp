@@ -11,21 +11,51 @@ using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
 using TravelAppWpf.Messages;
 using TravelAppWpf.Navigation;
+using TravelAppWpf.Services.ProcessesInfo;
 
 namespace TravelAppWpf.ViewModels
 {
-    class SignInViewModel: ViewModelBase
+    class SignInViewModel : ViewModelBase
     {
         #region Fields And Properties
 
         string nickOrEmail;
-        public string NickOrEmail { get => nickOrEmail; set => Set(ref nickOrEmail, value); }
+        public string NickOrEmail
+        {
+            get => nickOrEmail;
+            set
+            {
+                Set(ref nickOrEmail, value);
+                ErrorMessage = "";
+            }
+        }
 
         string password;
-        public string Password { get => password; set => Set(ref password, value); }
+        public string Password
+        {
+            get => password;
+            set
+            {
+                Set(ref password, value);
+                ErrorMessage = "";
+            }
+        }
 
         string errorMessage;
         public string ErrorMessage { get => errorMessage; set => Set(ref errorMessage, value); }
+
+        private string processMessage;
+
+        public string ProcessMessage
+        {
+            get { return processMessage; }
+            set
+            {
+                processMessage = value;
+                RegisterCommand.RaiseCanExecuteChanged();
+            }
+        }
+
 
         #endregion
 
@@ -34,6 +64,7 @@ namespace TravelAppWpf.ViewModels
 
         IAccountService accountService;
         INavigator navigator;
+        private readonly IProcessesInfoService processesInfoService;
 
         #endregion
 
@@ -45,10 +76,11 @@ namespace TravelAppWpf.ViewModels
 
         #region Constuctors
 
-        public SignInViewModel(INavigator navigator, IAccountService accountService)
+        public SignInViewModel(INavigator navigator, IProcessesInfoService processesInfoService, IAccountService accountService)
         {
             this.accountService = accountService;
             this.navigator = navigator;
+            this.processesInfoService = processesInfoService;
         }
 
         #endregion
@@ -59,10 +91,15 @@ namespace TravelAppWpf.ViewModels
         private RelayCommand signInCommand;
         public RelayCommand SignInCommand
         {
-            get => signInCommand ?? (signInCommand = new RelayCommand(async ()=>
+            get => signInCommand ?? (signInCommand = new RelayCommand(async () =>
             {
+
+
+                processesInfoService.ActivateProcess(ProcessEnum.SigningIn, "Signing In");
+                UpdateProcessMessage();
                 await Task.Run(async () =>
                 {
+
                     var logInResult = await accountService.TryLogInAsync(NickOrEmail, Password);
 
                     if (logInResult.result)
@@ -76,13 +113,36 @@ namespace TravelAppWpf.ViewModels
                         ErrorMessage = "Error occured during signing in\n";
                     }
                 });
+                processesInfoService.DeactivateProcess(ProcessEnum.SigningIn);
+                UpdateProcessMessage();
+
             }));
         }
 
         private RelayCommand registerCommand;
         public RelayCommand RegisterCommand
         {
-            get => registerCommand ?? (registerCommand = new RelayCommand(() => navigator.NavigateTo<RegisterViewModel>()));
+            get => registerCommand ??
+                (registerCommand = new RelayCommand(
+                    () => navigator.NavigateTo<RegisterViewModel>(),
+                    () => string.IsNullOrWhiteSpace(processMessage)
+                    ));
+        }
+
+        #endregion
+
+        #region Private Functions
+
+        void UpdateProcessMessage()
+        {
+            try
+            {
+                ProcessMessage = processesInfoService.GetAllStringValues().Aggregate((i, j) => i + j);
+            }
+            catch (InvalidOperationException ex)
+            {
+                ProcessMessage = "";
+            }
         }
 
         #endregion

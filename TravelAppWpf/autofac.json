@@ -13,6 +13,14 @@
     { "type": "TravelAppWpf.ViewModels.CityOnMapViewModel" },
     { "type": "TravelAppWpf.ViewModels.AddTicketViewModel" },
     {
+      "type": "TravelAppWpf.Services.ProcessesInfo.ProcessesInfoService",
+      "services": [
+        {
+          "type":"TravelAppWpf.Services.ProcessesInfo.IProcessesInfoService"
+        }
+      ]
+    },
+    {
       "type": "Services.AccountService, Services",
       "services": [
         {

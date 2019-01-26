@@ -168,6 +168,9 @@
     <Compile Include="Navigation\INavigator.cs" />
     <Compile Include="Navigation\Navigator.cs" />
     <Compile Include="Navigation\PageNotFoundException.cs" />
+    <Compile Include="Services\ProcessesInfo\IProcessesInfoService.cs" />
+    <Compile Include="Services\ProcessesInfo\ProcessEnum.cs" />
+    <Compile Include="Services\ProcessesInfo\ProcessesInfoService.cs" />
     <Compile Include="Tools\ViewModelLocator.cs" />
     <Compile Include="Tools\WebBrowserUtility.cs" />
     <Compile Include="ViewModels\AddCityViewModel.cs" />

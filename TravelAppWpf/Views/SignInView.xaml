@@ -33,6 +33,15 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="1"
+                       Content="{Binding ProcessMessage}"/>
+            </Grid>
             <Label Grid.Row="1"
                    Content="Enter login or email"/>
             <TextBox Grid.Row="2"
