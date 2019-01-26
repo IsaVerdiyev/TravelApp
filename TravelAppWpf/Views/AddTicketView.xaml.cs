@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,20 @@ namespace TravelAppWpf.Views
         {
             InitializeComponent();
             DataContext = ViewModelLocator.AddTicketViewModel;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.DefaultExt = ".pdf";
+            fileDialog.Filter = "Pdf filed (*.pdf)|*.pdf";
+            bool? result = fileDialog.ShowDialog();
+
+            if(result == true)
+            {
+                string filename = fileDialog.FileName;
+                PathToFileTextBox.Text = filename;
+            }
         }
     }
 }

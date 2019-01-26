@@ -29,9 +29,9 @@
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding PdfPath, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox x:Name="PathToFileTextBox" Text="{Binding PdfPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             <Button Grid.Column="1"
-                    Content="Browse"/>
+                    Content="Browse" Click="Button_Click"/>
         </Grid>
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
