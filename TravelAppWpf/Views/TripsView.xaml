@@ -47,14 +47,12 @@
                         <Button Grid.Column="1"
                                 Content="👁"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=DataContext.ObserveCommand}"
-                                CommandParameter="{Binding}"
-                                IsEnabled="{Binding ElementName=DeleteButton,Path=IsEnabled, Mode=OneWay}"/>
+                                CommandParameter="{Binding}"/>
                         <Button Grid.Column="2"
                                 Content="x"
                                 x:Name="DeleteButton"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl,Mode=FindAncestor}, Path=DataContext.DeleteTripCommand}"
-                                CommandParameter="{Binding}"
-                                Click="Button_Click"/>
+                                CommandParameter="{Binding}"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

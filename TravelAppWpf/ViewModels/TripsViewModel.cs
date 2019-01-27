@@ -38,6 +38,8 @@ namespace TravelAppWpf.ViewModels
             }
         }
 
+        private Dictionary<int, int> processKeysToTripsMap = new Dictionary<int, int>();
+
         #endregion
 
 
@@ -86,6 +88,9 @@ namespace TravelAppWpf.ViewModels
             {
                 int processId = processesInfoService.GenerateUniqueId();
                 processesInfoService.ActivateProcess(ProcessEnum.DeletingTrip, processesInfoService.ProcessNames[ProcessEnum.DeletingTrip], processId);
+                processKeysToTripsMap[t.Id] = processId;
+                DeleteTripCommand.RaiseCanExecuteChanged();
+                ObserveCommand.RaiseCanExecuteChanged();
                 try
                 {
                     Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
@@ -99,8 +104,10 @@ namespace TravelAppWpf.ViewModels
                 {
                     processesInfoService.DeactivateProcess(ProcessEnum.DeletingTrip, processId);
                     Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                    processKeysToTripsMap.Remove(t.Id);
                 }
-            }));
+            }
+            ,t =>  !processKeysToTripsMap.ContainsKey(t.Id)));
         }
 
 
@@ -135,6 +142,7 @@ namespace TravelAppWpf.ViewModels
                     Messenger.Default.Send<TripDetailsObserverViewModelMessage>(tripDetailsObserverViewModelMessage);
                     navigator.NavigateTo<CitiesViewModel>();
                 }
+                , t => !processKeysToTripsMap.ContainsKey(t.Id)
                 ));
 
         }
