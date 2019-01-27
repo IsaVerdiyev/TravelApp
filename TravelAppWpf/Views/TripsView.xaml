@@ -21,11 +21,14 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="60"/>
             </Grid.ColumnDefinitions>
 
             <Label Content="Trips"/>
-            <Button Grid.Column="1"
+            <Label Grid.Column="1"
+                   Content="{Binding CurrentProcessesInfo}"/>
+            <Button Grid.Column="2"
                      Content="Sign out"
                     Command="{Binding SignOutCommand}"/>
         </Grid>

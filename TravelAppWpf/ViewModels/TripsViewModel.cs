@@ -88,6 +88,7 @@ namespace TravelAppWpf.ViewModels
                 processesInfoService.ActivateProcess(ProcessEnum.DeletingTrip, processesInfoService.ProcessNames[ProcessEnum.DeletingTrip], processId);
                 try
                 {
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
                     await Task.Run(async () =>
                     {
                         await tripService.RemoveTripAsync(new DeleteByIdSpecification<Trip>(t.Id));
@@ -96,7 +97,7 @@ namespace TravelAppWpf.ViewModels
                 }
                 finally
                 {
-                    processesInfoService.DeactivateProcess(ProcessEnum.SigningIn, processId);
+                    processesInfoService.DeactivateProcess(ProcessEnum.DeletingTrip, processId);
                     Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
                 }
             }));
