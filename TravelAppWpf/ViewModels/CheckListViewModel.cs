@@ -12,8 +12,10 @@ using System.Windows;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
 using TravelAppCore.Specifications;
+using TravelAppWpf.Extensions;
 using TravelAppWpf.Messages;
 using TravelAppWpf.Navigation;
+using TravelAppWpf.Services.ProcessesInfo;
 
 namespace TravelAppWpf.ViewModels
 {
@@ -26,20 +28,34 @@ namespace TravelAppWpf.ViewModels
         Trip trip;
 
         private ObservableCollection<ToDoItem> checkList;
-
         public ObservableCollection<ToDoItem> CheckList { get => checkList; set => Set(ref checkList, value); }
 
+
+        private string currentProcessesInfo;
+        public string CurrentProcessesInfo
+        {
+            get { return currentProcessesInfo; }
+            set
+            {
+                Set(ref currentProcessesInfo, value);
+
+            }
+        }
+
+        private Dictionary<int, int> toDoItemsIdToDeletingProcessMap = new Dictionary<int, int>();
+        private Dictionary<int, int> toDoItemsIdToModifyingProcessesMap = new Dictionary<int, int>();
         #endregion
 
         #region Messages
 
         AddToDoItemViewModelMessage addToDoItemViewModelMessage = new AddToDoItemViewModelMessage();
-
+        UpdateProcessInfoMessage updateProcessInfoMessage = new UpdateProcessInfoMessage();
         #endregion
 
         #region Dependencies
 
         INavigator navigator;
+        private readonly IProcessesInfoService processesInfoService;
         ICheckListService checkListService;
 
 
@@ -47,9 +63,10 @@ namespace TravelAppWpf.ViewModels
 
         #region Constructors
 
-        public CheckListViewModel(INavigator navigator, ICheckListService checkListService)
+        public CheckListViewModel(INavigator navigator, IProcessesInfoService processesInfoService, ICheckListService checkListService)
         {
             this.navigator = navigator;
+            this.processesInfoService = processesInfoService;
             this.checkListService = checkListService;
 
             Messenger.Default.Register<TripDetailsObserverViewModelMessage>(this, m =>
@@ -58,6 +75,8 @@ namespace TravelAppWpf.ViewModels
                 trip = m.Trip;
                 UpdateCheckList();
             });
+
+            Messenger.Default.Register<UpdateProcessInfoMessage>(this, m => UpdateCurrentProcessesInfo());
         }
 
         #endregion
@@ -71,12 +90,28 @@ namespace TravelAppWpf.ViewModels
             get => changeToDoItemStateCommand ?? (changeToDoItemStateCommand = new RelayCommand<ToDoItem>(
                         async p =>
                         {
-                            await Task.Run(async () =>
+                            int processId = processesInfoService.GenerateUniqueId();
+                            processesInfoService.ActivateProcess(ProcessEnum.ModifyingItemInCheckList, processesInfoService.ProcessNames[ProcessEnum.ModifyingItemInCheckList], processId);
+                            toDoItemsIdToModifyingProcessesMap[p.Id] = processId;
+                            ChangeToDoItemStateCommand.RaiseCanExecuteChanged();
+                            try
                             {
-                                p = await checkListService.ChangeCheckedStateOfToDoItemAsync(p, p.Done);
-                                //checkList.First(i => i.Id == p.Id).Done = p.Done;
-                            });
-                        }
+                                Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                                await Task.Run(async () =>
+                                {
+                                    p = await checkListService.ChangeCheckedStateOfToDoItemAsync(p, p.Done);
+                                });
+                            }
+                            finally
+                            {
+                                processesInfoService.DeactivateProcess(ProcessEnum.ModifyingItemInCheckList, processId);
+                                Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                                toDoItemsIdToModifyingProcessesMap.Remove(p.Id);
+                                ChangeToDoItemStateCommand.RaiseCanExecuteChanged();
+                            }
+                        },
+                        p => !toDoItemsIdToDeletingProcessMap.ContainsKey(p.Id) &&
+                             !toDoItemsIdToModifyingProcessesMap.ContainsKey(p.Id)
                         ));
         }
 
@@ -114,12 +149,28 @@ namespace TravelAppWpf.ViewModels
             get => deleteToDoItemCommand ?? (deleteToDoItemCommand = new RelayCommand<ToDoItem>(
                         async p =>
                         {
-                            await Task.Run(async () =>
+                            int processId = processesInfoService.GenerateUniqueId();
+                            processesInfoService.ActivateProcess(ProcessEnum.DeletingItemFromCheckList, processesInfoService.ProcessNames[ProcessEnum.DeletingItemFromCheckList], processId);
+                            toDoItemsIdToDeletingProcessMap[p.Id] = processId;
+                            DeleteToDoItemCommand.RaiseCanExecuteChanged();
+                            ChangeToDoItemStateCommand.RaiseCanExecuteChanged();
+                            try
                             {
-                                await checkListService.RemoveItemFromCheckListAsync(new DeleteByIdSpecification<ToDoItem>(p.Id));
-                                UpdateCheckList();
-                            });
-                        }
+                                Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                                await Task.Run(async () =>
+                                {
+                                    await checkListService.RemoveItemFromCheckListAsync(new DeleteByIdSpecification<ToDoItem>(p.Id));
+                                    UpdateCheckList();
+                                });
+                            }
+                            finally
+                            {
+                                processesInfoService.DeactivateProcess(ProcessEnum.DeletingItemFromCheckList, processId);
+                                Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                                toDoItemsIdToDeletingProcessMap.Remove(p.Id);
+                            }
+                        },
+                        p => !toDoItemsIdToDeletingProcessMap.ContainsKey(p.Id)
                         ));
         }
 
@@ -159,9 +210,22 @@ namespace TravelAppWpf.ViewModels
 
         async void UpdateCheckList()
         {
-            await Task.Run(async () => {
+            await Task.Run(async () =>
+            {
                 CheckList = new ObservableCollection<ToDoItem>(await checkListService.GetCheckListOfTripAsync(trip));
             });
+        }
+
+        void UpdateCurrentProcessesInfo()
+        {
+            try
+            {
+                CurrentProcessesInfo = processesInfoService.GetOneInfoStringFromAllProcesses();
+            }
+            catch (InvalidOperationException ex)
+            {
+                CurrentProcessesInfo = "";
+            }
         }
 
         #endregion
