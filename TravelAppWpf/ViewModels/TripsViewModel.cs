@@ -11,8 +11,10 @@ using System.Threading.Tasks;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
 using TravelAppCore.Specifications;
+using TravelAppWpf.Extensions;
 using TravelAppWpf.Messages;
 using TravelAppWpf.Navigation;
+using TravelAppWpf.Services.ProcessesInfo;
 
 namespace TravelAppWpf.ViewModels
 {
@@ -25,7 +27,16 @@ namespace TravelAppWpf.ViewModels
         private ObservableCollection<Trip> trips;
         public ObservableCollection<Trip> Trips { get => trips; set => Set(ref trips, value); }
 
-
+        private string currentProcessesInfo;
+        public string CurrentProcessesInfo
+        {
+            get { return currentProcessesInfo; }
+            set
+            {
+                Set(ref currentProcessesInfo, value);
+                
+            }
+        }
 
         #endregion
 
@@ -34,12 +45,14 @@ namespace TravelAppWpf.ViewModels
 
         AddTripViewModelMessage addTripViewModelMessage = new AddTripViewModelMessage();
         TripDetailsObserverViewModelMessage tripDetailsObserverViewModelMessage = new TripDetailsObserverViewModelMessage();
+        UpdateProcessInfoMessage updateProcessInfoMessage = new UpdateProcessInfoMessage();
 
         #endregion
 
         #region Dependencies
 
         INavigator navigator;
+        private readonly IProcessesInfoService processesInfoService;
         ITripService tripService;
 
         #endregion
@@ -47,9 +60,10 @@ namespace TravelAppWpf.ViewModels
 
         #region Consturctors
 
-        public TripsViewModel(INavigator navigator, ITripService tripService)
+        public TripsViewModel(INavigator navigator, IProcessesInfoService processInfoService, ITripService tripService)
         {
             this.navigator = navigator;
+            this.processesInfoService = processInfoService;
             this.tripService = tripService;
             Messenger.Default.Register<TripsViewModelMessage>(this, m =>
             {
@@ -58,6 +72,7 @@ namespace TravelAppWpf.ViewModels
             });
 
             Messenger.Default.Register<UpdateTripsMessage>(this, m => UpdateTrips());
+            Messenger.Default.Register<UpdateProcessInfoMessage>(this, m => UpdateCurrentProcessesInfo());
         }
 
         #endregion
@@ -69,11 +84,21 @@ namespace TravelAppWpf.ViewModels
         {
             get => deleteTripCommand ?? (deleteTripCommand = new RelayCommand<Trip>(async t =>
             {
-                await Task.Run(async () =>
+                int processId = processesInfoService.GenerateUniqueId();
+                processesInfoService.ActivateProcess(ProcessEnum.DeletingTrip, processesInfoService.ProcessNames[ProcessEnum.DeletingTrip], processId);
+                try
                 {
-                    await tripService.RemoveTripAsync(new DeleteByIdSpecification<Trip>(t.Id));
-                    UpdateTrips();
-                });
+                    await Task.Run(async () =>
+                    {
+                        await tripService.RemoveTripAsync(new DeleteByIdSpecification<Trip>(t.Id));
+                        UpdateTrips();
+                    });
+                }
+                finally
+                {
+                    processesInfoService.DeactivateProcess(ProcessEnum.SigningIn, processId);
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                }
             }));
         }
 
@@ -125,6 +150,21 @@ namespace TravelAppWpf.ViewModels
            });
         }
 
+        
+
+        void UpdateCurrentProcessesInfo()
+        {
+            try
+            {
+                CurrentProcessesInfo = processesInfoService.GetOneInfoStringFromAllProcesses();
+            }
+            catch (InvalidOperationException ex)
+            {
+                CurrentProcessesInfo = "";
+            }
+        }
+
+        
         #endregion
     }
 }

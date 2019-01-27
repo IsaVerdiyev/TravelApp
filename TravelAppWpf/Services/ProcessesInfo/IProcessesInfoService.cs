@@ -10,7 +10,8 @@ namespace TravelAppWpf.Services.ProcessesInfo
     {
         int GenerateUniqueId();
         Dictionary<ProcessEnum, string> ProcessNames { get; }
-        bool IsProcessActive(ProcessEnum processEnum, int id);
+        bool IsProcessActive(ProcessEnum processEnum);
+        bool IsProcessWithSpecialIdActive(ProcessEnum processEnum, int id);
         bool DeactivateProcess(ProcessEnum processEnum, int id);
         bool ActivateProcess(ProcessEnum processEnum, string processStringValue, int id);
         string GetStringValueOfProcess(ProcessEnum processEnum);

@@ -61,7 +61,7 @@ namespace TravelAppWpf.Services.ProcessesInfo
             return activeProcesses[processEnum].First().Value;
         }
 
-        public bool IsProcessActive(ProcessEnum processEnum, int id)
+        public bool IsProcessWithSpecialIdActive(ProcessEnum processEnum, int id)
         {
             if (activeProcesses.ContainsKey(processEnum))
             {
@@ -76,6 +76,18 @@ namespace TravelAppWpf.Services.ProcessesInfo
         public int GenerateUniqueId()
         {
             return ++id;
+        }
+
+        public bool IsProcessActive(ProcessEnum processEnum)
+        {
+            if (activeProcesses.ContainsKey(processEnum))
+            {
+                return activeProcesses[processEnum].Count > 0;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

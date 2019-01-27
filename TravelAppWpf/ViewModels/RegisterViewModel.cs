@@ -127,37 +127,43 @@ namespace TravelAppWpf.ViewModels
             {
                 int processId = processesInfoService.GenerateUniqueId();
                 processesInfoService.ActivateProcess(ProcessEnum.SigningUp, processesInfoService.ProcessNames[ProcessEnum.SigningUp], processId);
-                Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
-                await Task.Run(async () =>
+                try
                 {
-                    User user = new User
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                    await Task.Run(async () =>
                     {
-                        Email = Email,
-                        NickName = Nick,
-                        Password = Password
-                    };
+                        User user = new User
+                        {
+                            Email = Email,
+                            NickName = Nick,
+                            Password = Password
+                        };
 
-                    var signUpResult = await accountService.TrySignUpAsync(user);
-                    if (signUpResult)
-                    {
-                        MessageBox.Show("User was successfully registered");
-                        tripsViewModelMessage.User = user;
-                        Messenger.Default.Send<TripsViewModelMessage>(tripsViewModelMessage);
-                        navigator.NavigateTo<TripsViewModel>();
-                    }
-                    else
-                    {
-                        MessageBox.Show("There is already such a user");
-                    }
-                });
-                processesInfoService.DeactivateProcess(ProcessEnum.SigningUp, processId);
-                Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                        var signUpResult = await accountService.TrySignUpAsync(user);
+                        if (signUpResult)
+                        {
+                            MessageBox.Show("User was successfully registered");
+                            tripsViewModelMessage.User = user;
+                            Messenger.Default.Send<TripsViewModelMessage>(tripsViewModelMessage);
+                            navigator.NavigateTo<TripsViewModel>();
+                        }
+                        else
+                        {
+                            MessageBox.Show("There is already such a user");
+                        }
+                    });
+                }
+                finally
+                {
+                    processesInfoService.DeactivateProcess(ProcessEnum.SigningUp, processId);
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                }
             },
             () => !string.IsNullOrWhiteSpace(Nick) &&
                   !string.IsNullOrWhiteSpace(Email) &&
                   !string.IsNullOrWhiteSpace(Password) &&
                   !string.IsNullOrWhiteSpace(RepeatPassword) &&
-                  string.IsNullOrWhiteSpace(CurrentProcessesInfo) &&
+                  !processesInfoService.IsProcessActive(ProcessEnum.SigningUp) &&
                   Password.Equals(RepeatPassword)));
 
         }

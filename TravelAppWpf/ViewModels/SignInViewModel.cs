@@ -46,7 +46,6 @@ namespace TravelAppWpf.ViewModels
         public string ErrorMessage { get => errorMessage; set => Set(ref errorMessage, value); }
 
         private string currentProcessesInfo;
-
         public string CurrentProcessesInfo
         {
             get { return currentProcessesInfo; }
@@ -100,26 +99,31 @@ namespace TravelAppWpf.ViewModels
 
                 int processId = processesInfoService.GenerateUniqueId();
                 processesInfoService.ActivateProcess(ProcessEnum.SigningIn, processesInfoService.ProcessNames[ProcessEnum.SigningIn], processId);
-                Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
-                await Task.Run(async () =>
+                try
                 {
-
-                    var logInResult = await accountService.TryLogInAsync(NickOrEmail, Password);
-
-                    if (logInResult.result)
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                    await Task.Run(async () =>
                     {
-                        tripsViewModelMessage.User = logInResult.foundUser;
-                        Messenger.Default.Send<TripsViewModelMessage>(tripsViewModelMessage);
-                        navigator.NavigateTo<TripsViewModel>();
-                    }
-                    else
-                    {
-                        ErrorMessage = "Error occured during signing in\n";
-                    }
-                });
-                processesInfoService.DeactivateProcess(ProcessEnum.SigningIn, processId);
-                Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
 
+                        var logInResult = await accountService.TryLogInAsync(NickOrEmail, Password);
+
+                        if (logInResult.result)
+                        {
+                            tripsViewModelMessage.User = logInResult.foundUser;
+                            Messenger.Default.Send<TripsViewModelMessage>(tripsViewModelMessage);
+                            navigator.NavigateTo<TripsViewModel>();
+                        }
+                        else
+                        {
+                            ErrorMessage = "Error occured during signing in\n";
+                        }
+                    });
+                }
+                finally
+                {
+                    processesInfoService.DeactivateProcess(ProcessEnum.SigningIn, processId);
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                }
             }));
         }
 
@@ -129,7 +133,7 @@ namespace TravelAppWpf.ViewModels
             get => registerCommand ??
                 (registerCommand = new RelayCommand(
                     () => navigator.NavigateTo<RegisterViewModel>(),
-                    () => string.IsNullOrWhiteSpace(currentProcessesInfo)
+                    () => !processesInfoService.IsProcessActive(ProcessEnum.SigningIn)
                     ));
         }
 
