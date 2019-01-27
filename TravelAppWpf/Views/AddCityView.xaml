@@ -22,12 +22,15 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="30"/>
                 <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" 
                    Content="←"
                     Command="{Binding ReturnBackCommand}"/>
             <Label Grid.Column="1"
                    Content="Adding City"/>
+            <Label Grid.Column="2"
+                   Content="{Binding CurrentProcessesInfo}"/>
         </Grid>
 
         <Grid Grid.Row="1"> 

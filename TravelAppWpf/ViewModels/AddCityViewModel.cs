@@ -11,8 +11,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
+using TravelAppWpf.Extensions;
 using TravelAppWpf.Messages;
 using TravelAppWpf.Navigation;
+using TravelAppWpf.Services.ProcessesInfo;
 
 namespace TravelAppWpf.ViewModels
 {
@@ -42,17 +44,30 @@ namespace TravelAppWpf.ViewModels
         City foundCity;
         public City FoundCity { get => foundCity; set => Set(ref foundCity, value); }
 
+
+        private string currentProcessesInfo;
+        public string CurrentProcessesInfo
+        {
+            get { return currentProcessesInfo; }
+            set
+            {
+                Set(ref currentProcessesInfo, value);
+
+            }
+        }
         #endregion
 
         #region Messages
 
         UpdateCitiesMessage updateCitiesMessage = new UpdateCitiesMessage();
+        UpdateProcessInfoMessage updateProcessInfoMessage = new UpdateProcessInfoMessage();
 
         #endregion
 
         #region Dependencies
 
         INavigator navigator;
+        private readonly IProcessesInfoService processesInfoService;
         ICityFromApiGetter<string> cityFromApiGetter;
         ICityMatchesSearcherFromApi<string, IList<(string cityFullName, string cityUrl)>, string> cityMatchesSearcherFromApi;
         private readonly ICityService cityService;
@@ -61,9 +76,10 @@ namespace TravelAppWpf.ViewModels
 
         #region Consturctors
 
-        public AddCityViewModel(INavigator navigator, ICityFromApiGetter<string> cityFromApiGetter, ICityMatchesSearcherFromApi<string, IList<(string cityFullName, string cityUrl)>, string> cityMatchesSearcherFromApi, ICityService cityService)
+        public AddCityViewModel(INavigator navigator, IProcessesInfoService processesInfoService, ICityFromApiGetter<string> cityFromApiGetter, ICityMatchesSearcherFromApi<string, IList<(string cityFullName, string cityUrl)>, string> cityMatchesSearcherFromApi, ICityService cityService)
         {
             this.navigator = navigator;
+            this.processesInfoService = processesInfoService;
             this.cityFromApiGetter = cityFromApiGetter;
             this.cityMatchesSearcherFromApi = cityMatchesSearcherFromApi;
             this.cityService = cityService;
@@ -73,6 +89,8 @@ namespace TravelAppWpf.ViewModels
                 user = m.User;
                 trip = m.Trip;
             });
+
+            Messenger.Default.Register<UpdateProcessInfoMessage>(this, m => UpdateCurrentProcessesInfo());
         }
 
         #endregion
@@ -124,13 +142,24 @@ namespace TravelAppWpf.ViewModels
         {
             get => searchByNameAndAddCityCommand ?? (searchByNameAndAddCityCommand = new RelayCommand(async () =>
             {
-                await Task.Run(async () =>
+                int processId = processesInfoService.GenerateUniqueId();
+                processesInfoService.ActivateProcess(ProcessEnum.AddingCity, processesInfoService.ProcessNames[ProcessEnum.AddingCity], processId);
+                try
                 {
-                    navigator.NavigateTo<CitiesViewModel>();
-                    City city = await cityFromApiGetter.GetCityFromApiByNameAsync(SearchInput);
-                    await cityService.AddCityAsync(trip, city);
-                    Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage);
-                });
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                    await Task.Run(async () =>
+                    {
+                        navigator.NavigateTo<CitiesViewModel>();
+                        City city = await cityFromApiGetter.GetCityFromApiByNameAsync(SearchInput);
+                        await cityService.AddCityAsync(trip, city);
+                        Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage);
+                    });
+                }
+                finally
+                {
+                    processesInfoService.DeactivateProcess(ProcessEnum.AddingCity, processId);
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                }
             }));
         }
 
@@ -151,6 +180,22 @@ namespace TravelAppWpf.ViewModels
 
         RelayCommand returnBackCommand;
         public RelayCommand ReturnBackCommand { get => returnBackCommand ?? (returnBackCommand = new RelayCommand(() => navigator.NavigateTo<CitiesViewModel>())); }
+
+        #endregion
+
+        #region Private Functions
+
+        void UpdateCurrentProcessesInfo()
+        {
+            try
+            {
+                CurrentProcessesInfo = processesInfoService.GetOneInfoStringFromAllProcesses();
+            }
+            catch (InvalidOperationException ex)
+            {
+                CurrentProcessesInfo = "";
+            }
+        }
 
         #endregion
     }
