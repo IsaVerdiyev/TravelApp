@@ -97,8 +97,8 @@ namespace TravelAppWpf.ViewModels
             get => signInCommand ?? (signInCommand = new RelayCommand(async () =>
             {
 
-
-                processesInfoService.ActivateProcess(ProcessEnum.SigningIn, "Signing In");
+                int processId = processesInfoService.GenerateUniqueId();
+                processesInfoService.ActivateProcess(ProcessEnum.SigningIn, processesInfoService.ProcessNames[ProcessEnum.SigningIn], processId);
                 Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
                 await Task.Run(async () =>
                 {
@@ -116,7 +116,7 @@ namespace TravelAppWpf.ViewModels
                         ErrorMessage = "Error occured during signing in\n";
                     }
                 });
-                processesInfoService.DeactivateProcess(ProcessEnum.SigningIn);
+                processesInfoService.DeactivateProcess(ProcessEnum.SigningIn, processId);
                 Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
 
             }));

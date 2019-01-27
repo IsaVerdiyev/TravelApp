@@ -8,9 +8,11 @@ namespace TravelAppWpf.Services.ProcessesInfo
 {
     interface IProcessesInfoService
     {
-        bool IsProcessActive(ProcessEnum processEnum);
-        bool DeactivateProcess(ProcessEnum processEnum);
-        bool ActivateProcess(ProcessEnum processEnum, string processStringValue);
+        int GenerateUniqueId();
+        Dictionary<ProcessEnum, string> ProcessNames { get; }
+        bool IsProcessActive(ProcessEnum processEnum, int id);
+        bool DeactivateProcess(ProcessEnum processEnum, int id);
+        bool ActivateProcess(ProcessEnum processEnum, string processStringValue, int id);
         string GetStringValueOfProcess(ProcessEnum processEnum);
         List<string> GetAllStringValues();
     }

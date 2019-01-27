@@ -9,36 +9,73 @@ namespace TravelAppWpf.Services.ProcessesInfo
     class ProcessesInfoService : IProcessesInfoService
     {
 
-        Dictionary<ProcessEnum, string> keyValuePairs = new Dictionary<ProcessEnum, string>();
-      
-        public bool ActivateProcess(ProcessEnum processEnumKey, string processStringValue)
+        int id = 0;
+
+        public Dictionary<ProcessEnum, string> ProcessNames { get; }
+
+        public ProcessesInfoService(Dictionary<ProcessEnum, string> processNames)
         {
-            if (keyValuePairs.ContainsKey(processEnumKey))
+            ProcessNames = processNames;
+        }
+
+        Dictionary<ProcessEnum, Dictionary<int, string>> activeProcesses = new Dictionary<ProcessEnum, Dictionary<int, string>>();
+      
+        public bool ActivateProcess(ProcessEnum processEnumKey, string processStringValue, int id)
+        {
+            if (activeProcesses.ContainsKey(processEnumKey))
+            {
+                if (activeProcesses[processEnumKey].ContainsKey(id))
+                {
+                    return false;
+                }
+
+                activeProcesses[processEnumKey][id] = processStringValue;
+                return true;
+            }
+            else
+            {
+                activeProcesses[processEnumKey] = new Dictionary<int, string> { { id, processStringValue} };
+                return true;
+            }
+        }
+
+        public bool DeactivateProcess(ProcessEnum processEnumKey, int id)
+        {
+            if (activeProcesses.ContainsKey(processEnumKey))
+            {
+                return activeProcesses[processEnumKey].Remove(id);
+            }
+            else
             {
                 return false;
             }
-            keyValuePairs[processEnumKey] = processStringValue;
-            return true;
-        }
-
-        public bool DeactivateProcess(ProcessEnum processEnumKey)
-        {
-            return keyValuePairs.Remove(processEnumKey);
         }
 
         public List<string> GetAllStringValues()
         {
-            return keyValuePairs.Values.ToList();
+            return activeProcesses.Where(p => p.Value.Count() != 0).Select(p => p.Value.First().Value).ToList();
         }
 
         public string GetStringValueOfProcess(ProcessEnum processEnum)
         {
-            return keyValuePairs[processEnum];
+            return activeProcesses[processEnum].First().Value;
         }
 
-        public bool IsProcessActive(ProcessEnum processEnum)
+        public bool IsProcessActive(ProcessEnum processEnum, int id)
         {
-            return keyValuePairs.ContainsKey(processEnum);
+            if (activeProcesses.ContainsKey(processEnum))
+            {
+                return activeProcesses[processEnum].ContainsKey(id);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public int GenerateUniqueId()
+        {
+            return ++id;
         }
     }
 }

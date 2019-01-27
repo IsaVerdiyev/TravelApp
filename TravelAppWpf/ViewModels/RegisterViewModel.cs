@@ -104,7 +104,7 @@ namespace TravelAppWpf.ViewModels
         UpdateProcessInfoMessage updateProcessInfoMessage = new UpdateProcessInfoMessage();
         #endregion
 
-        #region Constutors
+        #region Constructors
 
         public RegisterViewModel(INavigator navigator, IProcessesInfoService processesInfoService, IAccountService accountService)
         {
@@ -125,7 +125,8 @@ namespace TravelAppWpf.ViewModels
         {
             get => registerCommand ?? (registerCommand = new RelayCommand(async () =>
             {
-                processesInfoService.ActivateProcess(ProcessEnum.SigningUp, "Signing Up");
+                int processId = processesInfoService.GenerateUniqueId();
+                processesInfoService.ActivateProcess(ProcessEnum.SigningUp, processesInfoService.ProcessNames[ProcessEnum.SigningUp], processId);
                 Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
                 await Task.Run(async () =>
                 {
@@ -149,7 +150,7 @@ namespace TravelAppWpf.ViewModels
                         MessageBox.Show("There is already such a user");
                     }
                 });
-                processesInfoService.DeactivateProcess(ProcessEnum.SigningUp);
+                processesInfoService.DeactivateProcess(ProcessEnum.SigningUp, processId);
                 Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
             },
             () => !string.IsNullOrWhiteSpace(Nick) &&

@@ -19,6 +19,25 @@
           "type": "TravelAppWpf.Services.ProcessesInfo.IProcessesInfoService"
         }
       ],
+      "parameters": {
+        "ProcessNames": {
+          "SigningIn":  "Signing In",
+          "SigningUp":  "Signing Up",
+          "AddingTrip":  "Adding Trip",
+          "DeletingTrip":  "Deleting Trip",
+          "AddingCity": "Adding City",
+          "DeletingCity":  "Deleting City",
+          "AddingTicket":  "Adding City",
+          "DeletingTicket":  "Deleting Ticket",
+          "AddingItemInCheckList": "Adding item in checklist",
+          "DeletingItemFromCheckList": "Deleting item from checklist",
+          "ReadingTrips":  "Reading trips",
+          "ReadingCities":  "Reading cities",
+          "ReadingTickets":  "Reading tickets",
+          "ReadingChecklist":  "Reading checklist",
+          "ModifyingItemInCheckList":  "Modifying item in checklist"
+        }
+      },
       "instanceScope": "singleinstance"
     },
     {
