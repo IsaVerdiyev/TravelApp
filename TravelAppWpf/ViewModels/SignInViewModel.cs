@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
+using TravelAppWpf.Extensions;
 using TravelAppWpf.Messages;
 using TravelAppWpf.Navigation;
 using TravelAppWpf.Services.ProcessesInfo;
@@ -140,7 +141,7 @@ namespace TravelAppWpf.ViewModels
         {
             try
             {
-                CurrentProcessesInfo = processesInfoService.GetAllStringValues().Aggregate((i, j) => i + ", " + j);
+                CurrentProcessesInfo = processesInfoService.GetOneInfoStringFromAllProcesses();
             }
             catch (InvalidOperationException ex)
             {

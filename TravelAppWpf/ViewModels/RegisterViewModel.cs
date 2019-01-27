@@ -184,7 +184,7 @@ namespace TravelAppWpf.ViewModels
         {
             try
             {
-                CurrentProcessesInfo = processesInfoService.GetAllStringValues().Aggregate((i, j) => i +", " + j);
+                CurrentProcessesInfo = processesInfoService.GetOneInfoStringFromAllProcesses();
             }
             catch (InvalidOperationException ex)
             {
