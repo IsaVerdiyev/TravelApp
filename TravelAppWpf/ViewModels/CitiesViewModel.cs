@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -10,8 +11,10 @@ using System.Windows;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
 using TravelAppCore.Specifications;
+using TravelAppWpf.Extensions;
 using TravelAppWpf.Messages;
 using TravelAppWpf.Navigation;
+using TravelAppWpf.Services.ProcessesInfo;
 
 namespace TravelAppWpf.ViewModels
 {
@@ -32,8 +35,20 @@ namespace TravelAppWpf.ViewModels
         }
 
         private City selectedCity;
-        public City SelectedCity{  get => selectedCity; set => Set(ref selectedCity, value); }
+        public City SelectedCity { get => selectedCity; set => Set(ref selectedCity, value); }
 
+        private string currentProcessesInfo;
+        public string CurrentProcessesInfo
+        {
+            get { return currentProcessesInfo; }
+            set
+            {
+                Set(ref currentProcessesInfo, value);
+
+            }
+        }
+
+        private Dictionary<int, int> processKeysToCitiesMap = new Dictionary<int, int>();
         #endregion
 
 
@@ -41,20 +56,23 @@ namespace TravelAppWpf.ViewModels
 
         CityOnMapViewModelMessage cityOnMapViewModelMessage = new CityOnMapViewModelMessage();
         AddCityViewModelMessage addCityViewModelMessage = new AddCityViewModelMessage();
+        UpdateProcessInfoMessage updateProcessInfoMessage = new UpdateProcessInfoMessage();
         #endregion
 
         #region Dependencies
 
         private readonly INavigator navigator;
+        private readonly IProcessesInfoService processesInfoService;
         private readonly ICityService cityService;
 
         #endregion
 
         #region Constructors
 
-        public CitiesViewModel(INavigator navigator, ICityService cityService)
+        public CitiesViewModel(INavigator navigator, IProcessesInfoService processesInfoService, ICityService cityService)
         {
             this.navigator = navigator;
+            this.processesInfoService = processesInfoService;
             this.cityService = cityService;
 
             Messenger.Default.Register<TripDetailsObserverViewModelMessage>(this, m =>
@@ -65,6 +83,7 @@ namespace TravelAppWpf.ViewModels
             });
 
             Messenger.Default.Register<UpdateCitiesMessage>(this, m => UpdateCities());
+            Messenger.Default.Register<UpdateProcessInfoMessage>(this, m => UpdateCurrentProcessesInfo());
         }
 
         #endregion
@@ -96,18 +115,34 @@ namespace TravelAppWpf.ViewModels
         {
             get => deleteCityCommand ?? (deleteCityCommand = new RelayCommand<City>(async c =>
             {
-                await Task.Run(async () =>
+                int processId = processesInfoService.GenerateUniqueId();
+                processesInfoService.ActivateProcess(ProcessEnum.DeletingCity, processesInfoService.ProcessNames[ProcessEnum.DeletingCity], processId);
+                processKeysToCitiesMap[c.Id] = processId;
+                DeleteCityCommand.RaiseCanExecuteChanged();
+                ShowInfoOfCityCommand.RaiseCanExecuteChanged();
+                try
                 {
-                    await cityService.RemoveCityAsync(new DeleteByIdSpecification<City>(c.Id));
-                    UpdateCities();
-                });
-            }));
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                    await Task.Run(async () =>
+                    {
+                        await cityService.RemoveCityAsync(new DeleteByIdSpecification<City>(c.Id));
+                        UpdateCities();
+                    });
+                }
+                finally
+                {
+                    processesInfoService.DeactivateProcess(ProcessEnum.DeletingCity, processId);
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                    processKeysToCitiesMap.Remove(c.Id);
+                }
+            },
+                c => !processKeysToCitiesMap.ContainsKey(c.Id)));
         }
 
-        RelayCommand<City> showInfoOfCity;
-        public RelayCommand<City> ShowInfoOfCity
+        RelayCommand<City> showInfoOfCityCommand;
+        public RelayCommand<City> ShowInfoOfCityCommand
         {
-            get => showInfoOfCity ?? (showInfoOfCity = new RelayCommand<City>(c =>
+            get => showInfoOfCityCommand ?? (showInfoOfCityCommand = new RelayCommand<City>(c =>
             {
                 cityOnMapViewModelMessage.User = user;
                 cityOnMapViewModelMessage.Trip = trip;
@@ -116,7 +151,8 @@ namespace TravelAppWpf.ViewModels
                 Messenger.Default.Send<CityOnMapViewModelMessage>(cityOnMapViewModelMessage);
 
                 navigator.NavigateTo<CityOnMapViewModel>();
-            }));
+            },
+                c => !processKeysToCitiesMap.ContainsKey(c.Id)));
         }
 
         private RelayCommand navigateToCheckListCommand;
@@ -144,10 +180,22 @@ namespace TravelAppWpf.ViewModels
 
         async void UpdateCities()
         {
-            await Task.Run(async() =>
+            await Task.Run(async () =>
             {
                 Cities = new ObservableCollection<City>(await cityService.GetCitiesOfTripAsync(trip));
             });
+        }
+
+        void UpdateCurrentProcessesInfo()
+        {
+            try
+            {
+                CurrentProcessesInfo = processesInfoService.GetOneInfoStringFromAllProcesses();
+            }
+            catch (InvalidOperationException ex)
+            {
+                CurrentProcessesInfo = "";
+            }
         }
 
         #endregion

@@ -62,10 +62,10 @@ namespace TravelAppWpf.ViewModels
 
         #region Consturctors
 
-        public TripsViewModel(INavigator navigator, IProcessesInfoService processInfoService, ITripService tripService)
+        public TripsViewModel(INavigator navigator, IProcessesInfoService processesInfoService, ITripService tripService)
         {
             this.navigator = navigator;
-            this.processesInfoService = processInfoService;
+            this.processesInfoService = processesInfoService;
             this.tripService = tripService;
             Messenger.Default.Register<TripsViewModelMessage>(this, m =>
             {

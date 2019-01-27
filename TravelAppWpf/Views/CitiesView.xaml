@@ -23,6 +23,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             
             <Button Grid.Column="0"
@@ -31,6 +32,8 @@
 
             <Label Grid.Column="1"
                    Content="Cities"/>
+            <Label Grid.Column="2"
+                   Content="{Binding CurrentProcessesInfo}"/>
         </Grid>
         
         <Grid Grid.Row="1">
@@ -69,7 +72,7 @@
                             <Label Content="{Binding FullName}"/>
                             <Button Grid.Column="1"
                                 Content="👁"
-                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ShowInfoOfCity}"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ShowInfoOfCityCommand}"
                                 CommandParameter="{Binding}"/>
 
 
