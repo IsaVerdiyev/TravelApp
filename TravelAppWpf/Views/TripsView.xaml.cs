@@ -24,5 +24,10 @@ namespace TravelAppWpf.Views
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            (sender as Button).IsEnabled = false;
+        }
     }
 }
