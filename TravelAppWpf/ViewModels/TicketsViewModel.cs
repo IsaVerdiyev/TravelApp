@@ -10,13 +10,15 @@ using System.Threading.Tasks;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
 using TravelAppCore.Specifications;
+using TravelAppWpf.Extensions;
 using TravelAppWpf.Messages;
 using TravelAppWpf.Navigation;
+using TravelAppWpf.Services.ProcessesInfo;
 using TravelAppWpf.Views;
 
 namespace TravelAppWpf.ViewModels
 {
-    class TicketsViewModel: ViewModelBase
+    class TicketsViewModel : ViewModelBase
     {
         #region Fields And Properties
 
@@ -26,28 +28,47 @@ namespace TravelAppWpf.ViewModels
         User user;
         Trip trip;
 
+
+        private string currentProcessesInfo;
+        public string CurrentProcessesInfo
+        {
+            get { return currentProcessesInfo; }
+            set
+            {
+                Set(ref currentProcessesInfo, value);
+
+            }
+        }
+
+
+        private Dictionary<int, int> processKeysToTripsMap = new Dictionary<int, int>();
+
         #endregion
 
         #region Messages
 
         AddTicketViewModelMessage addTicketViewModelMessage = new AddTicketViewModelMessage();
+        UpdateProcessInfoMessage updateProcessInfoMessage = new UpdateProcessInfoMessage();
 
         #endregion
 
         #region Dependencies
 
         private readonly INavigator navigator;
+        private readonly IProcessesInfoService processesInfoService;
         private readonly ITicketService ticketService;
 
         #endregion
 
         #region Constructors
 
-        public TicketsViewModel(INavigator navigator, ITicketService ticketService)
+        public TicketsViewModel(INavigator navigator, IProcessesInfoService processesInfoService, ITicketService ticketService)
         {
             this.navigator = navigator;
+            this.processesInfoService = processesInfoService;
             this.ticketService = ticketService;
-            Messenger.Default.Register<TripDetailsObserverViewModelMessage>(this, m => {
+            Messenger.Default.Register<TripDetailsObserverViewModelMessage>(this, m =>
+            {
                 user = m.User;
                 trip = m.Trip;
                 addTicketViewModelMessage.Trip = trip;
@@ -55,6 +76,7 @@ namespace TravelAppWpf.ViewModels
             });
 
             Messenger.Default.Register<UpdateTicketsMessage>(this, m => UpdateTickets());
+            Messenger.Default.Register<UpdateProcessInfoMessage>(this, m => UpdateCurrentProcessesInfo());
         }
 
         #endregion
@@ -71,7 +93,8 @@ namespace TravelAppWpf.ViewModels
         RelayCommand addTicketCommand;
         public RelayCommand AddTicketCommand
         {
-            get => addTicketCommand ?? (addTicketCommand = new RelayCommand(() => {
+            get => addTicketCommand ?? (addTicketCommand = new RelayCommand(() =>
+            {
                 AddTicketView addTicketView = new AddTicketView();
                 Messenger.Default.Send<AddTicketViewModelMessage>(addTicketViewModelMessage);
                 addTicketView.ShowDialog();
@@ -81,12 +104,30 @@ namespace TravelAppWpf.ViewModels
         RelayCommand<Ticket> deleteTicketCommand;
         public RelayCommand<Ticket> DeleteTicketCommand
         {
-            get => deleteTicketCommand ?? (deleteTicketCommand = new RelayCommand<Ticket>(async t => {
-                await Task.Run(async() => {
-                    await ticketService.RemoveTicketAsync(new DeleteByIdSpecification<Ticket>(t.Id));
-                    UpdateTickets();
-                });
-            }));
+            get => deleteTicketCommand ?? (deleteTicketCommand = new RelayCommand<Ticket>(async t =>
+            {
+                int processId = processesInfoService.GenerateUniqueId();
+                processesInfoService.ActivateProcess(ProcessEnum.DeletingTicket, processesInfoService.ProcessNames[ProcessEnum.DeletingTicket], processId);
+                processKeysToTripsMap[t.Id] = processId;
+                DeleteTicketCommand.RaiseCanExecuteChanged();
+                
+                try
+                {
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                    await Task.Run(async () =>
+                    {
+                        await ticketService.RemoveTicketAsync(new DeleteByIdSpecification<Ticket>(t.Id));
+                        UpdateTickets();
+                    });
+                }
+                finally
+                {
+                    processesInfoService.DeactivateProcess(ProcessEnum.DeletingTicket, processId);
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                    processKeysToTripsMap.Remove(t.Id);
+                }
+            },
+               t => !processKeysToTripsMap.ContainsKey(t.Id)));
         }
 
         private RelayCommand navigateToCheckListCommand;
@@ -107,7 +148,7 @@ namespace TravelAppWpf.ViewModels
         #endregion
 
 
-        #region
+        #region Private Functions
 
         async void UpdateTickets()
         {
@@ -115,6 +156,18 @@ namespace TravelAppWpf.ViewModels
             {
                 Tickets = new ObservableCollection<Ticket>(await ticketService.GetTicketsOfTripAsync(trip));
             });
+        }
+
+        void UpdateCurrentProcessesInfo()
+        {
+            try
+            {
+                CurrentProcessesInfo = processesInfoService.GetOneInfoStringFromAllProcesses();
+            }
+            catch (InvalidOperationException ex)
+            {
+                CurrentProcessesInfo = "";
+            }
         }
 
         #endregion
