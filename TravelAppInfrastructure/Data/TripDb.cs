@@ -20,7 +20,7 @@ namespace TravelAppInfrastructure.Data
 
         public TripDb(): base("name=TripDbConnection")
         {
-
+            Configuration.AutoDetectChangesEnabled = false;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
