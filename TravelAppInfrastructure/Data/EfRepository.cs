@@ -26,6 +26,7 @@ namespace TravelAppInfrastructure.Data
         {
             T added = tripDb.Set<T>().Add(entity);
             tripDb.SaveChanges();
+            tripDb.Entry<T>(entity).State = EntityState.Detached;
             return added;
         }
 
@@ -33,6 +34,7 @@ namespace TravelAppInfrastructure.Data
         {
             T added = tripDb.Set<T>().Add(entity);
             await tripDb.SaveChangesAsync();
+            tripDb.Entry<T>(entity).State = EntityState.Detached;
             return added;
         }
 
@@ -59,12 +61,16 @@ namespace TravelAppInfrastructure.Data
 
         public T GetById(int id)
         {
-            return tripDb.Set<T>().Find(id);
+            T found = tripDb.Set<T>().Find(id);
+            tripDb.Entry<T>(found).State = EntityState.Detached;
+            return found;
         }
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await tripDb.Set<T>().FindAsync(id);
+            T found =  await tripDb.Set<T>().FindAsync(id);
+            tripDb.Entry<T>(found).State = EntityState.Detached;
+            return found;
         }
 
         public T GetSingleBySpec(ISpecification<T> spec)
@@ -101,12 +107,14 @@ namespace TravelAppInfrastructure.Data
         {
             tripDb.Entry<T>(entity).State = EntityState.Modified;
             tripDb.SaveChanges();
+            tripDb.Entry<T>(entity).State = EntityState.Detached;
         }
 
         public async Task UpdateAsync(T entity)
         {
             tripDb.Entry<T>(entity).State = EntityState.Modified;
             await tripDb.SaveChangesAsync();
+            tripDb.Entry<T>(entity).State = EntityState.Detached;
         }
 
         private IQueryable<T> ApplySpecification(ISpecification<T> specification)
