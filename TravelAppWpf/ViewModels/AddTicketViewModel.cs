@@ -10,6 +10,7 @@ using System.Windows;
 using TravelAppCore.Entities;
 using TravelAppCore.Interfaces;
 using TravelAppWpf.Messages;
+using TravelAppWpf.Navigation;
 
 namespace TravelAppWpf.ViewModels
 {
@@ -44,6 +45,7 @@ namespace TravelAppWpf.ViewModels
         #region Messages
 
         UpdateTicketsMessage updateTicketsMessage = new UpdateTicketsMessage();
+        private readonly INavigator navigator;
 
         #endregion
 
@@ -55,8 +57,9 @@ namespace TravelAppWpf.ViewModels
 
         #region Constructors
 
-        public AddTicketViewModel(ITicketService ticketService)
+        public AddTicketViewModel(INavigator navigator, ITicketService ticketService)
         {
+            this.navigator = navigator;
             this.ticketService = ticketService;
 
             Messenger.Default.Register<AddTicketViewModelMessage>(this, m => trip = m.Trip);
@@ -67,22 +70,28 @@ namespace TravelAppWpf.ViewModels
 
         #region Commands
 
-        RelayCommand<Window> addTicketCommand;
-        public RelayCommand<Window> AddTicketCommand
+        RelayCommand addTicketCommand;
+        public RelayCommand AddTicketCommand
         {
             get => addTicketCommand ?? (
-                addTicketCommand = new RelayCommand<Window>(
-                    async w => {
-                        w.Close();
+                addTicketCommand = new RelayCommand(
+                    async () => {
                         await Task.Run(async() => {
                             await ticketService.AddTicketAsync(trip, new Ticket {Name = TicketName,ImagePath = PdfPath});
+                            navigator.NavigateTo<TicketsViewModel>();
                             Messenger.Default.Send<UpdateTicketsMessage>(updateTicketsMessage);
                         });
                     },
-                    w => !string.IsNullOrWhiteSpace(TicketName) && !string.IsNullOrWhiteSpace(PdfPath))
+                    () => !string.IsNullOrWhiteSpace(TicketName) && !string.IsNullOrWhiteSpace(PdfPath))
                 );
         }
 
+
+        RelayCommand returnCommand;
+        public RelayCommand ReturnCommand
+        {
+            get => returnCommand ?? (returnCommand = new RelayCommand(() => navigator.NavigateTo<TicketsViewModel>()));
+        }
         #endregion
     }
 }

@@ -11,21 +11,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TravelAppWpf.Tools;
-using TravelAppWpf.ViewModels;
 
 namespace TravelAppWpf.Views
 {
     /// <summary>
     /// Interaction logic for AddTicketView.xaml
     /// </summary>
-    public partial class AddTicketView : Window
+    public partial class AddTicketView : UserControl
     {
         public AddTicketView()
         {
             InitializeComponent();
-            DataContext = ViewModelLocator.AddTicketViewModel;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -35,7 +33,7 @@ namespace TravelAppWpf.Views
             fileDialog.Filter = "Pdf filed (*.pdf)|*.pdf";
             bool? result = fileDialog.ShowDialog();
 
-            if(result == true)
+            if (result == true)
             {
                 string filename = fileDialog.FileName;
                 PathToFileTextBox.Text = filename;

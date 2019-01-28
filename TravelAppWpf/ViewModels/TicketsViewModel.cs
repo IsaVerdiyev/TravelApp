@@ -97,7 +97,7 @@ namespace TravelAppWpf.ViewModels
             {
                 AddTicketView addTicketView = new AddTicketView();
                 Messenger.Default.Send<AddTicketViewModelMessage>(addTicketViewModelMessage);
-                addTicketView.ShowDialog();
+                navigator.NavigateTo<AddTicketViewModel>();
             }));
         }
 

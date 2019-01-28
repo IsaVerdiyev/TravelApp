@@ -19,7 +19,7 @@ namespace TravelAppWpf.Tools
 
         public AppViewModel AppViewModel { get; }
 
-        public static AddTicketViewModel AddTicketViewModel { get; private set; }
+        public AddTicketViewModel AddTicketViewModel { get; private set; }
 
         public ViewModelLocator()
         {
@@ -31,7 +31,6 @@ namespace TravelAppWpf.Tools
             containerBuilder.RegisterGeneric(typeof(EfRepository<>)).As(typeof(IRepository<>)).InstancePerDependency();
             var container = containerBuilder.Build();
 
-            AddTicketViewModel = container.Resolve<AddTicketViewModel>();
             AppViewModel = container.Resolve<AppViewModel>();
             navigator = container.Resolve<INavigator>();
             navigator.Register(AppViewModel);
@@ -44,6 +43,7 @@ namespace TravelAppWpf.Tools
             navigator.Register(container.Resolve<AddTripViewModel>());
             navigator.Register(container.Resolve<AddCityViewModel>());
             navigator.Register(container.Resolve<CityOnMapViewModel>());
+            navigator.Register(container.Resolve<AddTicketViewModel>());
 
 
             navigator.NavigateTo<SignInViewModel>();

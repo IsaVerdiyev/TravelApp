@@ -40,4 +40,8 @@
         <v:CityOnMapView/>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:AddTicketViewModel}">
+        <v:AddTicketView/>
+    </DataTemplate>
+
 </ResourceDictionary>
