@@ -34,7 +34,7 @@ namespace TravelAppWpf.ViewModels
             set
             {
                 Set(ref currentProcessesInfo, value);
-                
+
             }
         }
 
@@ -56,17 +56,19 @@ namespace TravelAppWpf.ViewModels
         INavigator navigator;
         private readonly IProcessesInfoService processesInfoService;
         ITripService tripService;
+        private readonly IAccountService accountService;
 
         #endregion
 
 
         #region Consturctors
 
-        public TripsViewModel(INavigator navigator, IProcessesInfoService processesInfoService, ITripService tripService)
+        public TripsViewModel(INavigator navigator, IProcessesInfoService processesInfoService, ITripService tripService, IAccountService accountService)
         {
             this.navigator = navigator;
             this.processesInfoService = processesInfoService;
             this.tripService = tripService;
+            this.accountService = accountService;
             Messenger.Default.Register<TripsViewModelMessage>(this, m =>
             {
                 user = m.User;
@@ -107,7 +109,7 @@ namespace TravelAppWpf.ViewModels
                     processKeysToTripsMap.Remove(t.Id);
                 }
             }
-            ,t =>  !processKeysToTripsMap.ContainsKey(t.Id)));
+            , t => !processKeysToTripsMap.ContainsKey(t.Id)));
         }
 
 
@@ -126,7 +128,7 @@ namespace TravelAppWpf.ViewModels
         private RelayCommand signOutCommand;
         public RelayCommand SignOutCommand
         {
-            get => signOutCommand ?? (signOutCommand = 
+            get => signOutCommand ?? (signOutCommand =
                 new RelayCommand(() => navigator.NavigateTo<SignInViewModel>()));
         }
 
@@ -147,6 +149,32 @@ namespace TravelAppWpf.ViewModels
 
         }
 
+        private RelayCommand deleteUserCommand;
+        public RelayCommand DeleteUserCommand
+        {
+            get => deleteUserCommand ?? (deleteUserCommand = new RelayCommand(async () =>
+            {
+                int processId = processesInfoService.GenerateUniqueId();
+                processesInfoService.ActivateProcess(ProcessEnum.RemovingAccount, processesInfoService.ProcessNames[ProcessEnum.RemovingAccount], processId);
+                try
+                {
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                    await Task.Run(async () =>
+                    {
+                        navigator.NavigateTo<SignInViewModel>();
+                        await accountService.DeleteAccountAsync(new DeleteByIdSpecification<User>(user.Id));
+
+                    });
+                }
+                finally
+                {
+                    processesInfoService.DeactivateProcess(ProcessEnum.RemovingAccount, processId);
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                }
+
+            }));
+        }
+
         #endregion
 
         #region Private functions
@@ -159,7 +187,7 @@ namespace TravelAppWpf.ViewModels
            });
         }
 
-        
+
 
         void UpdateCurrentProcessesInfo()
         {
@@ -173,7 +201,7 @@ namespace TravelAppWpf.ViewModels
             }
         }
 
-        
+
         #endregion
     }
 }

@@ -10,6 +10,7 @@ namespace TravelAppWpf.Services.ProcessesInfo
     {
         SigningIn,
         SigningUp,
+        RemovingAccount,
         AddingTrip,
         DeletingTrip,
         AddingCity,

@@ -24,6 +24,7 @@
         "ProcessNames": {
           "SigningIn": "Signing In",
           "SigningUp": "Signing Up",
+          "RemovingAccount":  "Removing account",
           "AddingTrip": "Adding Trip",
           "DeletingTrip": "Deleting Trip",
           "AddingCity": "Adding City",
