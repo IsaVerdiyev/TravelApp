@@ -30,7 +30,8 @@
             <Label Grid.Column="1"
                    Content="Adding Ticket"/>
 
-            <Label Grid.Column="2"/>
+            <Label Grid.Column="2"
+                   Content="{Binding CurrentProcessesInfo}"/>
         </Grid>
        
 
