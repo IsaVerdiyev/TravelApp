@@ -44,6 +44,7 @@ namespace TravelAppWpf.Tools
             navigator.Register(container.Resolve<AddCityViewModel>());
             navigator.Register(container.Resolve<CityOnMapViewModel>());
             navigator.Register(container.Resolve<AddTicketViewModel>());
+            navigator.Register(container.Resolve<AddItemInCheckListViewModel>());
 
 
             navigator.NavigateTo<SignInViewModel>();

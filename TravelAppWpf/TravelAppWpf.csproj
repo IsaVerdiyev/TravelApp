@@ -163,6 +163,7 @@
     <Compile Include="Messages\CityOnMapViewModelMessage.cs" />
     <Compile Include="Messages\TripDetailsObserverViewModelMessage.cs" />
     <Compile Include="Messages\TripsViewModelMessage.cs" />
+    <Compile Include="Messages\UpdateCheckListMessage.cs" />
     <Compile Include="Messages\UpdateCitiesMessage.cs" />
     <Compile Include="Messages\UpdateProcessInfoMessage.cs" />
     <Compile Include="Messages\UpdateTicketsMessage.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Tools\ViewModelLocator.cs" />
     <Compile Include="Tools\WebBrowserUtility.cs" />
     <Compile Include="ViewModels\AddCityViewModel.cs" />
+    <Compile Include="ViewModels\AddItemInCheckListViewModel.cs" />
     <Compile Include="ViewModels\AddTicketViewModel.cs" />
     <Compile Include="ViewModels\AddTripViewModel.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
@@ -188,6 +190,9 @@
     <Compile Include="ViewModels\TripsViewModel.cs" />
     <Compile Include="Views\AddCityView.xaml.cs">
       <DependentUpon>AddCityView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddItemInCheckListView.xaml.cs">
+      <DependentUpon>AddItemInCheckListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AddTicketView.xaml.cs">
       <DependentUpon>AddTicketView.xaml</DependentUpon>
@@ -256,6 +261,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\AddItemInCheckListViewDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\AddTicketViewDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -305,6 +314,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddCityView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddItemInCheckListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

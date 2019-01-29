@@ -44,4 +44,8 @@
         <v:AddTicketView/>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:AddItemInCheckListViewModel}">
+        <v:AddItemInCheckListView/>
+    </DataTemplate>
+
 </ResourceDictionary>

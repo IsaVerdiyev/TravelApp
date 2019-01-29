@@ -12,6 +12,7 @@
     { "type": "TravelAppWpf.ViewModels.AddCityViewModel" },
     { "type": "TravelAppWpf.ViewModels.CityOnMapViewModel" },
     { "type": "TravelAppWpf.ViewModels.AddTicketViewModel" },
+    { "type": "TravelAppWpf.ViewModels.AddItemInCheckListViewModel"},
     {
       "type": "TravelAppWpf.Services.ProcessesInfo.ProcessesInfoService",
       "services": [
@@ -21,21 +22,21 @@
       ],
       "parameters": {
         "ProcessNames": {
-          "SigningIn":  "Signing In",
-          "SigningUp":  "Signing Up",
-          "AddingTrip":  "Adding Trip",
-          "DeletingTrip":  "Deleting Trip",
+          "SigningIn": "Signing In",
+          "SigningUp": "Signing Up",
+          "AddingTrip": "Adding Trip",
+          "DeletingTrip": "Deleting Trip",
           "AddingCity": "Adding City",
-          "DeletingCity":  "Deleting City",
-          "AddingTicket":  "Adding City",
-          "DeletingTicket":  "Deleting Ticket",
+          "DeletingCity": "Deleting City",
+          "AddingTicket": "Adding City",
+          "DeletingTicket": "Deleting Ticket",
           "AddingItemInCheckList": "Adding item in checklist",
           "DeletingItemFromCheckList": "Deleting item from checklist",
-          "ReadingTrips":  "Reading trips",
-          "ReadingCities":  "Reading cities",
-          "ReadingTickets":  "Reading tickets",
-          "ReadingChecklist":  "Reading checklist",
-          "ModifyingItemInCheckList":  "Modifying item in checklist"
+          "ReadingTrips": "Reading trips",
+          "ReadingCities": "Reading cities",
+          "ReadingTickets": "Reading tickets",
+          "ReadingChecklist": "Reading checklist",
+          "ModifyingItemInCheckList": "Modifying item in checklist"
         }
       },
       "instanceScope": "singleinstance"

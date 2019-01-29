@@ -76,6 +76,8 @@ namespace TravelAppWpf.ViewModels
                 UpdateCheckList();
             });
 
+            Messenger.Default.Register<UpdateCheckListMessage>(this, m => UpdateCheckList());
+
             Messenger.Default.Register<UpdateProcessInfoMessage>(this, m => UpdateCurrentProcessesInfo());
         }
 
@@ -119,26 +121,12 @@ namespace TravelAppWpf.ViewModels
         public RelayCommand AddToDoItemInCheckListCommand
         {
             get => addToDoItemInCheckListCommand ?? (addToDoItemInCheckListCommand = new RelayCommand(
-                        async () =>
+                        () =>
                         {
-                            await Task.Run(async () =>
-                            {
-                                while (true)
-                                {
-                                    string toDoItemName = Interaction.InputBox("Enter name of item to do: ", "Adding new item in checkList", "");
-                                    if (!string.IsNullOrWhiteSpace(toDoItemName))
-                                    {
-                                        await checkListService.AddItemInCheckListAsync(trip, new ToDoItem { Name = toDoItemName });
-                                        UpdateCheckList();
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("You should enter name for item");
-                                    }
-                                }
-                            });
-
+                            addToDoItemViewModelMessage.Trip = trip;
+                            addToDoItemViewModelMessage.User = user;
+                            Messenger.Default.Send<AddToDoItemViewModelMessage>(addToDoItemViewModelMessage);
+                            navigator.NavigateTo<AddItemInCheckListViewModel>();
                         }
                         ));
         }
