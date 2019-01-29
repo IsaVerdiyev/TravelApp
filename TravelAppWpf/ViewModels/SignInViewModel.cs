@@ -53,6 +53,7 @@ namespace TravelAppWpf.ViewModels
             {
                 Set(ref currentProcessesInfo, value);
                 RegisterCommand.RaiseCanExecuteChanged();
+                SignInCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -124,7 +125,8 @@ namespace TravelAppWpf.ViewModels
                     processesInfoService.DeactivateProcess(ProcessEnum.SigningIn, processId);
                     Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
                 }
-            }));
+            },
+                () => !processesInfoService.IsProcessActive(ProcessEnum.SigningIn)));
         }
 
         private RelayCommand registerCommand;
