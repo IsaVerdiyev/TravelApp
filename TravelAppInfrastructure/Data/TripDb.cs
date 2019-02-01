@@ -51,6 +51,10 @@ namespace TravelAppInfrastructure.Data
             modelBuilder.Entity<ToDoItem>().Property(td => td.Done).IsRequired();
             modelBuilder.Entity<ToDoItem>().Property(td => td.Name).IsRequired().HasMaxLength(70);
 
+            modelBuilder.Entity<DestinationCityInTrip>().Property(d => d.OrderNumber).IsRequired();
+            modelBuilder.Entity<DestinationCityInTrip>().Property(d => d.CityId).IsRequired();
+            modelBuilder.Entity<DestinationCityInTrip>().Property(d => d.TripId).IsRequired();
+
             base.OnModelCreating(modelBuilder);
         }
     }
