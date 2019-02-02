@@ -18,19 +18,20 @@ namespace Tester
     {
         static void Main(string[] args)
         {
-            TripDb tripDb = new TripDb();
+            //TripDb tripDb = new TripDb();
 
             //tripDb.Database.Log = s => Debug.WriteLine(s);
             //User user = new User
             //{
-            //    Email = "V.isa1ail.",
-            //    NickName = "vagif",
+            //    Email = "isa@gmail.com",
+            //    NickName = "isa",
             //    Password = "12345",
             //    Trips = new List<Trip>
             //    {
             //       new Trip{
             //           Name="Trip1",
             //           ArriavalDate = DateTime.Now.AddDays(3),
+            //           Destinations = new List<DestinationCityInTrip>(), 
             //           DepartureDate = DateTime.Now,
             //            CheckList = new List<ToDoItem>
             //            {
@@ -38,53 +39,52 @@ namespace Tester
             //                new ToDoItem{Name = "Second item to do", Done = true}
             //            },
             //            Tickets = new List<Ticket>{
-            //                new Ticket{ImagePath = "a;lkdsjf;ajds;f"},
-            //                new Ticket{ImagePath = ";alskdjf;lajsd;fja;sdjf;kasjd" }
+            //                new Ticket{Name="dsfafd", ImagePath = "a;lkdsjf;ajds;f"},
+            //                new Ticket{Name = "sdfds", ImagePath = ";alskdjf;lajsd;fja;sdjf;kasjd" }
             //            },
-            //            Cities = new List<City>
-            //            {
-            //                new City{
-            //                    Name = "Baku",
-            //                    FullName = "Azerbaijan, Baku",
-            //                    Currency = "AZN",
-            //                    Language = "Azeri",
-            //                    CityCoordinate  = new CityCoordinate
-            //                    {
-            //                        Latitude = 234,
-            //                        Longitude = 123
-            //                    }
-            //                },
-            //                new City
-            //                {
-            //                    Name = "Qwebeck",
-            //                    Currency  = "USD",
-            //                    Language = "English",
-            //                    FullName ="Canada, Qwebek",
-            //                    CityCoordinate = new CityCoordinate
-            //                    {
-            //                        Latitude = 123,
-            //                        Longitude = 532
-            //                    }
-            //                },
 
-            //            }
 
             //       }
             //    }
             //};
 
+            List<City> Cities = new List<City>
+                        {
+                            new City{
+                                Name = "Baku",
+                                FullName = "Azerbaijan, Baku",
+                                Currency = "AZN",
+                                Language = "Azeri",
+                                CityCoordinate  = new CityCoordinate
+                                {
+                                    Latitude = 234,
+                                    Longitude = 123
+                                }
+                            },
+                            new City
+                            {
+                                Name = "Qwebeck",
+                                Currency  = "USD",
+                                Language = "English",
+                                FullName ="Canada, Qwebek",
+                                CityCoordinate = new CityCoordinate
+                                {
+                                    Latitude = 123,
+                                    Longitude = 532
+                                }
+                            },
+
+                        };
 
 
-            ITicketService ticketService = new TicketService(new EfRepository<Ticket>(tripDb));
-            ICityService cityService = new CityService(new EfRepository<City>(tripDb));
-            ICheckListService checkListService = new CheckListService(new EfRepository<ToDoItem>(tripDb));
+            TripDb tripdb = new TripDb();
+            IDestinationsInTripService destinationsInTripService = new DestinationsInTripService(new EfRepository<DestinationCityInTrip>(tripdb));
+            ICityService cityService = new CityService(new EfRepository<City>(tripdb));
+            
+            //destinationsInTripService.AddDestinationInTrip(tripdb.Set<Trip>().First(), new DestinationCityInTrip { CityId = cityService.GetCityFromReposByFullname("Azerbaijan, Baku").Id });
+            
 
-            ICityCoordinateGetter cityCoordinateGetter = new CityCoordinateGetter(new EfRepository<CityCoordinate>(tripDb));
-
-
-            Console.WriteLine(tripDb.Set<Ticket>().First().Name);
-
-            Console.ReadKey();
+            
         }
     }
 }

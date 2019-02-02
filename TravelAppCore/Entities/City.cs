@@ -25,8 +25,6 @@ namespace TravelAppCore.Entities
         
         public string Language { get; set; }
 
-        
-        public int TripId { get; set; }
-        public Trip Trip { get; set; }
+        public ICollection<DestinationCityInTrip> Destinations { get; set; }
     }
 }

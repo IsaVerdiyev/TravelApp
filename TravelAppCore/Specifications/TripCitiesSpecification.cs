@@ -5,11 +5,15 @@ using TravelAppCore.Entities;
 
 namespace TravelAppCore.Specifications
 {
-    class TripCitiesSpecification: BaseSpecification<City>
+    class TripCitiesSpecification: BaseSpecification<DestinationCityInTrip>
     {
-        public TripCitiesSpecification(Trip trip): base(c => c.TripId == trip.Id) { }
+        public TripCitiesSpecification(Trip trip): base(d => d.TripId == trip.Id) {
+            Includes.Add(d => d.DestinationCity);
+        }
 
-        public TripCitiesSpecification(int tripId) : base(c => c.TripId == tripId) { }
+        public TripCitiesSpecification(int tripId) : base(d => d.TripId == tripId) {
+            Includes.Add(d => d.DestinationCity);
+        }
 
     }
 }

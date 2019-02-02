@@ -89,6 +89,10 @@
     <Compile Include="Migrations\201901250849023_TicketEntityChanging.Designer.cs">
       <DependentUpon>201901250849023_TicketEntityChanging.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902012031438_AddingDestinationCityEntity.cs" />
+    <Compile Include="Migrations\201902012031438_AddingDestinationCityEntity.Designer.cs">
+      <DependentUpon>201902012031438_AddingDestinationCityEntity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -125,6 +129,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901250849023_TicketEntityChanging.resx">
       <DependentUpon>201901250849023_TicketEntityChanging.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902012031438_AddingDestinationCityEntity.resx">
+      <DependentUpon>201902012031438_AddingDestinationCityEntity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

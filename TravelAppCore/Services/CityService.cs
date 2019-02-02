@@ -10,44 +10,31 @@ namespace TravelAppCore.Services
 {
     public class CityService : ICityService
     {
-        IRepository<City> cityRepository;
+        private readonly IRepository<City> repository;
 
-        public CityService(IRepository<City> cityRepository)
+        public CityService(IRepository<City> repository)
         {
-            this.cityRepository = cityRepository;
+            this.repository = repository;
         }
 
-        public City AddCity(Trip trip, City city)
+        public City AddCity(City city)
         {
-            city.TripId = trip.Id;
-            return cityRepository.Add(city);
-           
+            return repository.Add(city);
         }
 
-        public async Task<City> AddCityAsync(Trip trip, City city)
+        public async Task<City> AddCityAsync(City city)
         {
-            city.TripId = trip.Id;
-            return await cityRepository.AddAsync(city);
+            return await repository.AddAsync(city);
         }
 
-        public IReadOnlyList<City> GetCitiesOfTrip(Trip trip)
+        public City GetCityFromReposByFullname(string fullname)
         {
-            return cityRepository.List(new TripCitiesSpecification(trip));
+            return repository.GetSingleBySpec(new CityByFullNameSpecification(fullname));
         }
 
-        public async Task<IReadOnlyList<City>> GetCitiesOfTripAsync(Trip trip)
+        public async Task<City> GetCityFromReposByFullnameAsync(string fullname)
         {
-            return await cityRepository.ListAsync(new TripCitiesSpecification(trip));
-        }
-
-        public void RemoveCity(DeleteByIdSpecification<City> specification)
-        {
-            cityRepository.DeleteBySpec(specification);
-        }
-
-        public async Task RemoveCityAsync(DeleteByIdSpecification<City> specification)
-        {
-            await cityRepository.DeleteBySpecAsync(specification);
+            return await repository.GetSingleBySpecAsync(new CityByFullNameSpecification(fullname));
         }
     }
 }
