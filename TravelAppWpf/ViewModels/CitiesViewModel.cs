@@ -48,7 +48,7 @@ namespace TravelAppWpf.ViewModels
             }
         }
 
-        private Dictionary<int, int> processKeysToCitiesMap = new Dictionary<int, int>();
+        private Dictionary<int, int> processKeysToDestinationsMap = new Dictionary<int, int>();
         #endregion
 
 
@@ -109,14 +109,14 @@ namespace TravelAppWpf.ViewModels
             }));
         }
 
-        RelayCommand<City> deleteCityCommand;
-        public RelayCommand<City> DeleteCityCommand
+        RelayCommand<DestinationCityInTrip> deleteCityCommand;
+        public RelayCommand<DestinationCityInTrip> DeleteCityCommand
         {
-            get => deleteCityCommand ?? (deleteCityCommand = new RelayCommand<City>(async c =>
+            get => deleteCityCommand ?? (deleteCityCommand = new RelayCommand<DestinationCityInTrip>(async d =>
             {
                 int processId = processesInfoService.GenerateUniqueId();
                 processesInfoService.ActivateProcess(ProcessEnum.DeletingCity, processesInfoService.ProcessNames[ProcessEnum.DeletingCity], processId);
-                processKeysToCitiesMap[c.Id] = processId;
+                processKeysToDestinationsMap[d.Id] = processId;
                 DeleteCityCommand.RaiseCanExecuteChanged();
                 ShowInfoOfCityCommand.RaiseCanExecuteChanged();
                 try
@@ -124,7 +124,7 @@ namespace TravelAppWpf.ViewModels
                     Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
                     await Task.Run(async () =>
                     {
-                        await destinationsInTripService.RemoveDestinationFromTripAsync(new DeleteByIdSpecification<DestinationCityInTrip>(c.Id));
+                        await destinationsInTripService.RemoveDestinationFromTripAsync(new DeleteByIdSpecification<DestinationCityInTrip>(d.Id));
                         UpdateCities();
                     });
                 }
@@ -132,26 +132,26 @@ namespace TravelAppWpf.ViewModels
                 {
                     processesInfoService.DeactivateProcess(ProcessEnum.DeletingCity, processId);
                     Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
-                    processKeysToCitiesMap.Remove(c.Id);
+                    processKeysToDestinationsMap.Remove(d.Id);
                 }
             },
-                c => !processKeysToCitiesMap.ContainsKey(c.Id)));
+            c => !CheckProcess(c.Id)));
         }
 
-        RelayCommand<City> showInfoOfCityCommand;
-        public RelayCommand<City> ShowInfoOfCityCommand
+        RelayCommand<DestinationCityInTrip> showInfoOfCityCommand;
+        public RelayCommand<DestinationCityInTrip> ShowInfoOfCityCommand
         {
-            get => showInfoOfCityCommand ?? (showInfoOfCityCommand = new RelayCommand<City>(c =>
+            get => showInfoOfCityCommand ?? (showInfoOfCityCommand = new RelayCommand<DestinationCityInTrip>(c =>
             {
                 cityOnMapViewModelMessage.User = user;
                 cityOnMapViewModelMessage.Trip = trip;
-                cityOnMapViewModelMessage.City = c;
+                cityOnMapViewModelMessage.City = c.City;
 
                 Messenger.Default.Send<CityOnMapViewModelMessage>(cityOnMapViewModelMessage);
 
                 navigator.NavigateTo<CityOnMapViewModel>();
             },
-                c => !processKeysToCitiesMap.ContainsKey(c.Id)));
+            c => !CheckProcess(c.Id)));
         }
 
         private RelayCommand navigateToCheckListCommand;
@@ -195,6 +195,11 @@ namespace TravelAppWpf.ViewModels
             {
                 CurrentProcessesInfo = "";
             }
+        }
+
+        bool CheckProcess(int id)
+        {
+            return processKeysToDestinationsMap.ContainsKey(id);
         }
 
         #endregion

@@ -75,7 +75,7 @@ namespace TravelAppWpf.ViewModels
 
         #endregion
 
-        #region Consturctors
+        #region Constructors
 
         public AddCityViewModel(INavigator navigator, IProcessesInfoService processesInfoService, ICityFromApiGetter<string> cityFromApiGetter, ICityMatchesSearcherFromApi<string, IList<(string cityFullName, string cityUrl)>, string> cityMatchesSearcherFromApi, ICityService cityService, IDestinationsInTripService destinationsInTripService)
         {
