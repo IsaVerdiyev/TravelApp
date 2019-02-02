@@ -8,11 +8,11 @@ namespace TravelAppCore.Specifications
     class TripCitiesSpecification: BaseSpecification<DestinationCityInTrip>
     {
         public TripCitiesSpecification(Trip trip): base(d => d.TripId == trip.Id) {
-            Includes.Add(d => d.DestinationCity);
+            Includes.Add(d => d.City);
         }
 
         public TripCitiesSpecification(int tripId) : base(d => d.TripId == tripId) {
-            Includes.Add(d => d.DestinationCity);
+            Includes.Add(d => d.City);
         }
 
     }

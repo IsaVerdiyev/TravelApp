@@ -59,24 +59,26 @@
             </Grid.ColumnDefinitions>
             
             <ListBox
-                 ItemsSource="{Binding Cities, Mode=OneWay}"
+                 ItemsSource="{Binding Destinations, Mode=OneWay}"
                 SelectedItem="{Binding SelectedCity}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
+                                <ColumnDefinition/>
                                 <ColumnDefinition Width="30"/>
                                 <ColumnDefinition Width="30"/>
                             </Grid.ColumnDefinitions>
-                            <Label Content="{Binding FullName}"/>
-                            <Button Grid.Column="1"
+                            <Label Content="{Binding OrderNumber}"/>
+                            <Label Grid.Column="1" Content="{Binding City.FullName}"/>
+                            <Button Grid.Column="2"
                                 Content="👁"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ShowInfoOfCityCommand}"
                                 CommandParameter="{Binding}"/>
 
 
-                            <Button Grid.Column="2"
+                            <Button Grid.Column="3"
                                 Content="x"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DeleteCityCommand}"
                                 CommandParameter="{Binding}"/>

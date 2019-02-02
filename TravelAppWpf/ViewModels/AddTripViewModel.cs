@@ -127,7 +127,7 @@ namespace TravelAppWpf.ViewModels
                                 ArriavalDate = ArrivalDate,
                                 DepartureDate = DepartureDate,
                                 CheckList = new List<ToDoItem>(),
-                                Cities = new List<City>(),
+                                //Cities = new List<City>(),
                                 Tickets = new List<Ticket>()
                             };
                             await tripService.AddTripAsync(user, trip);

@@ -27,11 +27,11 @@ namespace TravelAppWpf.ViewModels
         Trip trip;
 
 
-        ObservableCollection<City> cities;
-        public ObservableCollection<City> Cities
+        ObservableCollection<DestinationCityInTrip> destinationsInTrip;
+        public ObservableCollection<DestinationCityInTrip> Destinations
         {
-            get => cities;
-            set => Set(ref cities, value);
+            get => destinationsInTrip;
+            set => Set(ref destinationsInTrip, value);
         }
 
         private City selectedCity;
@@ -63,18 +63,17 @@ namespace TravelAppWpf.ViewModels
 
         private readonly INavigator navigator;
         private readonly IProcessesInfoService processesInfoService;
-        private readonly ICityService cityService;
+        private readonly IDestinationsInTripService destinationsInTripService;
 
         #endregion
 
         #region Constructors
 
-        public CitiesViewModel(INavigator navigator, IProcessesInfoService processesInfoService, ICityService cityService)
+        public CitiesViewModel(INavigator navigator, IProcessesInfoService processesInfoService, IDestinationsInTripService destinationsInTripService)
         {
             this.navigator = navigator;
             this.processesInfoService = processesInfoService;
-            this.cityService = cityService;
-
+            this.destinationsInTripService = destinationsInTripService;
             Messenger.Default.Register<TripDetailsObserverViewModelMessage>(this, m =>
             {
                 user = m.User;
@@ -125,7 +124,7 @@ namespace TravelAppWpf.ViewModels
                     Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
                     await Task.Run(async () =>
                     {
-                        await cityService.RemoveCityAsync(new DeleteByIdSpecification<City>(c.Id));
+                        await destinationsInTripService.RemoveDestinationFromTripAsync(new DeleteByIdSpecification<DestinationCityInTrip>(c.Id));
                         UpdateCities();
                     });
                 }
@@ -182,7 +181,7 @@ namespace TravelAppWpf.ViewModels
         {
             await Task.Run(async () =>
             {
-                Cities = new ObservableCollection<City>(await cityService.GetCitiesOfTripAsync(trip));
+                Destinations = new ObservableCollection<DestinationCityInTrip>(await destinationsInTripService.GetDestinationsOfTripAsync(trip));
             });
         }
 

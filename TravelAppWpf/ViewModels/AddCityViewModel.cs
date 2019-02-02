@@ -41,8 +41,8 @@ namespace TravelAppWpf.ViewModels
             set => Set(ref foundCities, value);
         }
 
-        City foundCity;
-        public City FoundCity { get => foundCity; set => Set(ref foundCity, value); }
+        (string cityFullName, string cityUrl) foundCity;
+        public (string cityFullName, string cityUrl) FoundCity { get => foundCity; set => Set(ref foundCity, value); }
 
 
         private string currentProcessesInfo;
@@ -71,19 +71,20 @@ namespace TravelAppWpf.ViewModels
         ICityFromApiGetter<string> cityFromApiGetter;
         ICityMatchesSearcherFromApi<string, IList<(string cityFullName, string cityUrl)>, string> cityMatchesSearcherFromApi;
         private readonly ICityService cityService;
+        private readonly IDestinationsInTripService destinationsInTripService;
 
         #endregion
 
         #region Consturctors
 
-        public AddCityViewModel(INavigator navigator, IProcessesInfoService processesInfoService, ICityFromApiGetter<string> cityFromApiGetter, ICityMatchesSearcherFromApi<string, IList<(string cityFullName, string cityUrl)>, string> cityMatchesSearcherFromApi, ICityService cityService)
+        public AddCityViewModel(INavigator navigator, IProcessesInfoService processesInfoService, ICityFromApiGetter<string> cityFromApiGetter, ICityMatchesSearcherFromApi<string, IList<(string cityFullName, string cityUrl)>, string> cityMatchesSearcherFromApi, ICityService cityService, IDestinationsInTripService destinationsInTripService)
         {
             this.navigator = navigator;
             this.processesInfoService = processesInfoService;
             this.cityFromApiGetter = cityFromApiGetter;
             this.cityMatchesSearcherFromApi = cityMatchesSearcherFromApi;
             this.cityService = cityService;
-
+            this.destinationsInTripService = destinationsInTripService;
             Messenger.Default.Register<AddCityViewModelMessage>(this, m =>
             {
                 user = m.User;
@@ -118,7 +119,7 @@ namespace TravelAppWpf.ViewModels
             {
                 await Task.Run(async () =>
                 {
-                    FoundCity = await cityFromApiGetter.GetCityFromApiByNameAsync(SearchInput);
+                    FoundCity = (await cityMatchesSearcherFromApi.GetMatchesFromApiByInputAsync(SearchInput)).First();
                 });
             }));
         }
@@ -131,7 +132,16 @@ namespace TravelAppWpf.ViewModels
                 await Task.Run(async () =>
                 {
                     navigator.NavigateTo<CitiesViewModel>();
-                    await cityService.AddCityAsync(trip, FoundCity);
+                    City addedCity = await cityService.GetCityFromReposByFullnameAsync(FoundCity.cityFullName);
+                    if(addedCity == null)
+                    {
+                        addedCity = await cityMatchesSearcherFromApi.GetCityFromApiBySelectedMatchAsync(FoundCity.cityUrl);
+                        addedCity = await cityService.AddCityAsync(addedCity);
+                    }
+                    await destinationsInTripService.AddDestinationInTripAsync(trip, new DestinationCityInTrip {
+                        CityId = addedCity.Id, 
+                        TripId = trip.Id
+                    });
                     Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage);
                 });
             }));
@@ -149,9 +159,19 @@ namespace TravelAppWpf.ViewModels
                     Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
                     await Task.Run(async () =>
                     {
+                        FoundCity = (await cityMatchesSearcherFromApi.GetMatchesFromApiByInputAsync(SearchInput)).First();
                         navigator.NavigateTo<CitiesViewModel>();
-                        City city = await cityFromApiGetter.GetCityFromApiByNameAsync(SearchInput);
-                        await cityService.AddCityAsync(trip, city);
+                        City addedCity = await cityService.GetCityFromReposByFullnameAsync(FoundCity.cityFullName);
+                        if (addedCity == null)
+                        {
+                            addedCity = await cityMatchesSearcherFromApi.GetCityFromApiBySelectedMatchAsync(FoundCity.cityUrl);
+                            addedCity = await cityService.AddCityAsync(addedCity);
+                        }
+                        await destinationsInTripService.AddDestinationInTripAsync(trip, new DestinationCityInTrip
+                        {
+                            CityId = addedCity.Id,
+                            TripId = trip.Id
+                        });
                         Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage);
                     });
                 }
@@ -171,8 +191,17 @@ namespace TravelAppWpf.ViewModels
                 await Task.Run(async () =>
                 {
                     navigator.NavigateTo<CitiesViewModel>();
-                    City city = await cityMatchesSearcherFromApi.GetCityFromApiBySelectedMatchAsync(tuple.cityUrl);
-                    await cityService.AddCityAsync(trip, city);
+                    City addedCity = await cityService.GetCityFromReposByFullnameAsync(tuple.cityFullName);
+                    if (addedCity == null)
+                    {
+                        addedCity = await cityMatchesSearcherFromApi.GetCityFromApiBySelectedMatchAsync(tuple.cityUrl);
+                        addedCity = await cityService.AddCityAsync(addedCity);
+                    }
+                    await destinationsInTripService.AddDestinationInTripAsync(trip, new DestinationCityInTrip
+                    {
+                        CityId = addedCity.Id,
+                        TripId = trip.Id
+                    });
                     Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage);
                 });
             }));

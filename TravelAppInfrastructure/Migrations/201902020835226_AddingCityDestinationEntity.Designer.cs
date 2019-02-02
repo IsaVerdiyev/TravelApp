@@ -7,13 +7,13 @@ namespace TravelAppInfrastructure.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class AddingDestinationCityEntity : IMigrationMetadata
+    public sealed partial class AddingCityDestinationEntity : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddingDestinationCityEntity));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddingCityDestinationEntity));
         
         string IMigrationMetadata.Id
         {
-            get { return "201902012031438_AddingDestinationCityEntity"; }
+            get { return "201902020835226_AddingCityDestinationEntity"; }
         }
         
         string IMigrationMetadata.Source

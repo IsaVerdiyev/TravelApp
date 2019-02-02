@@ -17,5 +17,6 @@ namespace TravelAppCore.Interfaces
 
         IReadOnlyList<DestinationCityInTrip> GetDestinationsOfTrip(Trip trip);
         Task<IReadOnlyList<DestinationCityInTrip>> GetDestinationsOfTripAsync(Trip trip);
+
     }
 }

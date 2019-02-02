@@ -18,35 +18,33 @@ namespace Tester
     {
         static void Main(string[] args)
         {
-            //TripDb tripDb = new TripDb();
-
-            //tripDb.Database.Log = s => Debug.WriteLine(s);
-            //User user = new User
-            //{
-            //    Email = "isa@gmail.com",
-            //    NickName = "isa",
-            //    Password = "12345",
-            //    Trips = new List<Trip>
-            //    {
-            //       new Trip{
-            //           Name="Trip1",
-            //           ArriavalDate = DateTime.Now.AddDays(3),
-            //           Destinations = new List<DestinationCityInTrip>(), 
-            //           DepartureDate = DateTime.Now,
-            //            CheckList = new List<ToDoItem>
-            //            {
-            //                new ToDoItem{Name = "First item to do", Done = false},
-            //                new ToDoItem{Name = "Second item to do", Done = true}
-            //            },
-            //            Tickets = new List<Ticket>{
-            //                new Ticket{Name="dsfafd", ImagePath = "a;lkdsjf;ajds;f"},
-            //                new Ticket{Name = "sdfds", ImagePath = ";alskdjf;lajsd;fja;sdjf;kasjd" }
-            //            },
+            
+            User user = new User
+            {
+                Email = "isa@gmail.com",
+                NickName = "isa",
+                Password = "12345",
+                Trips = new List<Trip>
+                {
+                   new Trip{
+                       Name="Trip1",
+                       ArriavalDate = DateTime.Now.AddDays(3),
+                       Destinations = new List<DestinationCityInTrip>(),
+                       DepartureDate = DateTime.Now,
+                        CheckList = new List<ToDoItem>
+                        {
+                            new ToDoItem{Name = "First item to do", Done = false},
+                            new ToDoItem{Name = "Second item to do", Done = true}
+                        },
+                        Tickets = new List<Ticket>{
+                            new Ticket{Name="dsfafd", ImagePath = "a;lkdsjf;ajds;f"},
+                            new Ticket{Name = "sdfds", ImagePath = ";alskdjf;lajsd;fja;sdjf;kasjd" }
+                        },
 
 
-            //       }
-            //    }
-            //};
+                   }
+                }
+            };
 
             List<City> Cities = new List<City>
                         {
@@ -76,12 +74,13 @@ namespace Tester
 
                         };
 
-
+            
             TripDb tripdb = new TripDb();
+            tripdb.Set<User>().Add(user);
             IDestinationsInTripService destinationsInTripService = new DestinationsInTripService(new EfRepository<DestinationCityInTrip>(tripdb));
             ICityService cityService = new CityService(new EfRepository<City>(tripdb));
-            
-            //destinationsInTripService.AddDestinationInTrip(tripdb.Set<Trip>().First(), new DestinationCityInTrip { CityId = cityService.GetCityFromReposByFullname("Azerbaijan, Baku").Id });
+            cityService.AddCity(Cities.First());
+            destinationsInTripService.AddDestinationInTrip(tripdb.Set<Trip>().First(), new DestinationCityInTrip { CityId = cityService.GetCityFromReposByFullname("Azerbaijan, Baku").Id });
             
 
             

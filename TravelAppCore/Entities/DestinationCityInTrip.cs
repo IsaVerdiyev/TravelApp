@@ -10,7 +10,7 @@ namespace TravelAppCore.Entities
         public int OrderNumber { get; set; }
 
         public int CityId { get; set; }
-        public City DestinationCity { get; set; }
+        public City City { get; set; }
        
         public int TripId { get; set; }
         public Trip Trip { get; set; }

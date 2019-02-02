@@ -14,6 +14,7 @@ namespace TravelAppInfrastructure.Data
         public DbSet<ToDoItem> ToDoItems { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<CityCoordinate> CityCoordinates { get; set; }
+        public DbSet<DestinationCityInTrip> DestinationCitiesInTrip { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Trip> Trips { get; set; }
         public DbSet<User> Users { get; set; }

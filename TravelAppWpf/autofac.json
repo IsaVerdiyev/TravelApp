@@ -24,7 +24,7 @@
         "ProcessNames": {
           "SigningIn": "Signing In",
           "SigningUp": "Signing Up",
-          "RemovingAccount":  "Removing account",
+          "RemovingAccount": "Removing account",
           "AddingTrip": "Adding Trip",
           "DeletingTrip": "Deleting Trip",
           "AddingCity": "Adding City",
@@ -41,6 +41,14 @@
         }
       },
       "instanceScope": "singleinstance"
+    },
+    {
+      "type": "TravelAppCore.Services.DestinationsInTripService, TravelAppCore",
+      "services": [
+        {
+          "type": "TravelAppCore.Interfaces.IDestinationsInTripService, TravelAppCore"
+        }
+      ]
     },
     {
       "type": "Services.AccountService, Services",
