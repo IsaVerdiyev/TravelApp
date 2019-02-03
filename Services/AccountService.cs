@@ -37,7 +37,7 @@ namespace Services
             await userRepos.DeleteBySpecAsync(specification);
         }
 
-        public (bool, User) TryLogIn(string nick, string password)
+        public (bool, User) TryLogIn(string nick, SecureString password)
         {
             
 
@@ -47,7 +47,7 @@ namespace Services
             
         }
 
-        public async Task<(bool, User)> TryLogInAsync(string nickOrEmail, string password)
+        public async Task<(bool, User)> TryLogInAsync(string nickOrEmail, SecureString password)
         {
            
 
@@ -103,7 +103,7 @@ namespace Services
         
 
 
-        private (bool, User) GetSigningInResult(string nickOrEmail, string password, User foundUser)
+        private (bool, User) GetSigningInResult(string nickOrEmail, SecureString password, User foundUser)
         {
             if (foundUser == null)
             {
@@ -114,7 +114,8 @@ namespace Services
                 foundUser = null;
                 return (false, foundUser);
             }
-            if (foundUser.Password == Encrypt(password))
+            string realPassword = new System.Net.NetworkCredential(string.Empty, password).Password;
+            if (foundUser.Password == Encrypt(realPassword))
             {
                 
                 return (true, foundUser);

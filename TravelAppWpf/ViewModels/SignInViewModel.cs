@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,16 +32,7 @@ namespace TravelAppWpf.ViewModels
             }
         }
 
-        string password;
-        public string Password
-        {
-            get => password;
-            set
-            {
-                Set(ref password, value);
-                ErrorMessage = "";
-            }
-        }
+        
 
         string errorMessage;
         public string ErrorMessage { get => errorMessage; set => Set(ref errorMessage, value); }
@@ -85,6 +77,7 @@ namespace TravelAppWpf.ViewModels
             this.processesInfoService = processesInfoService;
 
             Messenger.Default.Register<UpdateProcessInfoMessage>(this, m => UpdateCurrentProcessesInfo());
+            Messenger.Default.Register<SecureString>(this, m => SignInCommand.Execute(m));
         }
 
         #endregion
@@ -92,10 +85,10 @@ namespace TravelAppWpf.ViewModels
 
         #region Commands
 
-        private RelayCommand signInCommand;
-        public RelayCommand SignInCommand
+        private RelayCommand<SecureString> signInCommand;
+        public RelayCommand<SecureString> SignInCommand
         {
-            get => signInCommand ?? (signInCommand = new RelayCommand(async () =>
+            get => signInCommand ?? (signInCommand = new RelayCommand<SecureString>(async password =>
             {
 
                 int processId = processesInfoService.GenerateUniqueId();
@@ -106,7 +99,7 @@ namespace TravelAppWpf.ViewModels
                     await Task.Run(async () =>
                     {
 
-                        var logInResult = await accountService.TryLogInAsync(NickOrEmail, Password);
+                        var logInResult = await accountService.TryLogInAsync(NickOrEmail, password);
 
                         if (logInResult.result)
                         {
@@ -126,7 +119,7 @@ namespace TravelAppWpf.ViewModels
                     Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
                 }
             },
-                () => !processesInfoService.IsProcessActive(ProcessEnum.SigningIn)));
+                pass => !processesInfoService.IsProcessActive(ProcessEnum.SigningIn)));
         }
 
         private RelayCommand registerCommand;

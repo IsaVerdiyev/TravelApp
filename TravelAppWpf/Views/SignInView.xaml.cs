@@ -1,6 +1,8 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +25,16 @@ namespace TravelAppWpf.Views
         public SignInView()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            SecureString secureString = new SecureString();
+            foreach(var item in PasswordBox.Password)
+            {
+                secureString.AppendChar(item);
+            }
+            Messenger.Default.Send<SecureString>(secureString);
         }
     }
 }
