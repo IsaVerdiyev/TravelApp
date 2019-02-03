@@ -135,7 +135,7 @@ namespace TravelAppWpf.ViewModels
                     processKeysToDestinationsMap.Remove(d.Id);
                 }
             },
-            c => !CheckProcess(c.Id)));
+            c => !processKeysToDestinationsMap.ContainsKey(c.Id)));
         }
 
         RelayCommand<DestinationCityInTrip> showInfoOfCityCommand;
@@ -151,7 +151,7 @@ namespace TravelAppWpf.ViewModels
 
                 navigator.NavigateTo<CityOnMapViewModel>();
             },
-            c => !CheckProcess(c.Id)));
+            c => !processKeysToDestinationsMap.ContainsKey(c.Id)));
         }
 
         private RelayCommand navigateToCheckListCommand;
@@ -195,11 +195,6 @@ namespace TravelAppWpf.ViewModels
             {
                 CurrentProcessesInfo = "";
             }
-        }
-
-        bool CheckProcess(int id)
-        {
-            return processKeysToDestinationsMap.ContainsKey(id);
         }
 
         #endregion

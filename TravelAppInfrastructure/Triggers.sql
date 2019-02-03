@@ -27,3 +27,16 @@ AS
 	END
 
 
+CREATE TRIGGER DeleteDestination
+On DestinationCityInTrips
+AFTER DELETE 
+AS 
+	BEGIN
+		SET NOCOUNT ON;
+		UPDATE DestinationCityInTrips
+		SET OrderNumber = OrderNumber - 1
+		WHERE OrderNumber > (SELECT Top 1 OrderNumber FROM deleted);
+	END
+
+
+

@@ -10,44 +10,44 @@ namespace TravelAppCore.Services
 {
     public class DestinationsInTripService : IDestinationsInTripService
     {
-        IRepository<DestinationCityInTrip> cityRepository;
+        IRepository<DestinationCityInTrip> destinationsRepository;
 
-        public DestinationsInTripService(IRepository<DestinationCityInTrip> cityRepository)
+        public DestinationsInTripService(IRepository<DestinationCityInTrip> destinationsInTripService)
         {
-            this.cityRepository = cityRepository;
+            this.destinationsRepository = destinationsInTripService;
         }
 
         public DestinationCityInTrip AddDestinationInTrip(Trip trip, DestinationCityInTrip destinationInTrip)
         {
             destinationInTrip.TripId = trip.Id;
-            return cityRepository.Add(destinationInTrip);
+            return destinationsRepository.Add(destinationInTrip);
            
         }
 
         public async Task<DestinationCityInTrip> AddDestinationInTripAsync(Trip trip, DestinationCityInTrip destinationInTrip)
         {
             destinationInTrip.TripId = trip.Id;
-            return await cityRepository.AddAsync(destinationInTrip);
+            return await destinationsRepository.AddAsync(destinationInTrip);
         }
 
         public IReadOnlyList<DestinationCityInTrip> GetDestinationsOfTrip(Trip trip)
         {
-            return cityRepository.List(new TripCitiesSpecification(trip));
+            return destinationsRepository.List(new TripCitiesSpecification(trip));
         }
 
         public async Task<IReadOnlyList<DestinationCityInTrip>> GetDestinationsOfTripAsync(Trip trip)
         {
-            return await cityRepository.ListAsync(new TripCitiesSpecification(trip));
+            return await destinationsRepository.ListAsync(new TripCitiesSpecification(trip));
         }
 
         public void RemoveDestinationFromTrip(DeleteByIdSpecification<DestinationCityInTrip> specification)
         {
-            cityRepository.DeleteBySpec(specification);
+            destinationsRepository.DeleteBySpec(specification);
         }
 
         public async Task RemoveDestinationFromTripAsync(DeleteByIdSpecification<DestinationCityInTrip> specification)
         {
-            await cityRepository.DeleteBySpecAsync(specification);
+            await destinationsRepository.DeleteBySpecAsync(specification);
         }
     }
 }
