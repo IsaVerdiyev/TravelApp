@@ -18,73 +18,90 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary Source="../Resources/SignInViewDictionary.xaml"/>
-    </UserControl.Resources> 
+    </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-
-        <materialDesign:Card Padding="12" Margin="16" >
-            <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}"
-                       TextAlignment="Center">Signing in menu</TextBlock>
-        </materialDesign:Card>
-
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
+        <GroupBox
+            Header="Signing in menu"
+            Style="{DynamicResource MaterialDesignGroupBox}"
+            Margin="16"
+            materialDesign:ColorZoneAssist.Mode="Accent">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
 
-                <materialDesign:Chip Grid.Column="1"
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <materialDesign:Chip Grid.Column="1"
                                      Visibility="{Binding CurrentProcessesInfo, Converter={StaticResource ActiveProcessesStringToVisibilityConverter}}">
-                    <Label Grid.Column="1"
+                        <Label Grid.Column="1"
                        x:Name="CurrentProcessesLabel"
                        Content="{Binding CurrentProcessesInfo}"/>
-                </materialDesign:Chip>
-                <materialDesign:Card Grid.Column="2"
+                    </materialDesign:Chip>
+                    <materialDesign:Card Grid.Column="2"
                                      Visibility="{Binding CurrentProcessesInfo, Converter={StaticResource ActiveProcessesStringToVisibilityConverter}}"
                                      UniformCornerRadius="14"
                                      Padding="4">
-                      <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                                    Value="50"
                                    IsIndeterminate="True" />
-                </materialDesign:Card>  
-            </Grid>
-            
-            <TextBox Grid.Row="1"
-                     x:Name="NameTextBox"
-                     materialDesign:HintAssist.Hint="Login/Email"
-                     materialDesign:HintAssist.IsFloating="True"
-                     Text="{Binding NickOrEmail, UpdateSourceTrigger=PropertyChanged}">
-            </TextBox>
+                    </materialDesign:Card>
+                </Grid>
 
-            <PasswordBox Grid.Row="2"
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <materialDesign:PackIcon Kind="Account" 
+                                             VerticalAlignment="Bottom"/>
+                    <TextBox Grid.Column="1"
+                         x:Name="NameTextBox"
+                         materialDesign:HintAssist.Hint="Login/Email"
+                         materialDesign:HintAssist.IsFloating="True"
+                         Text="{Binding NickOrEmail, UpdateSourceTrigger=PropertyChanged}">
+                    </TextBox>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <materialDesign:PackIcon Kind="Key" 
+                                             VerticalAlignment="Bottom"/>
+                    <PasswordBox Grid.Column="1"
                          x:Name="PasswordBox"
                          materialDesign:HintAssist.Hint="Password" 
                          />
-            <Button Grid.Row="3"
+                </Grid>
+                
+                <Button Grid.Row="3"
                     Content="Confirm"
                     Click="Button_Click"/>
-            <Button Grid.Row="4"
+                <Button Grid.Row="4"
                     Content="Register"
                     Command="{Binding RegisterCommand}"/>
-            <materialDesign:Chip Grid.Row="5"
+                <materialDesign:Chip Grid.Row="5"
                                  Visibility="{Binding ErrorMessage, Converter={StaticResource ActiveProcessesStringToVisibilityConverter}}">
-                <Label Grid.Row="5"
+                    <Label 
                        Content="{Binding ErrorMessage, Mode=OneWay}"/>
-            </materialDesign:Chip>
-        </Grid>
+                </materialDesign:Chip>
+
+            </Grid>
+        </GroupBox>
+
     </Grid>
 </UserControl>
