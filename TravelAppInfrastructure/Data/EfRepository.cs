@@ -91,12 +91,12 @@ namespace TravelAppInfrastructure.Data
 
         public async Task<IReadOnlyList<T>> ListAllAsync()
         {
-            return await tripDb.Set<T>().ToListAsync();
+            return await tripDb.Set<T>().AsNoTracking().ToListAsync();
         }
 
         public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
         {
-            return await ApplySpecification(spec).ToListAsync();
+            return await ApplySpecification(spec).AsNoTracking().ToListAsync();
         }
 
         public void Update(T entity)

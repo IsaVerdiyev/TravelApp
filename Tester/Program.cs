@@ -77,26 +77,25 @@ namespace Tester
             
             TripDb tripdb = new TripDb();
             //tripdb.Set<User>().Add(user);
-            IDestinationsInTripService destinationsInTripService = new DestinationsInTripService(new EfRepository<DestinationCityInTrip>(tripdb));
+            //IDestinationsInTripService destinationsInTripService = new DestinationsInTripService(new EfRepository<DestinationCityInTrip>(tripdb));
             //ICityService cityService = new CityService(new EfRepository<City>(tripdb));
             //cityService.AddCity(Cities.First());
-            var destinations = tripdb.Set<DestinationCityInTrip>().ToList();
-            foreach(var item in destinations)
+            var destinations = tripdb.Set<DestinationCityInTrip>().AsNoTracking().ToList();
+            foreach (var item in destinations)
             {
                 Console.WriteLine(item.OrderNumber);
                 //Console.WriteLine(item.City.FullName);
             }
-            // destinationsInTripService.RemoveDestinationFromTrip(new DeleteByIdSpecification<DestinationCityInTrip>(25));
-            //var dest = tripdb.Set<DestinationCityInTrip>().Find(7);
-            tripdb.Database.ExecuteSqlCommand("Delete from DestinationCityInTrips where Id = 7");
-
+            //destinationsInTripService.RemoveDestinationFromTrip(new DeleteByIdSpecification<DestinationCityInTrip>(25));
+            tripdb.Database.ExecuteSqlCommand("Delete from DestinationCityInTrips where Id = 8");
+            //Console.ReadLine();
             Console.WriteLine("---------------------------");
             while (true)
             {
                 Int32.TryParse(Console.ReadLine(),out int number);
                 if(number == 1)
                 {
-                    destinations = tripdb.Set<DestinationCityInTrip>().ToList();
+                    destinations = tripdb.Set<DestinationCityInTrip>().AsNoTracking().ToList();
                     foreach (var item in destinations)
                     {
                         Console.WriteLine(item.OrderNumber);
