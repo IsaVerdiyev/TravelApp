@@ -167,6 +167,7 @@
     <Compile Include="Converters\CityMatchTupleToStringConverter.cs" />
     <Compile Include="Converters\CityToItsCoordinatesStringConverter.cs" />
     <Compile Include="Converters\ActiveProcessesStringToVisibilityConverter.cs" />
+    <Compile Include="Converters\CommandToIsEnabledConverter.cs" />
     <Compile Include="Extensions\ProcessesInfoServiceExtensions.cs" />
     <Compile Include="Extensions\ValidateExtensions.cs" />
     <Compile Include="Messages\AddCityViewModelMessage.cs" />

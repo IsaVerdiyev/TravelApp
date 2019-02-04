@@ -133,7 +133,7 @@ namespace TravelAppWpf.ViewModels
         }
 
         #endregion
-
+        
         #region Private Functions
 
         void UpdateCurrentProcessesInfo()

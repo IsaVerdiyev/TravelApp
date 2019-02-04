@@ -89,8 +89,9 @@
                 </Grid>
                 
                 <Button Grid.Row="3"
-                    Content="Confirm"
-                    Click="Button_Click"/>
+                        Content="Confirm"
+                        Click="Button_Click"
+                        />
                 <Button Grid.Row="4"
                     Content="Register"
                     Command="{Binding RegisterCommand}"/>
