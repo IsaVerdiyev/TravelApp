@@ -5,6 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TravelAppWpf.Views"
              xmlns:vm="clr-namespace:TravelAppWpf.ViewModels"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="{DynamicResource MaterialDesignPaper}"
+             FontFamily="{DynamicResource MaterialDesignFont}"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance vm:CitiesViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -12,113 +20,191 @@
         <ResourceDictionary Source="../Resources/CitiesViewDictionary.xaml"/>
     </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
-            <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
-            <RowDefinition/>
-            <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
-        </Grid.RowDefinitions>
+        <materialDesign:DrawerHost
+                Margin="64"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                BorderThickness="2"
+                BorderBrush="{DynamicResource MaterialDesignDivider}">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <StackPanel
+                    Margin="16">
+                    <TextBlock
+                      Margin="4"
+                      HorizontalAlignment="Center">
+                    LEFT FIELD
+                    </TextBlock>
+                    <Button
+                      Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
+                      CommandParameter="{x:Static Dock.Left}"
+                      Margin="4"
+                      HorizontalAlignment="Center"
+                      Style="{DynamicResource MaterialDesignFlatButton}">
+                        CLOSE THIS
+                    </Button>
+                    <Button
+                      Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
+                      Margin="4"
+                      HorizontalAlignment="Center"
+                      Style="{DynamicResource MaterialDesignFlatButton}">
+                        CLOSE ALL
+                    </Button>
+                </StackPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+        </materialDesign:DrawerHost>
+        <GroupBox
+            Style="{DynamicResource MaterialDesignGroupBox}"
+            Margin="16"
+            materialDesign:ColorZoneAssist.Mode="Accent">
+            <GroupBox.Header>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            
-            <Button Grid.Column="0"
+                
+                    <!--<Button Grid.Column="0"
+                            Content="←"
+                            Command="{Binding ReturnBackCommand}"/>-->
+                    <materialDesign:ColorZone
+                        Mode="Accent">
+                        <Grid>
+                            <!--<materialDesign:PopupBox
+                                DockPanel.Dock="Right"
+                                PlacementMode="BottomAndAlignRightEdges">
+                                <ListBox>
+                                    <ListBoxItem>
+                                        Hello World
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        Nice Popup
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        Goodbye.
+                                    </ListBoxItem>
+                                </ListBox>
+                            </materialDesign:PopupBox>-->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                        <Button
+                                    Command="{x:Static materialDesign:}"
+                                    CommandParameter="{x:Static Dock.Left}">
+                            <materialDesign:PackIcon
+                                Kind="ArrowLeft"/>
+                        </Button>
+                                <TextBlock Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    TextAlignment="Center">
+                                    Cities
+                                </TextBlock>
+                            
+                        </Grid>
+                    </materialDesign:ColorZone>
+               
+
+            </GroupBox.Header>
+            <!--<Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0"
                     Content="←"
                     Command="{Binding ReturnBackCommand}"/>
 
-            <Label Grid.Column="1"
+                <Label Grid.Column="1"
                    Content="Cities"/>
-            <Label Grid.Column="2"
+                <Label Grid.Column="2"
                    Content="{Binding CurrentProcessesInfo}"/>
-        </Grid>
-        
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+            </Grid>-->
+            <!--<Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0"
+                    <Button Grid.Column="0"
                     Content="Cities"/>
-            <Button Grid.Column="1"
+                    <Button Grid.Column="1"
                     Content="Tickets"
                     Command="{Binding NavigateToTicketsCommand}"/>
-            <Button Grid.Column="2"
+                    <Button Grid.Column="2"
                     Content="Checklist"
                     Command="{Binding NavigateToCheckListCommand}"/>
-        </Grid>
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            
-            <ListBox
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox
                 ItemsSource="{Binding Destinations, Mode=OneWay}"
                 SelectedItem="{Binding SelectedCity}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="30"/>
-                                <ColumnDefinition Width="30"/>
-                            </Grid.ColumnDefinitions>
-                            <Label Content="{Binding OrderNumber}"/>
-                            <Label Grid.Column="1" Content="{Binding City.FullName}"/>
-                            <Button Grid.Column="2"
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition Width="30"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="{Binding OrderNumber}"/>
+                                    <Label Grid.Column="1" Content="{Binding City.FullName}"/>
+                                    <Button Grid.Column="2"
                                 Content="👁"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ShowInfoOfCityCommand}"
                                 CommandParameter="{Binding}"/>
 
 
-                            <Button Grid.Column="3"
+                                    <Button Grid.Column="3"
                                 Content="x"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DeleteCityCommand}"
                                 CommandParameter="{Binding}"/>
 
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
-            <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
 
-                <Image Grid.Column="0"
+                        <Image Grid.Column="0"
                        Width="340"
                        Source="{Binding SelectedCity.PictureUrl}"/>
-                <Label Grid.Row="1"
+                        <Label Grid.Row="1"
                        Content="{Binding SelectedCity.FullName}"/>
-                <Label Grid.Row="2"
+                        <Label Grid.Row="2"
                        Content="{Binding SelectedCity.Currency}"/>
-                <Label Grid.Row="3"
+                        <Label Grid.Row="3"
                        Content="{Binding SelectedCity.Language}"/>
-            </Grid>
-        </Grid>
-        
+                    </Grid>
+                </Grid>
 
-        <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="100"/>
-            </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="2"
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="2"
                     Content="Add City"
                     Command="{Binding AddCityCommand}"/>
-        </Grid>
+                </Grid>
+            </Grid>-->
+        </GroupBox>
     </Grid>
 </UserControl>

@@ -21,10 +21,14 @@
     </UserControl.Resources>
     <Grid>
         <GroupBox
-            Header="Signing in menu"
+            
             Style="{DynamicResource MaterialDesignGroupBox}"
             Margin="16"
             materialDesign:ColorZoneAssist.Mode="Accent">
+            <GroupBox.Header>
+                <Label Content="Signing in"
+                       HorizontalContentAlignment="Center"/>
+            </GroupBox.Header>
             <Grid>
 
                 <Grid.RowDefinitions>

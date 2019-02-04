@@ -26,28 +26,26 @@
             Margin="16"
             materialDesign:ColorZoneAssist.Mode="Accent">
             <GroupBox.Header>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
-                        <RowDefinition/>
-                        <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
-                    </Grid.RowDefinitions>
+               
                     <Grid>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Content="Trips"/>
-                        <Button Grid.Column="1"
+                        <Label  Grid.Column="1" 
+                                Content="Trips"
+                                HorizontalContentAlignment="Center"/>
+                        <Button Grid.Column="2"
                     Content="Delete account"
                     Command="{Binding DeleteUserCommand}"/>
-                        <Button Grid.Column="2"
+                        <Button Grid.Column="3"
                      Content="Sign out"
                     Command="{Binding SignOutCommand}"/>
                     </Grid>
-                </Grid>
+              
             </GroupBox.Header>
             <Grid>
 
