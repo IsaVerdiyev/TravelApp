@@ -58,6 +58,10 @@
                                 CommandParameter="{x:Static Dock.Left}">
                             <materialDesign:PackIcon Kind="HamburgerMenu" />
                         </Button>
+
+                        <Label Grid.Column="1"
+                               Content="Cities"
+                               HorizontalContentAlignment="Center"/>
                     </Grid>
                 </GroupBox.Header>
 
