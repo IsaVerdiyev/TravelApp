@@ -84,7 +84,7 @@ namespace TravelAppWpf.ViewModels
         #region Commands
 
         RelayCommand returnBackCommand;
-        public RelayCommand ReturnCommand
+        public RelayCommand ReturnBackCommand
         {
             get => returnBackCommand = new RelayCommand(() => navigator.NavigateTo<TripsViewModel>());
         }

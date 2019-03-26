@@ -29,6 +29,11 @@
                     </Button>
 
                     <Button 
+                        Command="{Binding ReturnBackCommand}">
+                        <materialDesign:PackIcon Kind="KeyboardReturn"></materialDesign:PackIcon>
+                    </Button>
+                    
+                    <Button 
                         Command="{Binding NavigateToCitiesCommand}"
                         Content="Cities"/>
 
