@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TravelAppWpf.Views"
              xmlns:vm="clr-namespace:TravelAppWpf.ViewModels"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              d:DataContext="{d:DesignInstance vm:AddCityViewModel}"
              mc:Ignorable="d" 
@@ -13,20 +14,122 @@
         <ResourceDictionary Source="../Resources/AddCityViewDictionary.xaml"/>
     </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+        <GroupBox
+            
+            Style="{DynamicResource MaterialDesignGroupBox}"
+            Margin="16"
+            materialDesign:ColorZoneAssist.Mode="Accent">
+            <GroupBox.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" 
+                    Command="{Binding ReturnBackCommand}">
+                        <materialDesign:PackIcon Kind="KeyboardReturn"></materialDesign:PackIcon>
+                    </Button>
+                    <Label Grid.Column="1" 
+                        Content="Adding city"
+                       HorizontalAlignment="Center"/>
+                </Grid>
+                
+            </GroupBox.Header>
+            <Grid>
 
-        <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <materialDesign:Chip Grid.Column="1"
+                                     Visibility="{Binding CurrentProcessesInfo, Converter={StaticResource ActiveProcessesStringToVisibilityConverter}}">
+                        <Label Grid.Column="1"
+                       x:Name="CurrentProcessesLabel"
+                       Content="{Binding CurrentProcessesInfo}"/>
+                    </materialDesign:Chip>
+                    <materialDesign:Card Grid.Column="2"
+                                     Visibility="{Binding CurrentProcessesInfo, Converter={StaticResource ActiveProcessesStringToVisibilityConverter}}"
+                                     UniformCornerRadius="14"
+                                     Padding="4">
+                        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                   Value="50"
+                                   IsIndeterminate="True" />
+                    </materialDesign:Card>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox MinWidth="100"
+                            Text="{Binding SearchInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:InvokeCommandAction Command="{Binding SearchMatchesByNameCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                        </TextBox>
+                        <Button Grid.Column="1">
+                            <materialDesign:PackIcon Kind="Search"></materialDesign:PackIcon>
+                        </Button>
+                    </Grid>
+
+                    <ListBox Grid.Row="1" ItemsSource="{Binding FoundCities}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label 
+                                        Content="{Binding Converter={StaticResource CityMatchTupleToStringConverter}}"/>
+                                    <Button Grid.Column="1"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.AddCityFromSelectedMatchCommand}"
+                                            CommandParameter="{Binding}">
+                                        <materialDesign:PackIcon Kind="Add"></materialDesign:PackIcon>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                </Grid>
+
+                
+
+            </Grid>
+        </GroupBox>
+
+       
+
+        <!--<Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" 
-                   Content="←"
-                    Command="{Binding ReturnBackCommand}"/>
+                    Command="{Binding ReturnBackCommand}">
+                <materialDesign:PackIcon Kind="KeyboardReturn"></materialDesign:PackIcon>
+            </Button>
             <Label Grid.Column="1"
                    Content="Adding City"/>
             <Label Grid.Column="2"
@@ -72,6 +175,6 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
-        </Grid>
+        </Grid>-->
     </Grid>
 </UserControl>

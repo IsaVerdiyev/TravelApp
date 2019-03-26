@@ -89,6 +89,8 @@ namespace TravelAppWpf.ViewModels
             {
                 user = m.User;
                 trip = m.Trip;
+                SearchInput = "";
+                FoundCities.Clear();
             });
 
             Messenger.Default.Register<UpdateProcessInfoMessage>(this, m => UpdateCurrentProcessesInfo());
@@ -172,7 +174,6 @@ namespace TravelAppWpf.ViewModels
                             CityId = addedCity.Id,
                             TripId = trip.Id
                         });
-                        Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage);
                     });
                 }
                 finally
@@ -188,22 +189,34 @@ namespace TravelAppWpf.ViewModels
         {
             get => addCityFromSelectedMatchCommand ?? (addCityFromSelectedMatchCommand = new RelayCommand<(string cityFullName, string cityUrl)>(async tuple =>
             {
-                await Task.Run(async () =>
+                int processId = processesInfoService.GenerateUniqueId();
+                try
                 {
-                    navigator.NavigateTo<CitiesViewModel>();
-                    City addedCity = await cityService.GetCityFromReposByFullnameAsync(tuple.cityFullName);
-                    if (addedCity == null)
+                    await Task.Run(async () =>
                     {
-                        addedCity = await cityMatchesSearcherFromApi.GetCityFromApiBySelectedMatchAsync(tuple.cityUrl);
-                        addedCity = await cityService.AddCityAsync(addedCity);
-                    }
-                    await destinationsInTripService.AddDestinationInTripAsync(trip, new DestinationCityInTrip
-                    {
-                        CityId = addedCity.Id,
-                        TripId = trip.Id
+                        
+                        processesInfoService.ActivateProcess(ProcessEnum.AddingCity, processesInfoService.ProcessNames[ProcessEnum.AddingCity], processId);
+                        Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                        navigator.NavigateTo<CitiesViewModel>();
+                        City addedCity = await cityService.GetCityFromReposByFullnameAsync(tuple.cityFullName);
+                        if (addedCity == null)
+                        {
+                            addedCity = await cityMatchesSearcherFromApi.GetCityFromApiBySelectedMatchAsync(tuple.cityUrl);
+                            addedCity = await cityService.AddCityAsync(addedCity);
+                        }
+                        await destinationsInTripService.AddDestinationInTripAsync(trip, new DestinationCityInTrip
+                        {
+                            CityId = addedCity.Id,
+                            TripId = trip.Id
+                        });
+                        Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage);
                     });
-                    Messenger.Default.Send<UpdateCitiesMessage>(updateCitiesMessage);
-                });
+                }
+                finally
+                {
+                    processesInfoService.DeactivateProcess(ProcessEnum.AddingCity, processId);
+                    Messenger.Default.Send<UpdateProcessInfoMessage>(updateProcessInfoMessage);
+                }
             }));
         }
 
