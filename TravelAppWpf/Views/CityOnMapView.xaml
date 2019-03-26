@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:TravelAppWpf.Views"
              xmlns:vm="clr-namespace:TravelAppWpf.ViewModels"
              mc:Ignorable="d" 
@@ -21,12 +22,13 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" 
-                   Content="←"
-                    Command="{Binding ReturnBackCommand}"/>
+                    Command="{Binding ReturnBackCommand}">
+                <materialDesign:PackIcon Kind="KeyboardReturn"></materialDesign:PackIcon>
+            </Button>
             <Label Grid.Column="1"
                    Content="City on map"/>
         </Grid>
