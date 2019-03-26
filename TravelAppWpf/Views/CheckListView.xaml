@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TravelAppWpf.Views"
              xmlns:vm="clr-namespace:TravelAppWpf.ViewModels"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              d:DataContext="{d:DesignInstance vm:CheckListViewModel}"
@@ -13,6 +14,127 @@
         <ResourceDictionary Source="../Resources/CheckListViewDictionary.xaml"/>
     </UserControl.Resources>
     <Grid>
+        <materialDesign:DrawerHost HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <StackPanel>
+
+                    <Button
+                        Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
+                        CommandParameter="{x:Static Dock.Left}"
+                        Margin="4"
+                        HorizontalAlignment="Center"
+                        Style="{DynamicResource MaterialDesignFlatButton}">
+                        CLOSE THIS
+                    </Button>
+
+                    <Button 
+                        Command="{Binding NavigateToCitiesCommand}"
+                        Content="Cities"/>
+
+                    <Button Command="{Binding NavigateToTicketsCommand}"
+                            Content="Tickets"/>
+
+
+                </StackPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+
+            <GroupBox Style="{DynamicResource MaterialDesignGroupBox}"
+                      materialDesign:ColorZoneAssist.Mode="Accent">
+                <GroupBox.Header>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
+                                CommandParameter="{x:Static Dock.Left}">
+                            <materialDesign:PackIcon Kind="HamburgerMenu" />
+                        </Button>
+
+                        <Label Grid.Column="1"
+                               Content="Checklist"
+                               HorizontalContentAlignment="Center"/>
+                    </Grid>
+                </GroupBox.Header>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <materialDesign:Chip Grid.Column="1"
+                                     Visibility="{Binding CurrentProcessesInfo, Converter={StaticResource ActiveProcessesStringToVisibilityConverter}}">
+                            <Label Grid.Column="1"
+                       x:Name="CurrentProcessesLabel"
+                       Content="{Binding CurrentProcessesInfo}"/>
+                        </materialDesign:Chip>
+                        <materialDesign:Card Grid.Column="2"
+                                     Visibility="{Binding CurrentProcessesInfo, Converter={StaticResource ActiveProcessesStringToVisibilityConverter}}"
+                                     UniformCornerRadius="14"
+                                     Padding="4">
+                            <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                   Value="50"
+                                   IsIndeterminate="True" />
+                        </materialDesign:Card>
+                    </Grid>
+                    <ListBox Grid.Row="1"
+                         ItemsSource="{Binding CheckList, Mode=OneWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="{Binding Name}"/>
+                                    <CheckBox Grid.Column="1"
+                                        IsChecked="{Binding Done}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ChangeToDoItemStateCommand}"
+                                                       CommandParameter="{Binding}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </CheckBox>
+                                    <Button Grid.Column="2"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DeleteToDoItemCommand}"
+                                CommandParameter="{Binding}">
+                                        <materialDesign:PackIcon Kind="DeleteForever" />
+                                    </Button>
+
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="1"
+                                ToolTip="Add Trip"
+                                Command="{Binding AddToDoItemInCheckListCommand}">
+                            <materialDesign:PackIcon Kind="Add" />
+                        </Button>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+        </materialDesign:DrawerHost>
+    </Grid>
+    <!--<Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
             <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
@@ -96,5 +218,5 @@
                     Content="Add item in checklist"
                     Command="{Binding AddToDoItemInCheckListCommand}"/>
         </Grid>
-    </Grid>
+    </Grid>-->
 </UserControl>
