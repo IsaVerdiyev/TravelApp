@@ -39,8 +39,8 @@
                         Command="{Binding NavigateToCitiesCommand}"
                         Content="Cities"/>
 
-                    <Button Command="{Binding NavigateToTicketsCommand}"
-                            Content="Tickets"/>
+                    <Button Command="{Binding NavigateToCheckListCommand}"
+                            Content="Checklist"/>
 
 
                 </StackPanel>
