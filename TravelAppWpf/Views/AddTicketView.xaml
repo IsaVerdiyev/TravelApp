@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TravelAppWpf.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:TravelAppWpf.ViewModels"
              d:DataContext="{d:DesignInstance vm:AddTicketViewModel}"
              mc:Ignorable="d" 
@@ -12,70 +13,100 @@
         <ResourceDictionary Source="../Resources/AddTicketViewDictionary.xaml"/>
     </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
+        <GroupBox
+            Style="{DynamicResource MaterialDesignGroupBox}"
+            Margin="16"
+            materialDesign:ColorZoneAssist.Mode="Accent">
+            <GroupBox.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" 
+                    Command="{Binding ReturnBackCommand}">
+                        <materialDesign:PackIcon Kind="KeyboardReturn"></materialDesign:PackIcon>
+                    </Button>
+                    <Label Grid.Column="1" 
+                        Content="Adding ticket"
+                       HorizontalAlignment="Center"/>
+                </Grid>
 
-            <Button Content="←"
-                    Command="{Binding ReturnCommand}"/>
+            </GroupBox.Header>
 
-            <Label Grid.Column="1"
-                   Content="Adding Ticket"/>
+            <Grid>
 
-            <Label Grid.Column="2"
-                   Content="{Binding CurrentProcessesInfo}"/>
-        </Grid>
-       
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <materialDesign:Chip Grid.Column="1"
+                                     Visibility="{Binding CurrentProcessesInfo, Converter={StaticResource ActiveProcessesStringToVisibilityConverter}}">
+                        <Label Grid.Column="1"
+                       x:Name="CurrentProcessesLabel"
+                       Content="{Binding CurrentProcessesInfo}"/>
+                    </materialDesign:Chip>
+                    <materialDesign:Card Grid.Column="2"
+                                     Visibility="{Binding CurrentProcessesInfo, Converter={StaticResource ActiveProcessesStringToVisibilityConverter}}"
+                                     UniformCornerRadius="14"
+                                     Padding="4">
+                        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                   Value="50"
+                                   IsIndeterminate="True" />
+                    </materialDesign:Card>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
 
 
 
-            <Label Grid.Row="0" 
+                    <Label Grid.Row="0" 
                Content="Enter name of ticket: "/>
-            <TextBox Grid.Row="1"
+                    <TextBox Grid.Row="1"
                  Text="{Binding TicketName, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Grid.Row="2"
+                    <Label Grid.Row="2"
                Content="Enter path to ticket"/>
-            <Grid Grid.Row="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="100"/>
-                </Grid.ColumnDefinitions>
+                    <Grid Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
 
-                <TextBox x:Name="PathToFileTextBox" Text="{Binding PdfPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <Button Grid.Column="1"
+                        <TextBox x:Name="PathToFileTextBox" Text="{Binding PdfPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                        <Button Grid.Column="1"
                     Content="Browse" Click="Button_Click"/>
-            </Grid>
-            <Grid Grid.Row="4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="1"
+                    </Grid>
+                    <Grid Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="1"
                     Content="Ok"
                     Width="100"
                     Command="{Binding AddTicketCommand}"
                     CommandParameter="{Binding ElementName=AddTicketWindow}"/>
-            </Grid>
+                    </Grid>
+                </Grid>
 
-        </Grid>
+            </Grid>
+        </GroupBox>
     </Grid>
     
 </UserControl>

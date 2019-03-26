@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TravelAppWpf.Views"
              xmlns:vm="clr-namespace:TravelAppWpf.ViewModels"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DataContext="{d:DesignInstance vm:AddItemInCheckListViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -12,7 +13,90 @@
         <ResourceDictionary Source="../Resources/AddItemInCheckListViewDictionary.xaml"/>
     </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
+        <GroupBox
+            Style="{DynamicResource MaterialDesignGroupBox}"
+            Margin="16"
+            materialDesign:ColorZoneAssist.Mode="Accent">
+            <GroupBox.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" 
+                    Command="{Binding ReturnBackCommand}">
+                        <materialDesign:PackIcon Kind="KeyboardReturn"></materialDesign:PackIcon>
+                    </Button>
+                    <Label Grid.Column="1" 
+                        Content="Adding task"
+                       HorizontalAlignment="Center"/>
+                </Grid>
+
+            </GroupBox.Header>
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <materialDesign:Chip Grid.Column="1"
+                                     Visibility="{Binding CurrentProcessesInfo, Converter={StaticResource ActiveProcessesStringToVisibilityConverter}}">
+                        <Label Grid.Column="1"
+                       x:Name="CurrentProcessesLabel"
+                       Content="{Binding CurrentProcessesInfo}"/>
+                    </materialDesign:Chip>
+                    <materialDesign:Card Grid.Column="2"
+                                     Visibility="{Binding CurrentProcessesInfo, Converter={StaticResource ActiveProcessesStringToVisibilityConverter}}"
+                                     UniformCornerRadius="14"
+                                     Padding="4">
+                        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                   Value="50"
+                                   IsIndeterminate="True" />
+                    </materialDesign:Card>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+
+
+
+                    <Label Grid.Row="0" 
+                           VerticalAlignment="Center"
+                        Content="Enter name of item to do: "/>
+                    <TextBox Grid.Row="1"
+                             VerticalAlignment="Top"
+                        Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+                    <Grid Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="1"
+                            Content="Ok"
+                            Width="100"
+                            Command="{Binding AddItemInCheckListCommand}"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="{StaticResource ViewNameControlLength}"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -61,6 +145,6 @@
                         Command="{Binding AddItemInCheckListCommand}"/>
             </Grid>
 
-        </Grid>
+        </Grid>-->
     </Grid>
 </UserControl>

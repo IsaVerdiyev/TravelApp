@@ -121,10 +121,10 @@ namespace TravelAppWpf.ViewModels
         }
 
 
-        RelayCommand returnCommand;
-        public RelayCommand ReturnCommand
+        RelayCommand returnBackCommand;
+        public RelayCommand ReturnBackCommand
         {
-            get => returnCommand ?? (returnCommand = new RelayCommand(() => navigator.NavigateTo<TicketsViewModel>()));
+            get => returnBackCommand ?? (returnBackCommand = new RelayCommand(() => navigator.NavigateTo<TicketsViewModel>()));
         }
         #endregion
 
